@@ -1,0 +1,6 @@
+{
+  "name": "Pizzería Monstruosa: Fracciones Mágicas",
+  "description": "¡Aprende Fracciones comiendo Pizza! Cortador mágico de equivalencias y cocina de sumas visual para campeones matemáticos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

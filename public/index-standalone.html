@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Pizzería Monstruosa: Fracciones Mágicas</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka para texto cómic legible y amigable -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Fredoka', cursive, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      background-color: #84cc16;
+    }
+
+    /* Animaciones suaves cartoon (sin parpadeos agresivos) */
+    @keyframes gentleWobble {
+      0%, 100% { transform: rotate(-1.5deg); }
+      50% { transform: rotate(1.5deg); }
+    }
+    .animate-wobble {
+      animation: gentleWobble 3s ease-in-out infinite;
+    }
+
+    @keyframes popBounce {
+      0% { transform: scale(0.92); }
+      60% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .pop-in {
+      animation: popBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Sombras sólidas estilo arcade/cómic de alto contraste */
+    .comic-shadow {
+      box-shadow: 0 8px 0px #0f172a;
+    }
+    .comic-shadow-sm {
+      box-shadow: 0 4px 0px #0f172a;
+    }
+    .comic-shadow-active:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0px #0f172a;
+    }
+
+    /* Transición suave de rebanadas */
+    .slice-path {
+      transition: fill 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+    .slice-path:hover {
+      filter: brightness(1.08);
+    }
+
+    /* Lluvia suave de estrellas y confeti */
+    @keyframes confettiFall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(320px) rotate(360deg); opacity: 0; }
+    }
+    .animate-confetti {
+      animation: confettiFall 2.8s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-3 sm:p-5 text-slate-900 overflow-x-hidden">
+
+  <!-- ============================================== -->
+  <!-- ENCABEZADO SUPERIOR -->
+  <!-- ============================================== -->
+  <header class="w-full max-w-4xl flex items-center justify-between bg-[#a3e635] p-3 sm:p-4 rounded-3xl border-4 border-slate-900 comic-shadow mb-3">
+    <div class="flex items-center gap-3">
+      <!-- Chef Monstruito Avatar con expresión reactiva -->
+      <div id="chefAvatar" class="w-14 h-14 sm:w-16 sm:h-16 bg-purple-500 rounded-2xl border-4 border-slate-900 comic-shadow-sm flex items-center justify-center overflow-hidden animate-wobble flex-shrink-0">
+        <svg id="chefSvg" viewBox="0 0 100 100" class="w-full h-full"></svg>
+      </div>
+
+      <div>
+        <h1 class="text-xl sm:text-2xl font-black tracking-wide text-slate-900 uppercase">La Pizzería Monstruosa</h1>
+        <p class="text-xs sm:text-sm text-slate-800 font-bold">¡Aprende Fracciones comiendo Pizza! 🍕</p>
+      </div>
+    </div>
+
+    <!-- Botón de Silencio para confort sensorial -->
+    <div class="flex items-center gap-2">
+      <button id="btnSound" class="bg-amber-400 hover:bg-amber-300 p-3 min-h-[48px] rounded-2xl border-4 border-slate-900 comic-shadow-sm comic-shadow-active flex items-center justify-center font-bold cursor-pointer transition-colors" aria-label="Control de sonido" title="Encender/Silenciar audio">
+        <span id="soundIcon" class="text-xl">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================== -->
+  <!-- NAVEGADOR DE 4 MODOS EDUCATIVOS -->
+  <!-- ============================================== -->
+  <nav class="w-full max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-3">
+    <button id="tab1" onclick="switchMode(1)" class="py-3 px-2 min-h-[48px] rounded-2xl border-4 border-slate-900 font-black text-xs sm:text-sm text-center bg-yellow-400 comic-shadow flex items-center justify-center gap-1.5 cursor-pointer">
+      <span class="text-xl">🍕</span>
+      <span>1. Cortador Mágico</span>
+    </button>
+    <button id="tab2" onclick="switchMode(2)" class="py-3 px-2 min-h-[48px] rounded-2xl border-4 border-slate-900 font-black text-xs sm:text-sm text-center bg-slate-200 opacity-80 comic-shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+      <span class="text-xl">➕</span>
+      <span>2. Sumas Básicas</span>
+    </button>
+    <button id="tab3" onclick="switchMode(3)" class="py-3 px-2 min-h-[48px] rounded-2xl border-4 border-slate-900 font-black text-xs sm:text-sm text-center bg-slate-200 opacity-80 comic-shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+      <span class="text-xl">😋</span>
+      <span>3. Fiesta de Restas</span>
+    </button>
+    <button id="tab4" onclick="switchMode(4)" class="py-3 px-2 min-h-[48px] rounded-2xl border-4 border-slate-900 font-black text-xs sm:text-sm text-center bg-slate-200 opacity-80 comic-shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+      <span class="text-xl">🚀</span>
+      <span>4. Sumas Avanzadas</span>
+    </button>
+  </nav>
+
+  <!-- ============================================== -->
+  <!-- ÁREA PRINCIPAL DINÁMICA -->
+  <!-- ============================================== -->
+  <main class="w-full max-w-4xl flex-1 flex flex-col relative">
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- MODO 1: CORTADOR MÁGICO CON CORTE ASISTIDO -->
+    <!-- ------------------------------------------------------------ -->
+    <section id="view1" class="flex-1 bg-[#fef08a] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between">
+      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3.5 rounded-2xl border-4 border-slate-900 mb-3 shadow-sm">
+        <span class="text-3xl flex-shrink-0 animate-bounce">👾</span>
+        <p class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
+          "¡Elige cortes base o pulsa el <strong class="text-amber-600">🔪 Cuchillo Asistido</strong> para rebanar por la mitad! Verás que <strong class="text-blue-600 underline">la cantidad total de pizza no cambia</strong>."
+        </p>
+      </div>
+
+      <!-- Selector de base -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-2">
+        <span class="text-xs font-black uppercase text-slate-600 mr-1">Cortar en:</span>
+        <div id="m1BaseButtons" class="flex gap-2"></div>
+      </div>
+
+      <!-- Pizza Central con Corte Asistido -->
+      <div class="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center my-1">
+        <div class="absolute inset-0 rounded-full bg-cyan-300 border-4 border-slate-900 comic-shadow-sm flex items-center justify-center">
+          <div class="w-11/12 h-11/12 rounded-full border-4 border-dashed border-cyan-600 opacity-30"></div>
+        </div>
+
+        <svg id="m1PizzaSvg" viewBox="0 0 200 200" class="w-56 h-56 sm:w-72 sm:h-72 relative z-10 filter drop-shadow-md pop-in"></svg>
+
+        <div onclick="m1DoubleCut()" class="absolute -top-3 -right-3 w-14 h-14 bg-red-500 hover:bg-red-400 rounded-full border-4 border-slate-900 flex items-center justify-center text-2xl shadow-md z-20 cursor-pointer animate-bounce active:scale-95" title="¡Cuchillo Asistido!">
+          🔪
+        </div>
+      </div>
+
+      <!-- Conexión Triple de Conceptos -->
+      <div class="flex flex-col items-center bg-white px-6 py-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm mb-3 w-full max-w-lg">
+        <span class="text-xs font-black text-slate-500 uppercase tracking-wider">Tu Porción Seleccionada</span>
+        <div class="flex items-center gap-4 my-2">
+          <div class="flex flex-col items-center">
+            <span id="m1Num" class="text-4xl sm:text-5xl font-black text-blue-600 leading-none">1</span>
+            <div class="w-16 h-2.5 bg-slate-900 rounded-full my-1"></div>
+            <span id="m1Den" class="text-4xl sm:text-5xl font-black text-amber-500 leading-none">2</span>
+          </div>
+          <div class="text-left text-xs sm:text-sm font-bold text-slate-700 pl-3 border-l-2 border-slate-300 space-y-1">
+            <p><span class="inline-block w-3.5 h-3.5 bg-blue-500 rounded-full border border-slate-900 mr-1.5"></span><span id="m1NumText">1 rebanada con queso</span></p>
+            <p><span class="inline-block w-3.5 h-3.5 bg-amber-500 rounded-full border border-slate-900 mr-1.5"></span><span id="m1DenText">Cortes totales: 2</span></p>
+          </div>
+        </div>
+        <!-- Barra medidora -->
+        <div class="w-full bg-slate-200 rounded-full h-5 border-2 border-slate-900 overflow-hidden mt-1 relative">
+          <div id="m1VolumeBar" class="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 h-full transition-all duration-500 flex items-center justify-center" style="width: 50%;">
+            <span id="m1VolumeLabel" class="text-[10px] font-black text-slate-900 tracking-wide">50% PIZZA</span>
+          </div>
+        </div>
+        <span class="text-[11px] font-bold text-slate-600 mt-1">
+          La barra mide la pizza real: ¡Al partir a la mitad la cantidad es equivalente!
+        </span>
+      </div>
+
+      <div class="w-full max-w-md flex flex-col sm:flex-row gap-3">
+        <button id="btnM1Double" onclick="m1DoubleCut()" class="flex-1 py-3 px-4 min-h-[48px] bg-emerald-400 hover:bg-emerald-300 rounded-2xl border-4 border-slate-900 font-black text-base comic-shadow-sm comic-shadow-active flex items-center justify-center gap-2 cursor-pointer">
+          <span>🔪 Cuchillo Asistido (Cortar x2)</span>
+        </button>
+        <button onclick="m1ToggleAssisted()" class="py-3 px-4 min-h-[48px] bg-white hover:bg-slate-100 rounded-2xl border-4 border-slate-900 font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
+          Guías de Corte
+        </button>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- MODO 2: COCINA DE SUMAS BÁSICAS (MISMO DENOMINADOR) -->
+    <!-- ------------------------------------------------------------ -->
+    <section id="view2" class="hidden flex-1 bg-[#bae6fd] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between relative overflow-hidden">
+      <div id="m2CelebrationContainer" class="absolute inset-0 pointer-events-none overflow-hidden z-30 hidden"></div>
+
+      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3.5 rounded-2xl border-4 border-slate-900 mb-3 shadow-sm z-10">
+        <span class="text-3xl flex-shrink-0">👾</span>
+        <p id="m2Instructions" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
+          "¡Ambos platos tienen cortes iguales! Toca las rebanadas o el botón para juntarlas en la Caja de Entrega."
+        </p>
+      </div>
+
+      <div class="w-full flex flex-col md:flex-row items-center justify-center gap-3 sm:gap-4 my-2 z-10">
+        <!-- Plato A -->
+        <div id="m2PlateA" onclick="m2AddSliceA()" class="flex flex-col items-center bg-white/90 p-3 rounded-2xl border-4 border-slate-900 cursor-pointer hover:scale-105 comic-shadow-sm transition-all">
+          <div class="relative w-36 h-36 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
+            <svg id="m2SvgA" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+          </div>
+          <span id="m2FracA" class="mt-2 text-2xl font-black text-blue-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">1/4</span>
+          <span id="m2HintA" class="text-[11px] font-bold text-slate-700 mt-1">👉 Toca para poner</span>
+        </div>
+
+        <div class="w-12 h-12 bg-pink-500 rounded-full border-4 border-slate-900 flex items-center justify-center text-white text-3xl font-black comic-shadow-sm flex-shrink-0">
+          +
+        </div>
+
+        <!-- Plato B -->
+        <div id="m2PlateB" onclick="m2AddSliceB()" class="flex flex-col items-center bg-white/90 p-3 rounded-2xl border-4 border-slate-900 cursor-pointer hover:scale-105 comic-shadow-sm transition-all">
+          <div class="relative w-36 h-36 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
+            <svg id="m2SvgB" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+          </div>
+          <span id="m2FracB" class="mt-2 text-2xl font-black text-purple-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">2/4</span>
+          <span id="m2HintB" class="text-[11px] font-bold text-slate-700 mt-1">👉 Toca para poner</span>
+        </div>
+
+        <div class="text-3xl font-black text-slate-800">➡️</div>
+
+        <!-- Caja de Entrega -->
+        <div onclick="m2CombineAll()" class="flex flex-col items-center bg-amber-100 p-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm min-w-[190px] cursor-pointer hover:bg-amber-200/80 transition-colors">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs font-black text-amber-900 uppercase">Caja de Entrega</span>
+            <span>📦</span>
+          </div>
+          <div class="relative w-36 h-36 flex items-center justify-center my-1 bg-amber-50 rounded-xl border-2 border-dashed border-amber-900/40">
+            <svg id="m2BoxSvg" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+            <div id="m2BoxLabel" class="absolute text-center text-xs text-amber-900/80 font-bold px-3 pointer-events-none">
+              Toca para juntarlas
+            </div>
+          </div>
+          <div id="m2ResultBadge" class="mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-slate-500 bg-white opacity-40 transition-all">
+            ? / ?
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full max-w-md flex flex-col sm:flex-row gap-3 items-center justify-center mt-2 z-10">
+        <button onclick="m2CombineAll()" class="w-full sm:w-auto flex-1 py-3 px-4 min-h-[48px] bg-emerald-400 hover:bg-emerald-300 text-slate-900 border-4 border-slate-900 rounded-2xl font-black text-base comic-shadow-sm comic-shadow-active flex items-center justify-center gap-2 cursor-pointer">
+          <span>📦 Juntar en la Caja</span>
+        </button>
+        <button onclick="m2GenerateNewSum()" class="w-full sm:w-auto py-3 px-5 min-h-[48px] bg-white hover:bg-slate-100 text-slate-900 border-4 border-slate-900 rounded-2xl font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
+          🎲 Nueva Suma
+        </button>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- MODO 3: LA FIESTA DE LAS RESTAS (COMER REBANADAS) -->
+    <!-- ------------------------------------------------------------ -->
+    <section id="view3" class="hidden flex-1 bg-[#fed7aa] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between">
+      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3.5 rounded-2xl border-4 border-slate-900 mb-3 shadow-sm">
+        <span class="text-3xl flex-shrink-0 animate-bounce">😋</span>
+        <p id="m3Instructions" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
+          "¡El Chef Monstruito tiene hambre! Quiere comerse rebanadas. <strong>Toca las rebanadas</strong> para que se las coma con un suave ¡ñam!"
+        </p>
+      </div>
+
+      <!-- Plato Central para Restar -->
+      <div class="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center my-1">
+        <div class="absolute inset-0 rounded-full bg-amber-300 border-4 border-slate-900 comic-shadow-sm flex items-center justify-center">
+          <div class="w-11/12 h-11/12 rounded-full border-4 border-dashed border-amber-600 opacity-40"></div>
+        </div>
+
+        <svg id="m3PizzaSvg" viewBox="0 0 200 200" class="w-56 h-56 sm:w-72 sm:h-72 relative z-10 filter drop-shadow-md"></svg>
+
+        <div id="m3BadgeEaten" class="absolute -top-3 -right-3 bg-red-500 text-white font-black px-3 py-1 rounded-full border-3 border-slate-900 text-xs shadow-md">
+          Comidas: 0 🍕
+        </div>
+      </div>
+
+      <!-- Panel de Resta Numérica -->
+      <div class="flex flex-col items-center bg-white px-6 py-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm mb-3 w-full max-w-lg">
+        <div class="flex items-center gap-3 sm:gap-4 my-1">
+          <!-- Inicial -->
+          <div class="flex flex-col items-center">
+            <span id="m3NumInit" class="text-3xl sm:text-4xl font-black text-blue-600">5</span>
+            <div class="w-12 h-2 bg-slate-900 rounded-full my-0.5"></div>
+            <span id="m3DenInit" class="text-3xl sm:text-4xl font-black text-amber-500">6</span>
+          </div>
+
+          <span class="text-3xl font-black text-pink-600">-</span>
+
+          <!-- Comidas -->
+          <div class="flex flex-col items-center">
+            <span id="m3NumEaten" class="text-3xl sm:text-4xl font-black text-red-600">0</span>
+            <div class="w-12 h-2 bg-slate-900 rounded-full my-0.5"></div>
+            <span id="m3DenEaten" class="text-3xl sm:text-4xl font-black text-amber-500">6</span>
+          </div>
+
+          <span class="text-3xl font-black text-slate-800">=</span>
+
+          <!-- Restante -->
+          <div class="flex flex-col items-center bg-emerald-100 px-3 py-1 rounded-xl border-2 border-slate-900">
+            <span id="m3NumResult" class="text-3xl sm:text-4xl font-black text-emerald-700">5</span>
+            <div class="w-12 h-2 bg-slate-900 rounded-full my-0.5"></div>
+            <span id="m3DenResult" class="text-3xl sm:text-4xl font-black text-amber-600">6</span>
+          </div>
+        </div>
+
+        <div id="m3SimplificationTip" class="hidden mt-2 text-xs font-black text-emerald-800 bg-emerald-200/80 px-3 py-1 rounded-full border border-slate-900">
+          💡 ¡Mira! Equivale exactamente a la mitad: <strong>1/2</strong>
+        </div>
+      </div>
+
+      <div class="w-full max-w-md flex gap-3">
+        <button onclick="m3ResetPizza()" class="flex-1 py-3 px-4 min-h-[48px] bg-white hover:bg-slate-100 rounded-2xl border-4 border-slate-900 font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
+          🔄 Restaurar Pizza
+        </button>
+        <button onclick="m3NewChallenge()" class="flex-1 py-3 px-4 min-h-[48px] bg-amber-400 hover:bg-amber-300 rounded-2xl border-4 border-slate-900 font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
+          🎲 Otro Reto de Resta
+        </button>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- MODO 4: SUMAS AVANZADAS (DIFERENTE DENOMINADOR Y CORTE) -->
+    <!-- ------------------------------------------------------------ -->
+    <section id="view4" class="hidden flex-1 bg-[#bae6fd] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between relative overflow-hidden">
+      <div id="m4CelebrationContainer" class="absolute inset-0 pointer-events-none overflow-hidden z-30 hidden"></div>
+
+      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3.5 rounded-2xl border-4 border-slate-900 mb-3 shadow-sm z-10">
+        <div class="w-10 h-10 flex-shrink-0 bg-purple-500 rounded-xl border-2 border-slate-900 flex items-center justify-center text-lg">
+          👾
+        </div>
+        <p id="m4Instructions" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
+          "¡Alto! Los trozos son de tamaños distintos. Toca el botón amarillo <strong class="text-amber-600 underline">🔪 Cortar y Emparejar</strong> para igualarlos."
+        </p>
+      </div>
+
+      <!-- Selector de retos populares -->
+      <div id="m4PresetsBar" class="flex flex-wrap items-center justify-center gap-2 mb-2 z-10"></div>
+
+      <div class="w-full flex flex-col md:flex-row items-center justify-center gap-3 sm:gap-4 my-2 z-10">
+        <!-- Plato A -->
+        <div id="m4PlateA" onclick="m4AddSliceA()" class="flex flex-col items-center bg-white/90 p-3 rounded-2xl border-4 border-slate-900 transition-all">
+          <div class="relative w-36 h-36 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
+            <svg id="m4SvgA" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+          </div>
+          <div class="mt-2 flex items-center gap-2">
+            <span id="m4FracA" class="text-2xl font-black text-blue-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">1/2</span>
+            <button id="btnM4CutMatch" onclick="event.stopPropagation(); m4CutAndMatch();" class="bg-yellow-400 hover:bg-yellow-300 text-xs font-black py-1.5 px-2.5 rounded-xl border-2 border-slate-900 comic-shadow-sm comic-shadow-active flex items-center gap-1 cursor-pointer transition-all">
+              <span>🔪 Cortar y Emparejar</span>
+            </button>
+          </div>
+          <span id="m4HintA" class="text-[11px] font-bold text-slate-700 mt-1">Rebanadas grandes</span>
+        </div>
+
+        <div class="w-12 h-12 bg-pink-500 rounded-full border-4 border-slate-900 flex items-center justify-center text-white text-3xl font-black comic-shadow-sm flex-shrink-0">
+          +
+        </div>
+
+        <!-- Plato B -->
+        <div id="m4PlateB" onclick="m4AddSliceB()" class="flex flex-col items-center bg-white/90 p-3 rounded-2xl border-4 border-slate-900 transition-all">
+          <div class="relative w-36 h-36 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
+            <svg id="m4SvgB" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+          </div>
+          <div class="mt-2">
+            <span id="m4FracB" class="text-2xl font-black text-purple-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">1/4</span>
+          </div>
+          <span id="m4HintB" class="text-[11px] font-bold text-slate-700 mt-1">Rebanadas ya en medida</span>
+        </div>
+
+        <div class="text-3xl font-black text-slate-800">➡️</div>
+
+        <!-- Caja de Entrega -->
+        <div onclick="m4CombineAll()" class="flex flex-col items-center bg-amber-100 p-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm min-w-[190px] cursor-pointer hover:bg-amber-200/80 transition-colors">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs font-black text-amber-900 uppercase">Caja de Entrega</span>
+            <span>📦</span>
+          </div>
+          <div class="relative w-36 h-36 flex items-center justify-center my-1 bg-amber-50 rounded-xl border-2 border-dashed border-amber-900/40">
+            <svg id="m4BoxSvg" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+            <div id="m4BoxLabel" class="absolute text-center text-xs text-amber-900/80 font-bold px-3 pointer-events-none">
+              Toca para juntarlas
+            </div>
+          </div>
+          <div id="m4ResultBadge" class="mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-slate-500 bg-white opacity-40 transition-all">
+            ? / ?
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full max-w-md flex flex-col sm:flex-row gap-3 items-center justify-center mt-2 z-10">
+        <button onclick="m4CombineAll()" class="w-full sm:w-auto flex-1 py-3 px-4 min-h-[48px] bg-emerald-400 hover:bg-emerald-300 text-slate-900 border-4 border-slate-900 rounded-2xl font-black text-base comic-shadow-sm comic-shadow-active flex items-center justify-center gap-2 cursor-pointer">
+          <span>📦 Juntar en la Caja</span>
+        </button>
+        <button onclick="m4NextPreset()" class="w-full sm:w-auto py-3 px-5 min-h-[48px] bg-white hover:bg-slate-100 text-slate-900 border-4 border-slate-900 rounded-2xl font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
+          Siguiente Reto 🚀
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="mt-3 text-center text-xs font-bold text-slate-800">
+    Diseñado con amor y cuidado sensorial para campeones matemáticos 🍕✨
+  </footer>
+
+  <!-- ============================================== -->
+  <!-- SCRIPTS NATIVOS Y AUDIO WEB API -->
+  <!-- ============================================== -->
+  <script>
+    /* 1. MOTOR DE AUDIO NATIVO (Web Audio API) */
+    let audioCtx = null;
+    let isMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playPop(freq = 440) {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.35, audioCtx.currentTime + 0.08);
+
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.12);
+      } catch (e) {}
+    }
+
+    function playSlice() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(540, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.12);
+
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      } catch (e) {}
+    }
+
+    function playNomNom() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        [330, 440].forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.12);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.8, audioCtx.currentTime + idx * 0.12 + 0.08);
+
+          gain.gain.setValueAtTime(0.2, audioCtx.currentTime + idx * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + idx * 0.12 + 0.1);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + idx * 0.12);
+          osc.stop(audioCtx.currentTime + idx * 0.12 + 0.1);
+        });
+      } catch (e) {}
+    }
+
+    function playThinking() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(360, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(420, audioCtx.currentTime + 0.2);
+
+        gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch (e) {}
+    }
+
+    function playSuccess() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+
+          const startTime = audioCtx.currentTime + idx * 0.1;
+          gain.gain.setValueAtTime(0.16, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.45);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + 0.45);
+        });
+      } catch (e) {}
+    }
+
+    const btnSound = document.getElementById('btnSound');
+    const soundIcon = document.getElementById('soundIcon');
+    btnSound.addEventListener('click', () => {
+      initAudio();
+      isMuted = !isMuted;
+      soundIcon.textContent = isMuted ? '🔇' : '🔊';
+      btnSound.classList.toggle('bg-slate-300', isMuted);
+      btnSound.classList.toggle('bg-amber-400', !isMuted);
+    });
+
+    /* 2. CHEF MONSTRUITO CON EXPRESIONES COMICAS */
+    function renderChef(mood = 'happy') {
+      const chefSvg = document.getElementById('chefSvg');
+      if (!chefSvg) return;
+
+      let eyes = '';
+      let mouth = '';
+
+      if (mood === 'happy') {
+        eyes = `
+          <circle cx="39" cy="48" r="11" fill="#ffffff" stroke="#0f172a" stroke-width="4.5"/>
+          <circle cx="63" cy="47" r="10" fill="#ffffff" stroke="#0f172a" stroke-width="4.5"/>
+          <circle cx="41" cy="48" r="4.5" fill="#0f172a"/>
+          <circle cx="65" cy="47" r="4" fill="#0f172a"/>
+          <circle cx="39" cy="46" r="1.5" fill="#ffffff"/>
+          <circle cx="63" cy="45" r="1.5" fill="#ffffff"/>
+        `;
+        mouth = `
+          <path d="M 38 68 Q 50 78 64 68" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
+          <rect x="47" y="67" width="6" height="6" fill="#ffffff" stroke="#0f172a" stroke-width="2.5" rx="1.5"/>
+        `;
+      } else if (mood === 'thinking') {
+        eyes = `
+          <circle cx="39" cy="48" r="11" fill="#ffffff" stroke="#0f172a" stroke-width="4.5"/>
+          <circle cx="63" cy="47" r="10" fill="#ffffff" stroke="#0f172a" stroke-width="4.5"/>
+          <circle cx="43" cy="43" r="4.5" fill="#0f172a"/>
+          <circle cx="67" cy="42" r="4" fill="#0f172a"/>
+          <path d="M 32 35 Q 40 31 48 36" fill="none" stroke="#0f172a" stroke-width="4" stroke-linecap="round"/>
+          <path d="M 58 37 Q 65 35 72 38" fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
+        `;
+        mouth = `<ellipse cx="52" cy="71" rx="5" ry="4" fill="#0f172a"/>`;
+      } else if (mood === 'eating') {
+        eyes = `
+          <path d="M 32 48 Q 40 42 48 48" fill="none" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M 54 48 Q 62 42 70 48" fill="none" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"/>
+        `;
+        mouth = `
+          <ellipse cx="50" cy="70" rx="9" ry="7" fill="#0f172a"/>
+          <polygon points="46,71 58,66 54,76" fill="#facc15" stroke="#ea580c" stroke-width="1"/>
+          <circle cx="51" cy="70" r="1.5" fill="#ef4444"/>
+        `;
+      } else if (mood === 'celebrating') {
+        eyes = `
+          <path d="M 30 48 Q 40 38 50 48" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
+          <path d="M 54 48 Q 64 38 74 48" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="50,2 52,8 58,10 52,12 50,18 48,12 42,10 48,8" fill="#facc15" stroke="#0f172a" stroke-width="1.5"/>
+        `;
+        mouth = `
+          <path d="M 36 65 Q 50 82 66 65 Z" fill="#0f172a" stroke="#0f172a" stroke-width="2"/>
+          <path d="M 43 72 Q 50 79 57 72 Z" fill="#f43f5e"/>
+          <rect x="44" y="64" width="6" height="5" fill="#ffffff" rx="1"/>
+          <rect x="52" y="64" width="6" height="5" fill="#ffffff" rx="1"/>
+        `;
+      }
+
+      chefSvg.innerHTML = `
+        <ellipse cx="50" cy="56" rx="35" ry="40" fill="#a855f7" stroke="#0f172a" stroke-width="5"/>
+        <g class="${mood === 'celebrating' ? 'animate-bounce' : ''}">
+          <path d="M 28 34 C 18 18, 45 4, 50 18 C 55 4, 82 18, 72 34 Z" fill="#ffffff" stroke="#0f172a" stroke-width="5"/>
+          <rect x="28" y="30" width="44" height="9" rx="4" fill="#f1f5f9" stroke="#0f172a" stroke-width="4"/>
+        </g>
+        <circle cx="28" cy="62" r="5" fill="#f472b6" opacity="0.6"/>
+        <circle cx="72" cy="62" r="5" fill="#f472b6" opacity="0.6"/>
+        ${eyes}
+        ${mouth}
+      `;
+    }
+
+    /* 3. DIBUJADO DE PIZZAS VECTORIALES (SVG NATIVO) */
+    function getArcPoint(cx, cy, radius, angleInDegrees) {
+      const rad = (angleInDegrees - 90) * Math.PI / 180.0;
+      return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) };
+    }
+
+    function createSlicePath(cx, cy, radius, startAngle, endAngle) {
+      const start = getArcPoint(cx, cy, radius, endAngle);
+      const end = getArcPoint(cx, cy, radius, startAngle);
+      const largeArc = endAngle - startAngle <= 180 ? "0" : "1";
+      return ["M", cx, cy, "L", start.x, start.y, "A", radius, radius, 0, largeArc, 0, end.x, end.y, "Z"].join(" ");
+    }
+
+    function renderPizza(svgElem, totalSlices, activeSlices, options = {}) {
+      const {
+        sliceColor = '#facc15',
+        crustColor = '#f59e0b',
+        emptyColor = '#fef3c7',
+        showAssistedDashes = false,
+        onSliceClick = null
+      } = options;
+
+      svgElem.innerHTML = '';
+      const cx = 100, cy = 100, radius = 86;
+      const anglePerSlice = 360 / totalSlices;
+
+      const crust = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      crust.setAttribute("cx", cx);
+      crust.setAttribute("cy", cy);
+      crust.setAttribute("r", radius + 6);
+      crust.setAttribute("fill", crustColor);
+      crust.setAttribute("stroke", "#0f172a");
+      crust.setAttribute("stroke-width", "5");
+      svgElem.appendChild(crust);
+
+      const sauce = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      sauce.setAttribute("cx", cx);
+      sauce.setAttribute("cy", cy);
+      sauce.setAttribute("r", radius + 1);
+      sauce.setAttribute("fill", "#dc2626");
+      sauce.setAttribute("stroke", "#0f172a");
+      sauce.setAttribute("stroke-width", "2");
+      svgElem.appendChild(sauce);
+
+      for (let i = 0; i < totalSlices; i++) {
+        const startAngle = i * anglePerSlice;
+        const endAngle = startAngle + anglePerSlice;
+        const isActive = i < activeSlices;
+
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        if (onSliceClick && isActive) {
+          g.style.cursor = 'pointer';
+          g.onclick = () => onSliceClick(i);
+        }
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", createSlicePath(cx, cy, radius, startAngle, endAngle));
+        path.setAttribute("fill", isActive ? sliceColor : emptyColor);
+        path.setAttribute("stroke", "#0f172a");
+        path.setAttribute("stroke-width", "4");
+        path.setAttribute("class", "slice-path");
+        g.appendChild(path);
+
+        if (isActive) {
+          const midAngle = startAngle + anglePerSlice / 2;
+          const pepPos = getArcPoint(cx, cy, radius * 0.58, midAngle);
+          const pepRadius = totalSlices >= 8 ? 6 : totalSlices >= 6 ? 7.5 : 9.5;
+
+          const pep = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          pep.setAttribute("cx", pepPos.x);
+          pep.setAttribute("cy", pepPos.y);
+          pep.setAttribute("r", pepRadius);
+          pep.setAttribute("fill", "#ef4444");
+          pep.setAttribute("stroke", "#0f172a");
+          pep.setAttribute("stroke-width", "2.5");
+          g.appendChild(pep);
+
+          if (totalSlices <= 8) {
+            const e1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            e1.setAttribute("cx", pepPos.x - (totalSlices >= 8 ? 2 : 2.8));
+            e1.setAttribute("cy", pepPos.y - 1);
+            e1.setAttribute("r", totalSlices >= 8 ? 1.2 : 1.6);
+            e1.setAttribute("fill", "#0f172a");
+            g.appendChild(e1);
+
+            const e2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            e2.setAttribute("cx", pepPos.x + (totalSlices >= 8 ? 2 : 2.8));
+            e2.setAttribute("cy", pepPos.y - 1);
+            e2.setAttribute("r", totalSlices >= 8 ? 1.2 : 1.6);
+            e2.setAttribute("fill", "#0f172a");
+            g.appendChild(e2);
+          }
+        }
+
+        if (showAssistedDashes && isActive) {
+          const midAngle = startAngle + anglePerSlice / 2;
+          const edgePoint = getArcPoint(cx, cy, radius + 2, midAngle);
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute("x1", cx);
+          line.setAttribute("y1", cy);
+          line.setAttribute("x2", edgePoint.x);
+          line.setAttribute("y2", edgePoint.y);
+          line.setAttribute("stroke", "#ea580c");
+          line.setAttribute("stroke-width", "3.5");
+          line.setAttribute("stroke-dasharray", "4 4");
+          g.appendChild(line);
+        }
+
+        svgElem.appendChild(g);
+      }
+    }
+
+    /* 4. MODO 1: CORTADOR MÁGICO */
+    let m1DenVal = 2;
+    let m1NumVal = 1;
+    let m1ShowAssistedDashes = true;
+
+    function initM1() {
+      const container = document.getElementById('m1BaseButtons');
+      container.innerHTML = '';
+      [2, 3, 4, 6, 8].forEach(d => {
+        const btn = document.createElement('button');
+        btn.textContent = `/${d}`;
+        btn.className = `px-3 py-1.5 min-h-[44px] rounded-xl border-3 border-slate-900 font-black text-sm cursor-pointer transition-all ${
+          m1DenVal === d ? 'bg-amber-400 comic-shadow-sm scale-105' : 'bg-white hover:bg-slate-100'
+        }`;
+        btn.onclick = () => {
+          playPop(480);
+          m1DenVal = d;
+          m1NumVal = Math.max(1, Math.floor(d / 2));
+          updateM1();
+        };
+        container.appendChild(btn);
+      });
+      updateM1();
+    }
+
+    function updateM1() {
+      document.getElementById('m1Num').textContent = m1NumVal;
+      document.getElementById('m1Den').textContent = m1DenVal;
+      document.getElementById('m1NumText').textContent = `${m1NumVal} rebanada${m1NumVal > 1 ? 's' : ''} con queso`;
+      document.getElementById('m1DenText').textContent = `Cortes totales: ${m1DenVal}`;
+
+      const pct = Math.round((m1NumVal / m1DenVal) * 100);
+      document.getElementById('m1VolumeBar').style.width = `${pct}%`;
+      document.getElementById('m1VolumeLabel').textContent = `${pct}% PIZZA`;
+
+      const btnDouble = document.getElementById('btnM1Double');
+      if (m1DenVal >= 8) {
+        btnDouble.classList.add('bg-slate-300', 'opacity-60', 'cursor-not-allowed');
+        btnDouble.classList.remove('bg-emerald-400', 'hover:bg-emerald-300');
+      } else {
+        btnDouble.classList.remove('bg-slate-300', 'opacity-60', 'cursor-not-allowed');
+        btnDouble.classList.add('bg-emerald-400', 'hover:bg-emerald-300');
+      }
+
+      renderPizza(document.getElementById('m1PizzaSvg'), m1DenVal, m1NumVal, {
+        sliceColor: '#facc15',
+        crustColor: '#ea580c',
+        emptyColor: '#fef3c7',
+        showAssistedDashes: m1ShowAssistedDashes
+      });
+    }
+
+    function m1DoubleCut() {
+      if (m1DenVal >= 8) {
+        playPop(350);
+        return;
+      }
+      playSlice();
+      renderChef('celebrating');
+      m1DenVal *= 2;
+      m1NumVal *= 2;
+      updateM1();
+      setTimeout(() => renderChef('happy'), 1500);
+    }
+
+    function m1ToggleAssisted() {
+      playPop(450);
+      m1ShowAssistedDashes = !m1ShowAssistedDashes;
+      updateM1();
+    }
+
+    /* 5. MODO 2: SUMAS BÁSICAS */
+    let m2DenVal = 4;
+    let m2NumA = 1;
+    let m2NumB = 2;
+    let m2AddedA = false;
+    let m2AddedB = false;
+
+    function renderM2() {
+      renderPizza(document.getElementById('m2SvgA'), m2DenVal, m2AddedA ? 0 : m2NumA, { sliceColor: '#60a5fa' });
+      renderPizza(document.getElementById('m2SvgB'), m2DenVal, m2AddedB ? 0 : m2NumB, { sliceColor: '#c084fc' });
+
+      document.getElementById('m2FracA').textContent = `${m2NumA}/${m2DenVal}`;
+      document.getElementById('m2FracB').textContent = `${m2NumB}/${m2DenVal}`;
+
+      document.getElementById('m2HintA').textContent = m2AddedA ? '¡En la caja! ✔️' : '👉 Toca para poner';
+      document.getElementById('m2HintB').textContent = m2AddedB ? '¡En la caja! ✔️' : '👉 Toca para poner';
+
+      document.getElementById('m2PlateA').classList.toggle('opacity-40', m2AddedA);
+      document.getElementById('m2PlateB').classList.toggle('opacity-40', m2AddedB);
+
+      const inBox = (m2AddedA ? m2NumA : 0) + (m2AddedB ? m2NumB : 0);
+      const target = m2NumA + m2NumB;
+      const boxSvg = document.getElementById('m2BoxSvg');
+      const boxLabel = document.getElementById('m2BoxLabel');
+      const badge = document.getElementById('m2ResultBadge');
+
+      if (inBox === 0) {
+        boxSvg.innerHTML = '';
+        boxLabel.style.display = 'block';
+        badge.textContent = '? / ?';
+        badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-slate-500 bg-white opacity-40 transition-all";
+      } else {
+        renderPizza(boxSvg, m2DenVal, inBox, { sliceColor: '#34d399', crustColor: '#ea580c' });
+        boxLabel.style.display = 'none';
+        badge.textContent = `${inBox}/${m2DenVal}`;
+        if (inBox === target) {
+          badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-emerald-700 bg-emerald-200 scale-105 transition-all";
+          renderChef('celebrating');
+          playSuccess();
+        } else {
+          badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-blue-600 bg-white transition-all";
+        }
+      }
+    }
+
+    function m2AddSliceA() {
+      if (m2AddedA) return;
+      playPop(480);
+      m2AddedA = true;
+      renderM2();
+    }
+
+    function m2AddSliceB() {
+      if (m2AddedB) return;
+      playPop(520);
+      m2AddedB = true;
+      renderM2();
+    }
+
+    function m2CombineAll() {
+      if (m2AddedA && m2AddedB) return;
+      playPop(520);
+      m2AddedA = true;
+      m2AddedB = true;
+      renderM2();
+    }
+
+    function m2GenerateNewSum() {
+      playPop(520);
+      const dens = [4, 6, 8];
+      m2DenVal = dens[Math.floor(Math.random() * dens.length)];
+      m2NumA = Math.floor(Math.random() * (m2DenVal - 2)) + 1;
+      const maxB = m2DenVal - m2NumA;
+      m2NumB = Math.floor(Math.random() * maxB) + 1;
+      m2AddedA = false;
+      m2AddedB = false;
+      renderChef('happy');
+      renderM2();
+    }
+
+    /* 6. MODO 3: FIESTA DE LAS RESTAS */
+    let m3DenVal = 6;
+    let m3InitVal = 5;
+    let m3EatenCount = 0;
+    let m3TargetEat = 2;
+
+    function renderM3() {
+      const remaining = m3InitVal - m3EatenCount;
+      document.getElementById('m3NumInit').textContent = m3InitVal;
+      document.getElementById('m3DenInit').textContent = m3DenVal;
+      document.getElementById('m3NumEaten').textContent = m3EatenCount;
+      document.getElementById('m3DenEaten').textContent = m3DenVal;
+      document.getElementById('m3NumResult').textContent = remaining;
+      document.getElementById('m3DenResult').textContent = m3DenVal;
+
+      document.getElementById('m3BadgeEaten').textContent = `Comidas: ${m3EatenCount} / ${m3TargetEat} 🍕`;
+
+      const tip = document.getElementById('m3SimplificationTip');
+      if (remaining > 0 && remaining / m3DenVal === 0.5) {
+        tip.classList.remove('hidden');
+      } else {
+        tip.classList.add('hidden');
+      }
+
+      renderPizza(document.getElementById('m3PizzaSvg'), m3DenVal, remaining, {
+        sliceColor: '#f59e0b',
+        crustColor: '#b45309',
+        emptyColor: '#fef3c7',
+        onSliceClick: () => {
+          if (m3EatenCount >= m3TargetEat) return;
+          playNomNom();
+          renderChef('eating');
+          m3EatenCount++;
+          renderM3();
+          setTimeout(() => {
+            if (m3EatenCount >= m3TargetEat) {
+              renderChef('celebrating');
+              playSuccess();
+            } else {
+              renderChef('happy');
+            }
+          }, 600);
+        }
+      });
+    }
+
+    function m3ResetPizza() {
+      playPop(420);
+      m3EatenCount = 0;
+      renderChef('happy');
+      renderM3();
+    }
+
+    function m3NewChallenge() {
+      playPop(500);
+      const dens = [4, 6, 8];
+      m3DenVal = dens[Math.floor(Math.random() * dens.length)];
+      m3InitVal = Math.floor(Math.random() * (m3DenVal - 2)) + 3;
+      m3TargetEat = Math.floor(Math.random() * (m3InitVal - 1)) + 1;
+      m3EatenCount = 0;
+      renderChef('happy');
+      renderM3();
+    }
+
+    /* 7. MODO 4: SUMAS AVANZADAS */
+    const presetsM4 = [
+      { name: '1/2 + 1/4', numA: 1, denA: 2, numB: 1, denB: 4 },
+      { name: '1/2 + 3/8', numA: 1, denA: 2, numB: 3, denB: 8 },
+      { name: '1/3 + 1/6', numA: 1, denA: 3, numB: 1, denB: 6 },
+      { name: '2/4 + 1/8', numA: 2, denA: 4, numB: 1, denB: 8 },
+    ];
+    let m4Idx = 0;
+    let m4IsSlicedA = false;
+    let m4AddedA = false;
+    let m4AddedB = false;
+
+    function initM4() {
+      const bar = document.getElementById('m4PresetsBar');
+      bar.innerHTML = '<span class="text-xs font-black text-slate-700 uppercase mr-1">Elegir Reto:</span>';
+      presetsM4.forEach((p, idx) => {
+        const btn = document.createElement('button');
+        btn.textContent = p.name;
+        btn.className = `px-3 py-1.5 min-h-[40px] rounded-xl border-3 border-slate-900 font-black text-xs cursor-pointer transition-all ${
+          m4Idx === idx ? 'bg-amber-400 comic-shadow-sm scale-105' : 'bg-white hover:bg-slate-100'
+        }`;
+        btn.onclick = () => {
+          m4Idx = idx;
+          m4IsSlicedA = false;
+          m4AddedA = false;
+          m4AddedB = false;
+          initM4();
+          renderM4();
+        };
+        bar.appendChild(btn);
+      });
+      renderM4();
+    }
+
+    function renderM4() {
+      const cur = presetsM4[m4Idx];
+      const factor = cur.denB / cur.denA;
+      const convertedNumA = cur.numA * factor;
+      const commonDen = cur.denB;
+
+      // Plato A
+      if (!m4IsSlicedA) {
+        renderPizza(document.getElementById('m4SvgA'), cur.denA, cur.numA, { sliceColor: '#60a5fa' });
+        document.getElementById('m4FracA').textContent = `${cur.numA}/${cur.denA}`;
+        document.getElementById('m4FracA').className = "text-2xl font-black text-blue-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900";
+        document.getElementById('btnM4CutMatch').style.display = "flex";
+        document.getElementById('m4HintA').textContent = "Rebanadas grandes";
+        document.getElementById('m4PlateA').classList.remove('cursor-pointer', 'hover:scale-105', 'opacity-40');
+      } else {
+        renderPizza(document.getElementById('m4SvgA'), commonDen, m4AddedA ? 0 : convertedNumA, { sliceColor: '#60a5fa' });
+        document.getElementById('m4FracA').textContent = `${convertedNumA}/${commonDen}`;
+        document.getElementById('m4FracA').className = "text-2xl font-black text-emerald-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900";
+        document.getElementById('btnM4CutMatch').style.display = "none";
+        document.getElementById('m4HintA').textContent = m4AddedA ? "¡En la caja! ✔️" : "👉 Toca para poner en la caja";
+        document.getElementById('m4PlateA').classList.toggle('opacity-40', m4AddedA);
+        document.getElementById('m4PlateA').classList.add('cursor-pointer', 'hover:scale-105');
+      }
+
+      // Plato B
+      renderPizza(document.getElementById('m4SvgB'), cur.denB, m4AddedB ? 0 : cur.numB, { sliceColor: '#c084fc' });
+      document.getElementById('m4FracB').textContent = `${cur.numB}/${cur.denB}`;
+      document.getElementById('m4HintB').textContent = m4AddedB ? "¡En la caja! ✔️" : m4IsSlicedA ? "👉 Toca para poner en la caja" : "Rebanadas ya en medida";
+      document.getElementById('m4PlateB').classList.toggle('opacity-40', m4AddedB);
+      if (m4IsSlicedA) {
+        document.getElementById('m4PlateB').classList.add('cursor-pointer', 'hover:scale-105');
+      }
+
+      // Caja
+      const inBox = (m4AddedA ? convertedNumA : 0) + (m4AddedB ? cur.numB : 0);
+      const target = convertedNumA + cur.numB;
+      const boxSvg = document.getElementById('m4BoxSvg');
+      const boxLabel = document.getElementById('m4BoxLabel');
+      const badge = document.getElementById('m4ResultBadge');
+
+      if (inBox === 0) {
+        boxSvg.innerHTML = '';
+        boxLabel.style.display = 'block';
+        badge.textContent = '? / ?';
+        badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-slate-500 bg-white opacity-40 transition-all";
+      } else {
+        renderPizza(boxSvg, commonDen, inBox, { sliceColor: '#34d399', crustColor: '#ea580c' });
+        boxLabel.style.display = 'none';
+        badge.textContent = `${inBox}/${commonDen}`;
+        if (inBox === target) {
+          badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-emerald-700 bg-emerald-200 scale-105 transition-all";
+          renderChef('celebrating');
+          playSuccess();
+        } else {
+          badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-blue-600 bg-white transition-all";
+        }
+      }
+    }
+
+    function m4CutAndMatch() {
+      playSlice();
+      m4IsSlicedA = true;
+      renderChef('happy');
+      document.getElementById('m4Instructions').innerHTML = `"¡Perfecto! Ahora ambos platos son del mismo tamaño. ¡Toca las rebanadas o el botón para ponerlas en la caja!"`;
+      renderM4();
+    }
+
+    function m4EarlyAttempt() {
+      playThinking();
+      renderChef('thinking');
+      document.getElementById('m4Instructions').innerHTML = `"¡Alto! Los trozos son de tamaños distintos. Toca el botón amarillo <strong class="text-amber-600 underline">🔪 Cortar y Emparejar</strong> para igualarlos."`;
+      const btn = document.getElementById('btnM4CutMatch');
+      btn.classList.add('animate-bounce', 'ring-4', 'ring-pink-400', 'scale-110');
+      setTimeout(() => {
+        btn.classList.remove('animate-bounce', 'ring-4', 'ring-pink-400', 'scale-110');
+        renderChef('happy');
+      }, 1800);
+    }
+
+    function m4AddSliceA() {
+      if (!m4IsSlicedA) {
+        m4EarlyAttempt();
+        return;
+      }
+      if (m4AddedA) return;
+      playPop(480);
+      m4AddedA = true;
+      renderM4();
+    }
+
+    function m4AddSliceB() {
+      if (!m4IsSlicedA) {
+        m4EarlyAttempt();
+        return;
+      }
+      if (m4AddedB) return;
+      playPop(520);
+      m4AddedB = true;
+      renderM4();
+    }
+
+    function m4CombineAll() {
+      if (!m4IsSlicedA) {
+        m4EarlyAttempt();
+        return;
+      }
+      if (m4AddedA && m4AddedB) return;
+      m4AddedA = true;
+      m4AddedB = true;
+      renderM4();
+    }
+
+    function m4NextPreset() {
+      playPop(490);
+      m4Idx = (m4Idx + 1) % presetsM4.length;
+      m4IsSlicedA = false;
+      m4AddedA = false;
+      m4AddedB = false;
+      renderChef('happy');
+      initM4();
+    }
+
+    /* 8. NAVEGACIÓN ENTRE MODOS */
+    function switchMode(idx) {
+      initAudio();
+      playPop(480);
+      renderChef('happy');
+
+      [1, 2, 3, 4].forEach(i => {
+        const tab = document.getElementById(`tab${i}`);
+        const view = document.getElementById(`view${i}`);
+        if (i === idx) {
+          tab.classList.remove('bg-slate-200', 'opacity-80', 'comic-shadow-sm');
+          tab.classList.add('bg-yellow-400', 'comic-shadow');
+          view.classList.remove('hidden');
+        } else {
+          tab.classList.remove('bg-yellow-400', 'comic-shadow');
+          tab.classList.add('bg-slate-200', 'opacity-80', 'comic-shadow-sm');
+          view.classList.add('hidden');
+        }
+      });
+
+      if (idx === 1) updateM1();
+      if (idx === 2) renderM2();
+      if (idx === 3) renderM3();
+      if (idx === 4) initM4();
+    }
+
+    window.onload = function() {
+      renderChef('happy');
+      initM1();
+      renderM2();
+      renderM3();
+      initM4();
+    };
+  </script>
+</body>
+</html>

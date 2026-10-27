@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizzería Monstruosa: Fracciones Mágicas</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka para texto cartoon legible y amigable -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Fredoka', cursive, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Animaciones suaves cartoon */
+    @keyframes gentleWobble {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+    .animate-wobble {
+      animation: gentleWobble 2.5s ease-in-out infinite;
+    }
+
+    @keyframes popBounce {
+      0% { transform: scale(0.9); }
+      60% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .pop-in {
+      animation: popBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Sombras sólidas estilo cómic / Dumb Ways to Die */
+    .comic-shadow {
+      box-shadow: 0 8px 0px #1e293b;
+    }
+    .comic-shadow-sm {
+      box-shadow: 0 4px 0px #1e293b;
+    }
+    .comic-shadow-active:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0px #1e293b;
+    }
+
+    /* Transición de rebanadas */
+    .slice-path {
+      transition: fill 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+    .slice-path:hover {
+      filter: brightness(1.08);
+    }
+  </style>
+</head>
+<body class="bg-[#84cc16] min-h-screen flex flex-col items-center justify-between p-3 sm:p-5 text-slate-900 overflow-x-hidden">
+
+  <!-- ENCABEZADO SUPERIOR -->
+  <header class="w-full max-w-4xl flex items-center justify-between bg-[#a3e635] p-3 sm:p-4 rounded-3xl border-4 border-slate-900 comic-shadow mb-4">
+    <!-- Logotipo y personaje avatar -->
+    <div class="flex items-center gap-3">
+      <!-- Icono Chef Monstruito (estilo Plants vs Zombies / Dumb Ways) -->
+      <div class="w-14 h-14 bg-purple-500 rounded-2xl border-4 border-slate-900 comic-shadow-sm flex items-center justify-center overflow-hidden animate-wobble">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <!-- Cuerpo frijolito morado -->
+          <ellipse cx="50" cy="55" rx="35" ry="40" fill="#a855f7" stroke="#0f172a" stroke-width="6"/>
+          <!-- Gorro de chef blanco -->
+          <path d="M 30 35 C 20 20, 45 5, 50 20 C 55 5, 80 20, 70 35 Z" fill="#ffffff" stroke="#0f172a" stroke-width="6"/>
+          <rect x="30" y="32" width="40" height="8" rx="4" fill="#f8fafc" stroke="#0f172a" stroke-width="5"/>
+          <!-- Ojos saltones locos -->
+          <circle cx="40" cy="50" r="12" fill="#ffffff" stroke="#0f172a" stroke-width="5"/>
+          <circle cx="62" cy="48" r="10" fill="#ffffff" stroke="#0f172a" stroke-width="5"/>
+          <circle cx="42" cy="50" r="5" fill="#0f172a"/>
+          <circle cx="63" cy="48" r="4" fill="#0f172a"/>
+          <!-- Sonrisa tonta amigable -->
+          <path d="M 40 68 Q 50 78 62 68" fill="none" stroke="#0f172a" stroke-width="6" stroke-linecap="round"/>
+          <!-- Diente salidito tipo zombie tierno -->
+          <rect x="47" y="68" width="6" height="6" fill="#ffffff" stroke="#0f172a" stroke-width="3" rx="1"/>
+        </svg>
+      </div>
+
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold tracking-wide text-slate-900 uppercase">La Pizzería Monstruosa</h1>
+        <p class="text-xs sm:text-sm text-slate-800 font-semibold">¡Aprende Fracciones comiendo Pizza!</p>
+      </div>
+    </div>
+
+    <!-- Controles superiores: Silenciar sonido y selector de modos -->
+    <div class="flex items-center gap-2">
+      <!-- Botón de sonido accesible para confort auditivo -->
+      <button id="btnSound" class="bg-amber-400 hover:bg-amber-300 p-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm comic-shadow-active flex items-center justify-center font-bold" aria-label="Control de sonido" title="Encender/Silenciar audio">
+        <span id="soundIcon" class="text-xl">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- NAVEGADOR DE MODOS (Pestañas grandes con botones de dibujos) -->
+  <nav class="w-full max-w-4xl flex gap-3 mb-4">
+    <button id="tabMode1" onclick="switchMode(1)" class="flex-1 py-3 px-4 rounded-2xl border-4 border-slate-900 font-bold text-base sm:text-lg text-center bg-yellow-400 comic-shadow comic-shadow-active transition-all flex items-center justify-center gap-2">
+      <span class="text-2xl">🍕</span>
+      <span>1. Cortador Mágico (Equivalencias)</span>
+    </button>
+    <button id="tabMode2" onclick="switchMode(2)" class="flex-1 py-3 px-4 rounded-2xl border-4 border-slate-900 font-bold text-base sm:text-lg text-center bg-slate-200 opacity-80 comic-shadow-sm comic-shadow-active transition-all flex items-center justify-center gap-2">
+      <span class="text-2xl">➕</span>
+      <span>2. La Cocina de Sumas</span>
+    </button>
+  </nav>
+
+  <!-- ÁREA PRINCIPAL DINÁMICA -->
+  <main class="w-full max-w-4xl flex-1 flex flex-col">
+
+    <!-- ============================================== -->
+    <!-- MODO 1: CORTADOR MÁGICO DE EQUIVALENCIAS -->
+    <!-- ============================================== -->
+    <section id="viewMode1" class="flex-1 bg-[#fef08a] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between">
+      
+      <!-- Mensaje guiado del Chef con bocadillo tipo cómic -->
+      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3 rounded-2xl border-4 border-slate-900 mb-4 relative">
+        <span class="text-3xl">👾</span>
+        <p id="mode1Instructions" class="text-sm sm:text-base font-bold text-slate-800">
+          "¡Mira! Corta la pizza en más rebanadas. Verás que <span class="text-blue-600 underline">la cantidad de pizza es la misma</span>, ¡solo son pedacitos más pequeños!"
+        </p>
+      </div>
+
+      <!-- Zona Central: La Pizza Gigante SVG y el Plato -->
+      <div class="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center my-2">
+        <!-- Plato cartoon -->
+        <div class="absolute inset-0 rounded-full bg-cyan-300 border-4 border-slate-900 comic-shadow-sm flex items-center justify-center">
+          <div class="w-11/12 h-11/12 rounded-full border-4 border-dashed border-cyan-500 opacity-40"></div>
+        </div>
+
+        <!-- SVG de la Pizza Interactiva -->
+        <svg id="magicPizzaSvg" viewBox="0 0 200 200" class="w-56 h-56 sm:w-72 sm:h-72 relative z-10 filter drop-shadow-md">
+          <!-- El contenido se genera con JS -->
+        </svg>
+
+        <!-- Cortador animado decorativo en la esquina -->
+        <div class="absolute -top-3 -right-3 w-12 h-12 bg-red-500 rounded-full border-4 border-slate-900 flex items-center justify-center text-xl shadow-md animate-bounce" title="¡Cortador!">
+          🔪
+        </div>
+      </div>
+
+      <!-- Indicador visual de Fracción Gigante con colores clave -->
+      <div class="flex flex-col items-center bg-white px-6 py-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm mb-4">
+        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tu Porción de Pizza</span>
+        <div class="flex items-center gap-3 my-1">
+          <div class="flex flex-col items-center">
+            <!-- Numerador: partes que comemos (Azul) -->
+            <span id="eqNum" class="text-4xl sm:text-5xl font-black text-blue-600 leading-none">1</span>
+            <!-- Barra de fracción -->
+            <div class="w-14 sm:w-16 h-2 bg-slate-900 rounded-full my-1"></div>
+            <!-- Denominador: en cuánto la cortamos (Naranja) -->
+            <span id="eqDen" class="text-4xl sm:text-5xl font-black text-amber-500 leading-none">2</span>
+          </div>
+          <!-- Texto explicativo amigable -->
+          <div class="text-left text-xs sm:text-sm font-bold text-slate-700 pl-2 border-l-2 border-slate-300">
+            <p><span class="inline-block w-3 h-3 bg-blue-500 rounded-full mr-1"></span><span id="eqNumLabel">1 rebanada elegida</span></p>
+            <p><span class="inline-block w-3 h-3 bg-amber-500 rounded-full mr-1"></span><span id="eqDenLabel">Cortes totales: 2</span></p>
+          </div>
+        </div>
+        <!-- Barra de equivalencia visual permanente -->
+        <div class="w-full bg-slate-200 rounded-full h-4 border-2 border-slate-900 overflow-hidden mt-2">
+          <div id="volumeBar" class="bg-gradient-to-r from-amber-400 to-orange-500 h-full transition-all duration-300" style="width: 50%;"></div>
+        </div>
+        <span class="text-[11px] font-bold text-slate-600 mt-1">Barriga llena: exactamente la mitad de la pizza (50%)</span>
+      </div>
+
+      <!-- Botones grandes del cortador (2, 4 y 8 rebanadas) -->
+      <div class="w-full max-w-md flex justify-center gap-3">
+        <button onclick="setEquivalenceCuts(2)" id="btnCut2" class="flex-1 py-3 bg-emerald-400 hover:bg-emerald-300 text-slate-900 border-4 border-slate-900 rounded-2xl font-bold text-base sm:text-lg comic-shadow-sm comic-shadow-active flex flex-col items-center">
+          <span>Partir en 2</span>
+          <span class="text-xs bg-white/70 px-2 py-0.5 rounded-full border border-slate-900 mt-1">1/2</span>
+        </button>
+
+        <button onclick="setEquivalenceCuts(4)" id="btnCut4" class="flex-1 py-3 bg-white text-slate-900 border-4 border-slate-900 rounded-2xl font-bold text-base sm:text-lg comic-shadow-sm comic-shadow-active flex flex-col items-center">
+          <span>Partir en 4</span>
+          <span class="text-xs bg-white/70 px-2 py-0.5 rounded-full border border-slate-900 mt-1">2/4</span>
+        </button>
+
+        <button onclick="setEquivalenceCuts(8)" id="btnCut8" class="flex-1 py-3 bg-white text-slate-900 border-4 border-slate-900 rounded-2xl font-bold text-base sm:text-lg comic-shadow-sm comic-shadow-active flex flex-col items-center">
+          <span>Partir en 8</span>
+          <span class="text-xs bg-white/70 px-2 py-0.5 rounded-full border border-slate-900 mt-1">4/8</span>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- MODO 2: LA COCINA DE SUMAS CON EQUIVALENCIA -->
+    <!-- ============================================== -->
+    <section id="viewMode2" class="hidden flex-1 bg-[#bae6fd] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between">
+      
+      <!-- Bocadillo del chef para la orden -->
+      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3 rounded-2xl border-4 border-slate-900 mb-3">
+        <div class="w-10 h-10 flex-shrink-0 bg-purple-500 rounded-xl border-2 border-slate-900 flex items-center justify-center text-lg">
+          👾
+        </div>
+        <p id="sumInstructions" class="text-xs sm:text-sm font-bold text-slate-800">
+          "¡Nueva orden! Queremos juntar <strong class="text-blue-600">1/2</strong> + <strong class="text-purple-600">1/4</strong>. ¡Pero son de distinto tamaño! Presiona el cortador para igualarlas."
+        </p>
+      </div>
+
+      <!-- Zona de preparación: Dos pizzas para combinar -->
+      <div class="w-full flex flex-col md:flex-row items-center justify-center gap-4 my-2">
+        
+        <!-- Plato 1 (Pizza 1/2) -->
+        <div class="flex flex-col items-center bg-white/80 p-3 rounded-2xl border-4 border-slate-900">
+          <div class="relative w-36 h-36 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
+            <svg id="sumPizza1" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+          </div>
+          
+          <div class="mt-2 flex items-center gap-2">
+            <span id="sumFraction1" class="text-2xl font-black text-blue-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">1/2</span>
+            
+            <!-- Botón Cortador Mágico exclusivo para Pizza 1 -->
+            <button id="btnSliceEqual" onclick="transformHalfToQuarters()" class="bg-yellow-400 hover:bg-yellow-300 text-xs font-bold py-1 px-2 rounded-xl border-2 border-slate-900 comic-shadow-sm comic-shadow-active flex items-center gap-1">
+              <span>🔪 Cortar en 4</span>
+            </button>
+          </div>
+          <span id="hintEqual1" class="text-[10px] font-bold text-slate-600 mt-1">Rebanada grande</span>
+        </div>
+
+        <!-- Signo MÁS grande estilo cómic -->
+        <div class="w-12 h-12 bg-pink-500 rounded-full border-4 border-slate-900 flex items-center justify-center text-white text-3xl font-black comic-shadow-sm">
+          +
+        </div>
+
+        <!-- Plato 2 (Pizza 1/4) -->
+        <div class="flex flex-col items-center bg-white/80 p-3 rounded-2xl border-4 border-slate-900">
+          <div class="relative w-36 h-36 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
+            <svg id="sumPizza2" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+          </div>
+          <div class="mt-2">
+            <span class="text-2xl font-black text-purple-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">1/4</span>
+          </div>
+          <span class="text-[10px] font-bold text-slate-600 mt-1">Rebanada de cuarto</span>
+        </div>
+
+        <!-- Flecha hacia la entrega -->
+        <div class="text-2xl font-bold text-slate-800">
+          ➡️
+        </div>
+
+        <!-- CAJA DE PIZZA (Resultado de la suma) -->
+        <div class="flex flex-col items-center bg-amber-100 p-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm min-w-[180px]">
+          <span class="text-xs font-bold text-amber-900 uppercase">Caja de Entrega</span>
+          <div class="relative w-36 h-36 flex items-center justify-center my-1 bg-amber-50 rounded-xl border-2 border-dashed border-amber-900/40">
+            <svg id="boxPizzaSvg" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+            <div id="boxEmptyLabel" class="absolute text-center text-xs text-amber-800 font-bold px-2 pointer-events-none">
+              Toca el botón "Juntar en la caja"
+            </div>
+          </div>
+          <div id="sumResultBadge" class="mt-1 text-2xl font-black text-emerald-600 bg-white px-4 py-0.5 rounded-xl border-2 border-slate-900 opacity-30">
+            ? / ?
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Barra de acción de Suma -->
+      <div class="w-full max-w-md flex flex-col sm:flex-row gap-3 items-center justify-center mt-2">
+        <button id="btnCombineToBox" onclick="combinePizzas()" class="w-full sm:w-auto flex-1 py-3 bg-emerald-400 hover:bg-emerald-300 text-slate-900 border-4 border-slate-900 rounded-2xl font-bold text-lg comic-shadow-sm comic-shadow-active flex items-center justify-center gap-2">
+          <span>📦 Juntar Rebanadas en la Caja</span>
+        </button>
+
+        <button onclick="resetSumMode()" class="w-full sm:w-auto py-3 px-5 bg-white hover:bg-slate-100 text-slate-900 border-4 border-slate-900 rounded-2xl font-bold text-base comic-shadow-sm comic-shadow-active">
+          🔄 Reiniciar
+        </button>
+      </div>
+
+      <!-- Banner de Éxito / Celebración -->
+      <div id="celebrationBanner" class="hidden mt-3 w-full max-w-xl bg-emerald-100 border-4 border-emerald-600 p-3 rounded-2xl flex items-center justify-between animate-bounce">
+        <div class="flex items-center gap-2">
+          <span class="text-3xl">🎉</span>
+          <div>
+            <p class="font-black text-emerald-900 text-sm">¡EXCELENTE TRABAJO!</p>
+            <p class="font-bold text-emerald-800 text-xs">Transformaste 1/2 en 2/4. Y 2/4 + 1/4 = 3/4 de pizza.</p>
+          </div>
+        </div>
+        <button onclick="nextSumChallenge()" class="bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs py-2 px-3 rounded-xl border-2 border-slate-900">
+          Siguiente 🚀
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA AMIGABLE -->
+  <footer class="mt-3 text-center text-xs font-bold text-slate-800">
+    Creado con amor para campeones matemáticos 🍕✨
+  </footer>
+
+  <!-- ============================================== -->
+  <!-- LÓGICA JAVASCRIPT CON AUDIO WEB API -->
+  <!-- ============================================== -->
+  <script>
+    /* -------------------------------------------------------------
+       1. GENERADOR DE EFECTOS DE SONIDO (Web Audio API)
+       Cero URLs externas; sonidos agradables y suaves para niños.
+    -------------------------------------------------------------- */
+    let audioCtx = null;
+    let isMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Efecto Pop dulce
+    function playPopSound(freq = 440) {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + 0.08);
+
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.12);
+      } catch (e) {}
+    }
+
+    // Efecto de corte "crunch" suave de pizza
+    function playSliceSound() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.1);
+
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      } catch (e) {}
+    }
+
+    // Campanita suave de éxito
+    function playSuccessChime() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // Do, Mi, Sol, Do alto
+        notes.forEach((freq, index) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+
+          const startTime = audioCtx.currentTime + (index * 0.1);
+          gain.gain.setValueAtTime(0.18, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.4);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + 0.4);
+        });
+      } catch (e) {}
+    }
+
+    // Control del botón de sonido
+    const btnSound = document.getElementById('btnSound');
+    const soundIcon = document.getElementById('soundIcon');
+    btnSound.addEventListener('click', () => {
+      initAudio();
+      isMuted = !isMuted;
+      soundIcon.textContent = isMuted ? '🔇' : '🔊';
+      btnSound.classList.toggle('bg-slate-300', isMuted);
+      btnSound.classList.toggle('bg-amber-400', !isMuted);
+    });
+
+    /* -------------------------------------------------------------
+       2. RENDERIZADOR VECTORIAL DE PIZZAS (SVG)
+       Dibuja cortes exactos, costras doradas, queso y pepperonis con caritas
+    -------------------------------------------------------------- */
+    // Función trigonométrica para calcular coordenadas polares en SVG
+    function getArcPoint(cx, cy, radius, angleInDegrees) {
+      const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+      return {
+        x: cx + (radius * Math.cos(angleInRadians)),
+        y: cy + (radius * Math.sin(angleInRadians))
+      };
+    }
+
+    // Dibuja una rebanada como camino SVG
+    function createSlicePath(cx, cy, radius, startAngle, endAngle) {
+      const start = getArcPoint(cx, cy, radius, endAngle);
+      const end = getArcPoint(cx, cy, radius, startAngle);
+      const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+      return [
+        "M", cx, cy,
+        "L", start.x, start.y,
+        "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
+        "Z"
+      ].join(" ");
+    }
+
+    // Dibuja una pizza completa o parcial con rebanadas activas
+    function renderPizzaSVG(svgElement, totalSlices, activeSlicesCount, options = {}) {
+      const {
+        sliceColor = '#facc15', // Queso amarillo brillante
+        crustColor = '#f59e0b', // Masa dorada
+        emptyColor = '#fde68a', // Fondo de molde vacío
+        showFaces = true,
+        interactive = false,
+        onClickSlice = null
+      } = options;
+
+      svgElement.innerHTML = '';
+      const cx = 100, cy = 100, radius = 86;
+      const anglePerSlice = 360 / totalSlices;
+
+      // 1. Plato base/corteza inferior
+      const baseCrust = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      baseCrust.setAttribute("cx", cx);
+      baseCrust.setAttribute("cy", cy);
+      baseCrust.setAttribute("r", radius + 6);
+      baseCrust.setAttribute("fill", crustColor);
+      baseCrust.setAttribute("stroke", "#0f172a");
+      baseCrust.setAttribute("stroke-width", "5");
+      svgElement.appendChild(baseCrust);
+
+      // 2. Dibujar cada rebanada
+      for (let i = 0; i < totalSlices; i++) {
+        const startAngle = i * anglePerSlice;
+        const endAngle = startAngle + anglePerSlice;
+        const isActive = i < activeSlicesCount;
+
+        const sliceGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+        // Camino de la rebanada
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", createSlicePath(cx, cy, radius, startAngle, endAngle));
+        path.setAttribute("fill", isActive ? sliceColor : emptyColor);
+        path.setAttribute("stroke", "#0f172a");
+        path.setAttribute("stroke-width", "4");
+        path.setAttribute("class", "slice-path");
+
+        if (interactive) {
+          path.style.cursor = "pointer";
+          path.addEventListener('click', () => {
+            if (onClickSlice) onClickSlice(i);
+          });
+        }
+
+        sliceGroup.appendChild(path);
+
+        // Si la rebanada tiene queso (activa), añadir ingredientes simpáticos
+        if (isActive) {
+          const midAngle = startAngle + (anglePerSlice / 2);
+          // Coordenada para el pepperoni en la rebanada
+          const pepDist = radius * 0.58;
+          const pepPos = getArcPoint(cx, cy, pepDist, midAngle);
+
+          // Pepperoni rojo
+          const pep = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          pep.setAttribute("cx", pepPos.x);
+          pep.setAttribute("cy", pepPos.y);
+          pep.setAttribute("r", totalSlices >= 8 ? 6 : 9);
+          pep.setAttribute("fill", "#ef4444");
+          pep.setAttribute("stroke", "#0f172a");
+          pep.setAttribute("stroke-width", "2.5");
+          sliceGroup.appendChild(pep);
+
+          // Carita tierna estilo cómic en el pepperoni si hay espacio
+          if (showFaces && totalSlices <= 8) {
+            const eye1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            eye1.setAttribute("cx", pepPos.x - (totalSlices >= 8 ? 2 : 3));
+            eye1.setAttribute("cy", pepPos.y - 1);
+            eye1.setAttribute("r", 1.5);
+            eye1.setAttribute("fill", "#0f172a");
+
+            const eye2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            eye2.setAttribute("cx", pepPos.x + (totalSlices >= 8 ? 2 : 3));
+            eye2.setAttribute("cy", pepPos.y - 1);
+            eye2.setAttribute("r", 1.5);
+            eye2.setAttribute("fill", "#0f172a");
+
+            sliceGroup.appendChild(eye1);
+            sliceGroup.appendChild(eye2);
+          }
+        }
+
+        svgElement.appendChild(sliceGroup);
+      }
+    }
+
+    /* -------------------------------------------------------------
+       3. MODO 1: CORTADOR MÁGICO DE EQUIVALENCIAS
+    -------------------------------------------------------------- */
+    let currentEquivDenominator = 2; // Inicia en 1/2
+    const magicPizzaSvg = document.getElementById('magicPizzaSvg');
+    const eqNum = document.getElementById('eqNum');
+    const eqDen = document.getElementById('eqDen');
+    const eqNumLabel = document.getElementById('eqNumLabel');
+    const eqDenLabel = document.getElementById('eqDenLabel');
+    const volumeBar = document.getElementById('volumeBar');
+
+    function updateEquivalenceView() {
+      // Calculamos el numerador equivalente para mantener siempre el 50% (la mitad)
+      const activeSlices = currentEquivDenominator / 2;
+
+      // Actualizar números
+      eqNum.textContent = activeSlices;
+      eqDen.textContent = currentEquivDenominator;
+      eqNumLabel.textContent = `${activeSlices} rebanada${activeSlices > 1 ? 's' : ''} con queso`;
+      eqDenLabel.textContent = `Cortes totales: ${currentEquivDenominator}`;
+
+      // Estilo de botones
+      ['btnCut2', 'btnCut4', 'btnCut8'].forEach(id => {
+        const btn = document.getElementById(id);
+        btn.classList.remove('bg-emerald-400');
+        btn.classList.add('bg-white');
+      });
+      const activeBtn = document.getElementById(`btnCut${currentEquivDenominator}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white');
+        activeBtn.classList.add('bg-emerald-400');
+      }
+
+      // Renderizar Pizza SVG
+      renderPizzaSVG(magicPizzaSvg, currentEquivDenominator, activeSlices, {
+        sliceColor: '#facc15',
+        crustColor: '#ea580c',
+        emptyColor: '#fef3c7',
+        showFaces: true
+      });
+
+      // Animación pop al cambiar
+      magicPizzaSvg.classList.remove('pop-in');
+      void magicPizzaSvg.offsetWidth;
+      magicPizzaSvg.classList.add('pop-in');
+    }
+
+    function setEquivalenceCuts(den) {
+      if (currentEquivDenominator === den) {
+        playPopSound(500);
+        return;
+      }
+      playSliceSound();
+      currentEquivDenominator = den;
+      updateEquivalenceView();
+    }
+
+    /* -------------------------------------------------------------
+       4. MODO 2: LA COCINA DE SUMAS CON EQUIVALENCIA
+    -------------------------------------------------------------- */
+    const sumPizza1 = document.getElementById('sumPizza1');
+    const sumPizza2 = document.getElementById('sumPizza2');
+    const boxPizzaSvg = document.getElementById('boxPizzaSvg');
+    const sumFraction1 = document.getElementById('sumFraction1');
+    const hintEqual1 = document.getElementById('hintEqual1');
+    const btnSliceEqual = document.getElementById('btnSliceEqual');
+    const sumInstructions = document.getElementById('sumInstructions');
+    const sumResultBadge = document.getElementById('sumResultBadge');
+    const boxEmptyLabel = document.getElementById('boxEmptyLabel');
+    const celebrationBanner = document.getElementById('celebrationBanner');
+
+    let isHalfConverted = false; // ¿Se transformó 1/2 en 2/4?
+    let isSumCombined = false;
+
+    function renderSumMode() {
+      // Pizza 1: Es 1/2 si no está convertida, o 2/4 si ya se rebanó
+      if (!isHalfConverted) {
+        renderPizzaSVG(sumPizza1, 2, 1, { sliceColor: '#60a5fa', crustColor: '#d97706' });
+        sumFraction1.textContent = "1/2";
+        sumFraction1.className = "text-2xl font-black text-blue-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900";
+        hintEqual1.textContent = "Rebanada grande";
+        btnSliceEqual.style.display = "flex";
+      } else {
+        renderPizzaSVG(sumPizza1, 4, 2, { sliceColor: '#60a5fa', crustColor: '#d97706' });
+        sumFraction1.textContent = "2/4";
+        sumFraction1.className = "text-2xl font-black text-emerald-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900";
+        hintEqual1.textContent = "¡Igualada a cuartos! (2/4)";
+        btnSliceEqual.style.display = "none";
+      }
+
+      // Pizza 2: Siempre 1/4 en este nivel
+      renderPizzaSVG(sumPizza2, 4, 1, { sliceColor: '#c084fc', crustColor: '#d97706' });
+
+      // Caja de pizza
+      if (!isSumCombined) {
+        boxPizzaSvg.innerHTML = '';
+        boxEmptyLabel.style.display = 'block';
+        sumResultBadge.textContent = "? / ?";
+        sumResultBadge.classList.add('opacity-30');
+        celebrationBanner.classList.add('hidden');
+      } else {
+        // En la caja caben 4 trozos, y tenemos 2 (de la primera) + 1 (de la segunda) = 3 trozos
+        renderPizzaSVG(boxPizzaSvg, 4, 3, { sliceColor: '#34d399', crustColor: '#ea580c' });
+        boxEmptyLabel.style.display = 'none';
+        sumResultBadge.textContent = "3/4";
+        sumResultBadge.classList.remove('opacity-30');
+      }
+    }
+
+    // Acción de rebanar 1/2 a 2/4
+    function transformHalfToQuarters() {
+      playSliceSound();
+      isHalfConverted = true;
+      renderSumMode();
+
+      // Instrucción actualizada
+      sumInstructions.innerHTML = `"¡Genial! Ahora ambas pizzas están en <strong class="text-emerald-600">cuartos (/4)</strong>. Ya tienen el mismo tamaño. ¡Presiona <strong>Juntar Rebanadas</strong>!"`;
+      playPopSound(520);
+    }
+
+    // Acción de combinar las dos pizzas en la caja
+    function combinePizzas() {
+      initAudio();
+      if (!isHalfConverted) {
+        // Si aún no corta la pizza, le recordamos con tono dulce y suave (sin error agresivo)
+        playPopSound(300);
+        sumInstructions.innerHTML = `"¡Alto, Chef! Primero toca el botón amarillo <strong class="text-amber-600">🔪 Cortar en 4</strong> para que todas las rebanadas tengan el mismo tamaño."`;
+        btnSliceEqual.classList.add('animate-bounce');
+        setTimeout(() => btnSliceEqual.classList.remove('animate-bounce'), 1000);
+        return;
+      }
+
+      if (isSumCombined) {
+        playPopSound(440);
+        return;
+      }
+
+      // Se combinan con éxito
+      isSumCombined = true;
+      renderSumMode();
+      playSuccessChime();
+
+      sumInstructions.innerHTML = `"¡Yuju! Juntamos <strong>2 cuartos</strong> + <strong>1 cuarto</strong> = <strong class="text-emerald-700 text-lg">3/4 de pizza</strong>. ¡Orden completa!"`;
+      celebrationBanner.classList.remove('hidden');
+    }
+
+    // Reiniciar ejercicio de suma
+    function resetSumMode() {
+      playPopSound(400);
+      isHalfConverted = false;
+      isSumCombined = false;
+      sumInstructions.innerHTML = `"¡Nueva orden! Queremos juntar <strong class="text-blue-600">1/2</strong> + <strong class="text-purple-600">1/4</strong>. ¡Pero son de distinto tamaño! Presiona el cortador para igualarlas."`;
+      renderSumMode();
+    }
+
+    // Siguiente reto (ciclo lúdico)
+    function nextSumChallenge() {
+      resetSumMode();
+      playPopSound(600);
+    }
+
+    /* -------------------------------------------------------------
+       5. NAVEGACIÓN ENTRE MODOS
+    -------------------------------------------------------------- */
+    function switchMode(modeIndex) {
+      initAudio();
+      playPopSound(480);
+
+      const tab1 = document.getElementById('tabMode1');
+      const tab2 = document.getElementById('tabMode2');
+      const view1 = document.getElementById('viewMode1');
+      const view2 = document.getElementById('viewMode2');
+
+      if (modeIndex === 1) {
+        tab1.classList.remove('bg-slate-200', 'opacity-80', 'comic-shadow-sm');
+        tab1.classList.add('bg-yellow-400', 'comic-shadow');
+
+        tab2.classList.remove('bg-yellow-400', 'comic-shadow');
+        tab2.classList.add('bg-slate-200', 'opacity-80', 'comic-shadow-sm');
+
+        view1.classList.remove('hidden');
+        view2.classList.add('hidden');
+        updateEquivalenceView();
+      } else {
+        tab2.classList.remove('bg-slate-200', 'opacity-80', 'comic-shadow-sm');
+        tab2.classList.add('bg-yellow-400', 'comic-shadow');
+
+        tab1.classList.remove('bg-yellow-400', 'comic-shadow');
+        tab1.classList.add('bg-slate-200', 'opacity-80', 'comic-shadow-sm');
+
+        view2.classList.remove('hidden');
+        view1.classList.add('hidden');
+        renderSumMode();
+      }
+    }
+
+    // Inicialización al cargar la ventana
+    window.onload = function () {
+      updateEquivalenceView();
+      renderSumMode();
+    };
+  </script>
+</body>
+</html>
