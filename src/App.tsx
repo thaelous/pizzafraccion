@@ -2108,34 +2108,38 @@ export default function App() {
       />
 
       {/* ==========================================
-          CABECERA SUPERIOR ULTRA-COMPACTA
+          CABECERA SUPERIOR RESPONSIVE Y COMPACTA
+          - Izquierda: Inicio + Logo y Nombre
+          - Centro: Selector de Pizzas + Sub-fila de Audio (Música y Efectos)
+          - Derecha: Trofeos / PWA
       ========================================== */}
-      <header className="bg-white border-b-3 sm:border-b-4 border-slate-900 px-2 sm:px-4 py-1 flex items-center justify-between shrink-0 shadow-[0_3px_0_#0f172a] z-30">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Botón de inicio para volver a la portada */}
+      <header className="bg-white border-b-3 sm:border-b-4 border-slate-900 px-2 sm:px-3 py-1 flex items-center justify-between shrink-0 shadow-[0_3px_0_#0f172a] z-30 w-full box-border overflow-hidden">
+        {/* LADO IZQUIERDO: Inicio + Logo */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
           <button
             onClick={() => {
               setShowWelcome(true);
               audio.playPop(520);
             }}
-            className="p-1 sm:p-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center shrink-0"
+            className="p-1 sm:p-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center shrink-0 cursor-pointer"
             title="Volver a la portada de bienvenida"
           >
             <Home className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-900" />
           </button>
 
-          <span className="text-xl sm:text-2xl animate-bounce">🍕</span>
-          <div>
-            <h1 className="text-sm sm:text-lg font-black text-slate-900 leading-tight uppercase tracking-tight">
+          <span className="text-lg sm:text-2xl animate-bounce shrink-0">🍕</span>
+          <div className="min-w-0">
+            <h1 className="text-xs sm:text-base md:text-lg font-black text-slate-900 leading-tight uppercase tracking-tight truncate">
               Pizzería de Altair
             </h1>
-            <p className="text-[9px] sm:text-[11px] font-bold text-amber-800 leading-none">
+            <p className="text-[9px] sm:text-[11px] font-bold text-amber-800 leading-none hidden sm:block truncate">
               Fracciones Táctiles y Corte Real
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+        {/* CENTRO: Selector de Pizzas + Subfila con Controles de Audio */}
+        <div className="flex flex-col items-center justify-center gap-0.5 shrink-0 px-1">
           {/* Selector de Pizza PNG */}
           <div className="flex items-center bg-amber-50 border-2 border-slate-900 rounded-xl p-0.5">
             {PIZZA_IMAGES.map((img) => (
@@ -2145,7 +2149,7 @@ export default function App() {
                   setSelectedPizza(img);
                   audio.playPop(520);
                 }}
-                className={`px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 transition-all ${
+                className={`px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-0.5 transition-all cursor-pointer ${
                   selectedPizza === img
                     ? 'bg-amber-400 text-slate-900 shadow-[1px_1px_0_#0f172a]'
                     : 'text-slate-600 hover:bg-amber-100'
@@ -2158,54 +2162,75 @@ export default function App() {
             ))}
           </div>
 
+          {/* Sub-fila compacta: Botones de Música y Sonido */}
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            {/* Botón 1: Música Italiana On/Off */}
+            <button
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                toggleMusicOnly();
+              }}
+              className={`px-1.5 py-0.5 border-1.5 sm:border-2 border-slate-900 rounded-lg text-[9px] sm:text-[10px] font-black shadow-[1px_1px_0_#0f172a] active:translate-y-0.5 flex items-center gap-0.5 cursor-pointer transition-all ${
+                isMusicPlaying
+                  ? 'bg-emerald-400 text-emerald-950 font-black'
+                  : 'bg-slate-200 text-slate-500 opacity-75'
+              }`}
+              title={isMusicPlaying ? 'Música: Encendida (Toca para apagar)' : 'Música: Apagada (Toca para encender)'}
+            >
+              <span>{isMusicPlaying ? '🎵' : '🔇'}</span>
+              <span className="hidden xs:inline sm:inline text-[8.5px] uppercase font-black">
+                {isMusicPlaying ? 'Música' : 'Sin Música'}
+              </span>
+            </button>
+
+            {/* Botón 2: Efectos de Sonido On/Off */}
+            <button
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                toggleSound();
+              }}
+              className={`px-1.5 py-0.5 border-1.5 sm:border-2 border-slate-900 rounded-lg text-[9px] sm:text-[10px] font-black shadow-[1px_1px_0_#0f172a] active:translate-y-0.5 flex items-center gap-0.5 cursor-pointer transition-all ${
+                !isAudioMuted
+                  ? 'bg-amber-300 text-slate-900 font-black'
+                  : 'bg-slate-200 text-slate-500 opacity-75'
+              }`}
+              title={!isAudioMuted ? 'Sonidos: Encendidos (Toca para silenciar)' : 'Sonidos: Silenciados (Toca para activar)'}
+            >
+              <span>{!isAudioMuted ? '🔊' : '🔇'}</span>
+              <span className="hidden xs:inline sm:inline text-[8.5px] uppercase font-black">
+                {!isAudioMuted ? 'Sonido' : 'Silencio'}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* LADO DERECHO: Trofeos y Botón PWA */}
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           {/* Botón PWA de instalación en Android / Chrome */}
           {deferredPrompt && (
             <button
               onClick={handleInstallApp}
-              className="px-2 py-1 bg-emerald-400 hover:bg-emerald-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1 animate-pulse"
+              className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-emerald-400 hover:bg-emerald-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1 animate-pulse cursor-pointer shrink-0"
               title="Instalar App en tu pantalla de inicio"
             >
               <span>📲</span>
-              <span className="hidden sm:inline text-[10px] font-black uppercase">Instalar App</span>
+              <span className="hidden md:inline text-[10px] font-black uppercase">Instalar</span>
             </button>
           )}
 
-          {/* Trofeos */}
+          {/* Trofeos / Estrellas */}
           <button
             onClick={() => {
               setIsTrophyOpen(true);
               audio.playPop(520);
             }}
-            className="px-2 py-1 bg-amber-400 hover:bg-amber-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1"
+            className="px-1.5 sm:px-2 py-1 bg-amber-400 hover:bg-amber-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1 cursor-pointer shrink-0"
+            title="Vitrina de Trofeos y Logros"
           >
             <Trophy className="w-3.5 h-3.5 text-slate-900" />
             <span className="bg-slate-900 text-amber-300 px-1 py-0.2 rounded text-[10px] font-black">
               ⭐ {stats.stars}
             </span>
-          </button>
-
-          {/* Música */}
-          <button
-            onClick={toggleMusicOnly}
-            className={`p-1.5 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center ${
-              isMusicPlaying ? 'bg-emerald-300 text-emerald-950' : 'bg-slate-100 text-slate-500'
-            }`}
-            title={isMusicPlaying ? 'Pausar Música' : 'Música Italiana'}
-          >
-            <Music className="w-3.5 h-3.5" />
-          </button>
-
-          {/* Sonido */}
-          <button
-            onClick={toggleSound}
-            className="p-1.5 bg-slate-100 hover:bg-slate-200 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center"
-            title={isAudioMuted ? 'Activar Sonido' : 'Silenciar'}
-          >
-            {isAudioMuted ? (
-              <VolumeX className="w-3.5 h-3.5 text-red-500" />
-            ) : (
-              <Volume2 className="w-3.5 h-3.5 text-emerald-600" />
-            )}
           </button>
         </div>
       </header>

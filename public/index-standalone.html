@@ -182,57 +182,71 @@
   <!-- CAPA DE CONFETI CELEBRATORIO -->
   <div id="confetti-container" class="fixed inset-0 pointer-events-none z-50 overflow-hidden hidden"></div>
 
-  <!-- BARRA SUPERIOR (Pizzería de Altair) -->
-  <header class="bg-white border-b-3 sm:border-b-4 border-slate-900 px-2 sm:px-4 py-1 flex items-center justify-between shadow-[0_3px_0_#0f172a] sticky top-0 z-40 shrink-0">
-    <div class="flex items-center gap-1.5 sm:gap-2">
+  <!-- BARRA SUPERIOR RESPONSIVE Y COMPACTA (Pizzería de Altair) -->
+  <header class="bg-white border-b-3 sm:border-b-4 border-slate-900 px-2 sm:px-3 py-1 flex items-center justify-between shadow-[0_3px_0_#0f172a] sticky top-0 z-40 shrink-0 w-full box-border overflow-hidden">
+    <!-- LADO IZQUIERDO: Inicio + Logo y Nombre -->
+    <div class="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
       <!-- Botón de regreso a la portada -->
-      <button onclick="showWelcomeScreen()" class="p-1 sm:p-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center shrink-0" title="Volver a la portada de bienvenida">
+      <button onclick="showWelcomeScreen()" class="p-1 sm:p-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center shrink-0 cursor-pointer" title="Volver a la portada de bienvenida">
         <span class="text-sm sm:text-base">🏠</span>
       </button>
 
-      <span class="text-xl sm:text-2xl animate-bounce">🍕</span>
-      <div>
-        <h1 class="text-sm sm:text-lg font-black tracking-tight text-slate-900 leading-tight uppercase">
+      <span class="text-lg sm:text-2xl animate-bounce shrink-0">🍕</span>
+      <div class="min-w-0">
+        <h1 class="text-xs sm:text-base md:text-lg font-black tracking-tight text-slate-900 leading-tight uppercase truncate">
           Pizzería de Altair
         </h1>
-        <p class="text-[9px] sm:text-[11px] font-bold text-amber-800 leading-none">
+        <p class="text-[9px] sm:text-[11px] font-bold text-amber-800 leading-none hidden sm:block truncate">
           Fracciones Táctiles y Corte Real
         </p>
       </div>
     </div>
 
-    <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+    <!-- CENTRO: Selector de Pizzas + Sub-fila de Audio (Música y Sonido) -->
+    <div class="flex flex-col items-center justify-center gap-0.5 shrink-0 px-1">
+      <!-- Fila 1: Selector de Pizzas -->
       <div class="flex items-center bg-amber-50 border-2 border-slate-900 rounded-xl p-0.5" id="pizza-selector">
-        <button onclick="selectPizza('pepperoni.png')" id="btn-p-pepperoni.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 bg-amber-400 text-slate-900 shadow-[1px_1px_0_#0f172a]">
+        <button onclick="selectPizza('pepperoni.png')" id="btn-p-pepperoni.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-0.5 bg-amber-400 text-slate-900 shadow-[1px_1px_0_#0f172a] cursor-pointer">
           <span>🍕</span><span class="hidden md:inline text-[10px]">Pepperoni</span>
         </button>
-        <button onclick="selectPizza('hawaiana.png')" id="btn-p-hawaiana.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 text-slate-600 hover:bg-amber-100">
+        <button onclick="selectPizza('hawaiana.png')" id="btn-p-hawaiana.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-0.5 text-slate-600 hover:bg-amber-100 cursor-pointer">
           <span>🍍</span><span class="hidden md:inline text-[10px]">Hawaiana</span>
         </button>
-        <button onclick="selectPizza('queso.png')" id="btn-p-queso.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 text-slate-600 hover:bg-amber-100">
+        <button onclick="selectPizza('queso.png')" id="btn-p-queso.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-0.5 text-slate-600 hover:bg-amber-100 cursor-pointer">
           <span>🧀</span><span class="hidden md:inline text-[10px]">Queso</span>
         </button>
       </div>
 
+      <!-- Fila 2: Controles de Audio Compactos alineados justo debajo -->
+      <div class="flex items-center gap-1 sm:gap-1.5">
+        <!-- Botón 1: Música Italiana On/Off -->
+        <button onpointerdown="toggleMusic()" id="music-btn" class="px-1.5 py-0.5 border-1.5 sm:border-2 border-slate-900 rounded-lg text-[9px] sm:text-[10px] font-black shadow-[1px_1px_0_#0f172a] active:translate-y-0.5 flex items-center gap-0.5 bg-slate-200 text-slate-500 opacity-75 cursor-pointer transition-all" title="Alternar Música Italiana de Mandolina">
+          <span id="music-icon">🔇</span>
+          <span id="music-text" class="hidden xs:inline sm:inline text-[8.5px] uppercase font-black">Sin Música</span>
+        </button>
+
+        <!-- Botón 2: Efectos de Sonido On/Off -->
+        <button onpointerdown="toggleMute()" id="mute-btn" class="px-1.5 py-0.5 border-1.5 sm:border-2 border-slate-900 rounded-lg text-[9px] sm:text-[10px] font-black shadow-[1px_1px_0_#0f172a] active:translate-y-0.5 flex items-center gap-0.5 bg-amber-300 text-slate-900 font-black cursor-pointer transition-all" title="Alternar Efectos de Sonido">
+          <span id="mute-icon">🔊</span>
+          <span id="mute-text" class="hidden xs:inline sm:inline text-[8.5px] uppercase font-black">Sonido</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- LADO DERECHO: Trofeos / Estrellas y Botón PWA -->
+    <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
       <!-- Botón PWA de Instalación en Android / Chrome -->
-      <button id="pwa-install-btn" onclick="installPWAApp()" class="hidden px-2 py-1 bg-emerald-400 hover:bg-emerald-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 items-center gap-1 animate-pulse" title="Instalar App en tu pantalla de inicio">
+      <button id="pwa-install-btn" onclick="installPWAApp()" class="hidden px-1.5 sm:px-2 py-0.5 sm:py-1 bg-emerald-400 hover:bg-emerald-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 items-center gap-1 animate-pulse cursor-pointer shrink-0" title="Instalar App en tu pantalla de inicio">
         <span>📲</span>
-        <span class="hidden sm:inline text-[10px] font-black uppercase">Instalar App</span>
+        <span class="hidden md:inline text-[10px] font-black uppercase">Instalar</span>
       </button>
 
-      <button onclick="toggleTrophyModal(true)" class="px-2 py-1 bg-amber-400 hover:bg-amber-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1">
+      <!-- Vitrina de Trofeos -->
+      <button onclick="toggleTrophyModal(true)" class="px-1.5 sm:px-2 py-1 bg-amber-400 hover:bg-amber-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1 cursor-pointer shrink-0" title="Vitrina de Trofeos y Logros">
         <span>🏆</span>
         <span id="star-count-badge" class="bg-slate-900 text-amber-300 px-1 py-0.2 rounded text-[10px] font-black">
           ⭐ 10
         </span>
-      </button>
-
-      <button onclick="toggleMusic()" id="music-btn" class="p-1.5 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 bg-slate-100 text-slate-500 flex items-center justify-center" title="Música">
-        <span class="text-xs">🎵</span>
-      </button>
-
-      <button onclick="toggleMute()" id="mute-btn" class="p-1.5 bg-slate-100 hover:bg-slate-200 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center" title="Sonido">
-        <span id="mute-icon" class="text-xs">🔊</span>
       </button>
     </div>
   </header>
@@ -534,14 +548,21 @@
 
     function toggleMusic() {
       initAudio();
+      const btn = document.getElementById('music-btn');
+      const icon = document.getElementById('music-icon');
+      const text = document.getElementById('music-text');
       if (isMusicPlaying) {
         clearInterval(musicInterval);
         isMusicPlaying = false;
-        document.getElementById('music-btn').className = 'p-1.5 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 bg-slate-100 text-slate-500 flex items-center justify-center';
+        if (btn) btn.className = 'px-1.5 py-0.5 border-1.5 sm:border-2 border-slate-900 rounded-lg text-[9px] sm:text-[10px] font-black shadow-[1px_1px_0_#0f172a] active:translate-y-0.5 flex items-center gap-0.5 bg-slate-200 text-slate-500 opacity-75 cursor-pointer transition-all';
+        if (icon) icon.textContent = '🔇';
+        if (text) text.textContent = 'Sin Música';
       } else {
         isMusicPlaying = true;
         musicStep = 0;
-        document.getElementById('music-btn').className = 'p-1.5 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 bg-emerald-300 text-emerald-950 flex items-center justify-center';
+        if (btn) btn.className = 'px-1.5 py-0.5 border-1.5 sm:border-2 border-slate-900 rounded-lg text-[9px] sm:text-[10px] font-black shadow-[1px_1px_0_#0f172a] active:translate-y-0.5 flex items-center gap-0.5 bg-emerald-400 text-emerald-950 font-black cursor-pointer transition-all';
+        if (icon) icon.textContent = '🎵';
+        if (text) text.textContent = 'Música';
         musicInterval = setInterval(() => {
           if (!audioCtx || !musicMasterGain) return;
           const note = MELODY_NOTES[musicStep % MELODY_NOTES.length];
@@ -565,8 +586,19 @@
 
     function toggleMute() {
       isMuted = !isMuted;
-      document.getElementById('mute-icon').textContent = isMuted ? '🔇' : '🔊';
-      playPop(420);
+      const btn = document.getElementById('mute-btn');
+      const icon = document.getElementById('mute-icon');
+      const text = document.getElementById('mute-text');
+      if (isMuted) {
+        if (btn) btn.className = 'px-1.5 py-0.5 border-1.5 sm:border-2 border-slate-900 rounded-lg text-[9px] sm:text-[10px] font-black shadow-[1px_1px_0_#0f172a] active:translate-y-0.5 flex items-center gap-0.5 bg-slate-200 text-slate-500 opacity-75 cursor-pointer transition-all';
+        if (icon) icon.textContent = '🔇';
+        if (text) text.textContent = 'Silencio';
+      } else {
+        if (btn) btn.className = 'px-1.5 py-0.5 border-1.5 sm:border-2 border-slate-900 rounded-lg text-[9px] sm:text-[10px] font-black shadow-[1px_1px_0_#0f172a] active:translate-y-0.5 flex items-center gap-0.5 bg-amber-300 text-slate-900 font-black cursor-pointer transition-all';
+        if (icon) icon.textContent = '🔊';
+        if (text) text.textContent = 'Sonido';
+        playPop(420);
+      }
     }
 
     function playKitchenBell() {
