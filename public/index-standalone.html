@@ -1,1129 +1,1735 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Pizzería Monstruosa: Fracciones Mágicas</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Fredoka para texto cómic legible y amigable -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Pizzería de Altair</title>
+  <meta name="description" content="¡Aprende Fracciones comiendo Pizza! Corte asistido de reparto, sumas con huella vacía, restas, equivalencias y misiones." />
+  <meta name="theme-color" content="#fbbf24" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Pizzería Altair" />
+  <link rel="icon" type="image/png" href="altairojo.png" />
+  <link rel="apple-touch-icon" href="altairojo.png" />
+  <link rel="manifest" href="manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'cursive', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body {
+    *, *::before, *::after {
+      text-decoration: none !important;
+      text-decoration-line: none !important;
+      -webkit-text-decoration-line: none !important;
+    }
+    h1, h2, h3, h4, span, p, a, div {
+      text-decoration: none !important;
+    }
+    html, body {
+      height: 100%;
+      height: 100dvh;
+      max-height: 100dvh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
       font-family: 'Fredoka', cursive, sans-serif;
       user-select: none;
+      -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
-      background-color: #84cc16;
+      touch-action: manipulation;
+      background-color: #fef08a;
     }
-
-    /* Animaciones suaves cartoon (sin parpadeos agresivos) */
-    @keyframes gentleWobble {
-      0%, 100% { transform: rotate(-1.5deg); }
-      50% { transform: rotate(1.5deg); }
-    }
-    .animate-wobble {
-      animation: gentleWobble 3s ease-in-out infinite;
-    }
-
-    @keyframes popBounce {
-      0% { transform: scale(0.92); }
-      60% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    .pop-in {
-      animation: popBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    /* Sombras sólidas estilo arcade/cómic de alto contraste */
-    .comic-shadow {
-      box-shadow: 0 8px 0px #0f172a;
-    }
-    .comic-shadow-sm {
-      box-shadow: 0 4px 0px #0f172a;
-    }
-    .comic-shadow-active:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0px #0f172a;
-    }
-
-    /* Transición suave de rebanadas */
-    .slice-path {
-      transition: fill 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-      cursor: pointer;
-    }
-    .slice-path:hover {
-      filter: brightness(1.08);
-    }
-
-    /* Lluvia suave de estrellas y confeti */
     @keyframes confettiFall {
-      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(320px) rotate(360deg); opacity: 0; }
+      0% {
+        transform: translateY(-50px) rotate(0deg) scale(0.8);
+        opacity: 1;
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(105vh) rotate(540deg) scale(1);
+        opacity: 0;
+      }
     }
     .animate-confetti {
-      animation: confettiFall 2.8s ease-out forwards;
+      animation: confettiFall 3.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes floatPizza1 {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(12deg); }
+    }
+    @keyframes floatPizza2 {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-24px) rotate(-14deg); }
+    }
+    @keyframes floatPizza3 {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-35px) rotate(10deg); }
+    }
+    .animate-float-pizza-1 { animation: floatPizza1 6s ease-in-out infinite; }
+    .animate-float-pizza-2 { animation: floatPizza2 7.5s ease-in-out infinite; }
+    .animate-float-pizza-3 { animation: floatPizza3 8.2s ease-in-out infinite; }
+
+    @keyframes floatSoft {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .animate-float { animation: floatSoft 3s ease-in-out infinite; }
+
+    @keyframes wobbleGentle {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+    .animate-wobble { animation: wobbleGentle 3s ease-in-out infinite; }
+
+    @keyframes lidFoldDown {
+      0% { transform: perspective(700px) rotateX(-95deg); opacity: 0.2; }
+      70% { transform: perspective(700px) rotateX(10deg); opacity: 1; }
+      100% { transform: perspective(700px) rotateX(0deg); opacity: 1; }
+    }
+    .animate-lid-close {
+      animation: lidFoldDown 0.75s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
+      transform-origin: top center;
+    }
+
+    @keyframes boxFlyAway {
+      0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+      25% { transform: translateY(-20px) scale(1.05) rotate(-3deg); opacity: 1; }
+      100% { transform: translate(140vw, -120px) scale(0.4) rotate(18deg); opacity: 0; }
+    }
+    .animate-box-fly {
+      animation: boxFlyAway 1.35s cubic-bezier(0.45, 0, 0.2, 1) forwards;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-between p-3 sm:p-5 text-slate-900 overflow-x-hidden">
+<body class="bg-[#fef08a] text-slate-900 h-[100dvh] max-h-[100dvh] w-full overflow-hidden flex flex-col justify-between select-none font-fredoka relative">
 
-  <!-- ============================================== -->
-  <!-- ENCABEZADO SUPERIOR -->
-  <!-- ============================================== -->
-  <header class="w-full max-w-4xl flex items-center justify-between bg-[#a3e635] p-3 sm:p-4 rounded-3xl border-4 border-slate-900 comic-shadow mb-3">
-    <div class="flex items-center gap-3">
-      <!-- Chef Monstruito Avatar con expresión reactiva -->
-      <div id="chefAvatar" class="w-14 h-14 sm:w-16 sm:h-16 bg-purple-500 rounded-2xl border-4 border-slate-900 comic-shadow-sm flex items-center justify-center overflow-hidden animate-wobble flex-shrink-0">
-        <svg id="chefSvg" viewBox="0 0 100 100" class="w-full h-full"></svg>
+  <!-- ==========================================
+       1. PANTALLA DE BIENVENIDA (SPLASH SCREEN)
+  ========================================== -->
+  <div id="welcome-screen" class="fixed inset-0 z-50 bg-gradient-to-b from-[#fef08a] via-[#fde047] to-[#f59e0b] flex flex-col items-center justify-between p-4 select-none overflow-hidden transition-all duration-500">
+    <!-- Canvas de destellos dorados suaves -->
+    <canvas id="welcome-stars-canvas" class="absolute inset-0 pointer-events-none z-10"></canvas>
+
+    <!-- Pizzas flotantes atenuadas en el fondo (opacity: 0.16 a 0.18) -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+      <img src="pepperoni.png" alt="" class="absolute -top-10 -left-12 w-44 sm:w-64 opacity-[0.16] animate-float-pizza-1 select-none" />
+      <img src="hawaiana.png" alt="" class="absolute -bottom-14 -left-8 w-48 sm:w-72 opacity-[0.18] animate-float-pizza-2 select-none" />
+      <img src="queso.png" alt="" class="absolute -top-12 -right-10 w-52 sm:w-72 opacity-[0.17] animate-float-pizza-3 select-none" />
+      <img src="pepperoni.png" alt="" class="absolute -bottom-12 -right-12 w-48 sm:w-64 opacity-[0.16] animate-float-pizza-1 select-none" />
+    </div>
+
+    <!-- Título principal -->
+    <div class="relative z-20 flex flex-col items-center text-center mt-2 sm:mt-6 max-w-xl">
+      <div class="inline-flex items-center gap-2 bg-white/95 border-3 border-slate-900 rounded-full px-4 py-1.5 shadow-[3px_3px_0_#0f172a] mb-2 sm:mb-3 animate-wobble">
+        <span class="text-xl sm:text-2xl">🍕</span>
+        <span class="text-xs sm:text-sm font-black uppercase text-amber-900 tracking-wider">La Pizzería Más Divertida</span>
+        <span class="text-xl sm:text-2xl">⭐</span>
       </div>
 
-      <div>
-        <h1 class="text-xl sm:text-2xl font-black tracking-wide text-slate-900 uppercase">La Pizzería Monstruosa</h1>
-        <p class="text-xs sm:text-sm text-slate-800 font-bold">¡Aprende Fracciones comiendo Pizza! 🍕</p>
+      <h1 class="text-2xl sm:text-4xl md:text-5xl font-black text-slate-950 uppercase tracking-tight drop-shadow-sm leading-tight select-none">
+        ¡Bienvenidos a la <br class="hidden sm:inline" />
+        <span class="text-amber-900 drop-shadow-[0_2px_4px_rgba(245,158,11,0.25)]">Pizzería de Altair!</span>
+      </h1>
+      <p class="mt-1.5 text-xs sm:text-base font-bold text-slate-800 max-w-md px-2 select-none">
+        ¡Aprende fracciones cortando, sumando y compartiendo deliciosas pizzas!
+      </p>
+    </div>
+
+    <!-- Altair Central con altairojo.png (Amplio y Protagónico 160px) -->
+    <div class="relative z-20 flex flex-col items-center my-auto">
+      <div class="relative group">
+        <div class="w-40 h-40 sm:w-52 sm:h-52 md:w-56 md:h-56 rounded-full bg-white/95 border-4 sm:border-5 border-slate-900 p-2 sm:p-3 shadow-[6px_6px_0_#0f172a] flex items-center justify-center animate-float">
+          <img src="altairojo.png" alt="Chef Altair" class="w-full h-full object-contain select-none drop-shadow-md animate-wobble" />
+        </div>
+        <div class="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 bg-amber-400 border-3 border-slate-900 rounded-2xl p-1.5 sm:p-2 shadow-[3px_3px_0_#0f172a] animate-bounce">
+          <span class="text-2xl sm:text-3xl">👨‍🍳</span>
+        </div>
+      </div>
+
+      <div class="mt-3 bg-white/95 border-3 border-slate-900 rounded-2xl py-1 px-4 shadow-[3px_3px_0_#0f172a] text-xs sm:text-sm font-black text-slate-900">
+        Chef Anfitrión Altair ✨
       </div>
     </div>
 
-    <!-- Botón de Silencio para confort sensorial -->
-    <div class="flex items-center gap-2">
-      <button id="btnSound" class="bg-amber-400 hover:bg-amber-300 p-3 min-h-[48px] rounded-2xl border-4 border-slate-900 comic-shadow-sm comic-shadow-active flex items-center justify-center font-bold cursor-pointer transition-colors" aria-label="Control de sonido" title="Encender/Silenciar audio">
-        <span id="soundIcon" class="text-xl">🔊</span>
+    <!-- Botón Arcade Grande -->
+    <div class="relative z-20 flex flex-col items-center mb-4 sm:mb-8 w-full max-w-sm px-4">
+      <button onclick="startGameFromWelcome()" class="w-full py-3.5 sm:py-4 px-6 bg-emerald-500 hover:bg-emerald-400 active:translate-y-1 active:shadow-[2px_2px_0_#0f172a] text-white border-4 border-slate-900 rounded-3xl font-black text-lg sm:text-2xl shadow-[6px_6px_0_#0f172a] transition-all transform hover:scale-[1.03] flex items-center justify-center gap-3 cursor-pointer">
+        <span class="text-2xl sm:text-3xl animate-bounce">🍕</span>
+        <span>¡ENTRAR A LA PIZZERÍA!</span>
+        <span class="text-2xl sm:text-3xl animate-bounce">🚀</span>
+      </button>
+      <span class="text-[11px] sm:text-xs font-bold text-slate-800 mt-2 text-center opacity-90">
+        Toca el botón para encender el horno y la música italiana 🎶
+      </span>
+    </div>
+  </div>
+
+  <!-- CAPA DE CONFETI CELEBRATORIO -->
+  <div id="confetti-container" class="fixed inset-0 pointer-events-none z-50 overflow-hidden hidden"></div>
+
+  <!-- BARRA SUPERIOR (Pizzería de Altair) -->
+  <header class="bg-white border-b-3 sm:border-b-4 border-slate-900 px-2 sm:px-4 py-1 flex items-center justify-between shadow-[0_3px_0_#0f172a] sticky top-0 z-40 shrink-0">
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- Botón de regreso a la portada -->
+      <button onclick="showWelcomeScreen()" class="p-1 sm:p-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center shrink-0" title="Volver a la portada de bienvenida">
+        <span class="text-sm sm:text-base">🏠</span>
+      </button>
+
+      <span class="text-xl sm:text-2xl animate-bounce">🍕</span>
+      <div>
+        <h1 class="text-sm sm:text-lg font-black tracking-tight text-slate-900 leading-tight uppercase">
+          Pizzería de Altair
+        </h1>
+        <p class="text-[9px] sm:text-[11px] font-bold text-amber-800 leading-none">
+          Fracciones Táctiles y Corte Real
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+      <div class="flex items-center bg-amber-50 border-2 border-slate-900 rounded-xl p-0.5" id="pizza-selector">
+        <button onclick="selectPizza('pepperoni.png')" id="btn-p-pepperoni.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 bg-amber-400 text-slate-900 shadow-[1px_1px_0_#0f172a]">
+          <span>🍕</span><span class="hidden md:inline text-[10px]">Pepperoni</span>
+        </button>
+        <button onclick="selectPizza('hawaiana.png')" id="btn-p-hawaiana.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 text-slate-600 hover:bg-amber-100">
+          <span>🍍</span><span class="hidden md:inline text-[10px]">Hawaiana</span>
+        </button>
+        <button onclick="selectPizza('queso.png')" id="btn-p-queso.png" class="px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 text-slate-600 hover:bg-amber-100">
+          <span>🧀</span><span class="hidden md:inline text-[10px]">Queso</span>
+        </button>
+      </div>
+
+      <!-- Botón PWA de Instalación en Android / Chrome -->
+      <button id="pwa-install-btn" onclick="installPWAApp()" class="hidden px-2 py-1 bg-emerald-400 hover:bg-emerald-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 items-center gap-1 animate-pulse" title="Instalar App en tu pantalla de inicio">
+        <span>📲</span>
+        <span class="hidden sm:inline text-[10px] font-black uppercase">Instalar App</span>
+      </button>
+
+      <button onclick="toggleTrophyModal(true)" class="px-2 py-1 bg-amber-400 hover:bg-amber-300 border-2 border-slate-900 rounded-xl font-black text-xs shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1">
+        <span>🏆</span>
+        <span id="star-count-badge" class="bg-slate-900 text-amber-300 px-1 py-0.2 rounded text-[10px] font-black">
+          ⭐ 10
+        </span>
+      </button>
+
+      <button onclick="toggleMusic()" id="music-btn" class="p-1.5 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 bg-slate-100 text-slate-500 flex items-center justify-center" title="Música">
+        <span class="text-xs">🎵</span>
+      </button>
+
+      <button onclick="toggleMute()" id="mute-btn" class="p-1.5 bg-slate-100 hover:bg-slate-200 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center justify-center" title="Sonido">
+        <span id="mute-icon" class="text-xs">🔊</span>
       </button>
     </div>
   </header>
 
-  <!-- ============================================== -->
-  <!-- NAVEGADOR DE 4 MODOS EDUCATIVOS -->
-  <!-- ============================================== -->
-  <nav class="w-full max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-3">
-    <button id="tab1" onclick="switchMode(1)" class="py-3 px-2 min-h-[48px] rounded-2xl border-4 border-slate-900 font-black text-xs sm:text-sm text-center bg-yellow-400 comic-shadow flex items-center justify-center gap-1.5 cursor-pointer">
-      <span class="text-xl">🍕</span>
-      <span>1. Cortador Mágico</span>
-    </button>
-    <button id="tab2" onclick="switchMode(2)" class="py-3 px-2 min-h-[48px] rounded-2xl border-4 border-slate-900 font-black text-xs sm:text-sm text-center bg-slate-200 opacity-80 comic-shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
-      <span class="text-xl">➕</span>
-      <span>2. Sumas Básicas</span>
-    </button>
-    <button id="tab3" onclick="switchMode(3)" class="py-3 px-2 min-h-[48px] rounded-2xl border-4 border-slate-900 font-black text-xs sm:text-sm text-center bg-slate-200 opacity-80 comic-shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
-      <span class="text-xl">😋</span>
-      <span>3. Fiesta de Restas</span>
-    </button>
-    <button id="tab4" onclick="switchMode(4)" class="py-3 px-2 min-h-[48px] rounded-2xl border-4 border-slate-900 font-black text-xs sm:text-sm text-center bg-slate-200 opacity-80 comic-shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
-      <span class="text-xl">🚀</span>
-      <span>4. Sumas Avanzadas</span>
-    </button>
-  </nav>
-
-  <!-- ============================================== -->
-  <!-- ÁREA PRINCIPAL DINÁMICA -->
-  <!-- ============================================== -->
-  <main class="w-full max-w-4xl flex-1 flex flex-col relative">
-
-    <!-- ------------------------------------------------------------ -->
-    <!-- MODO 1: CORTADOR MÁGICO CON CORTE ASISTIDO -->
-    <!-- ------------------------------------------------------------ -->
-    <section id="view1" class="flex-1 bg-[#fef08a] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between">
-      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3.5 rounded-2xl border-4 border-slate-900 mb-3 shadow-sm">
-        <span class="text-3xl flex-shrink-0 animate-bounce">👾</span>
-        <p class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
-          "¡Elige cortes base o pulsa el <strong class="text-amber-600">🔪 Cuchillo Asistido</strong> para rebanar por la mitad! Verás que <strong class="text-blue-600 underline">la cantidad total de pizza no cambia</strong>."
-        </p>
-      </div>
-
-      <!-- Selector de base -->
-      <div class="flex flex-wrap items-center justify-center gap-2 mb-2">
-        <span class="text-xs font-black uppercase text-slate-600 mr-1">Cortar en:</span>
-        <div id="m1BaseButtons" class="flex gap-2"></div>
-      </div>
-
-      <!-- Pizza Central con Corte Asistido -->
-      <div class="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center my-1">
-        <div class="absolute inset-0 rounded-full bg-cyan-300 border-4 border-slate-900 comic-shadow-sm flex items-center justify-center">
-          <div class="w-11/12 h-11/12 rounded-full border-4 border-dashed border-cyan-600 opacity-30"></div>
+  <!-- BANNER DE ALTAIR (AVATAR MÁS GRANDE Y PROTAGÓNICO 95-140px + GLOBO AMPLIO) -->
+  <div class="bg-amber-200/85 border-b-2 sm:border-b-3 border-slate-900 px-2 sm:px-4 py-1.5 flex items-center justify-between shrink-0 shadow-[0_2px_0_#0f172a] gap-2">
+    <div class="flex items-center gap-2 sm:gap-3.5 select-none w-full min-w-0">
+      <div class="relative shrink-0 flex items-center justify-center">
+        <div class="w-[95px] h-[95px] sm:w-[138px] sm:h-[138px] rounded-3xl bg-amber-300/40 border-3 sm:border-4 border-slate-900 p-1 flex items-center justify-center shadow-[3px_3px_0_#0f172a] overflow-hidden bg-gradient-to-b from-amber-100 to-amber-200">
+          <img id="altair-img" src="altaircerrada.png" alt="Chef Altair" class="w-full h-full object-contain drop-shadow-md select-none transition-transform duration-300" />
         </div>
-
-        <svg id="m1PizzaSvg" viewBox="0 0 200 200" class="w-56 h-56 sm:w-72 sm:h-72 relative z-10 filter drop-shadow-md pop-in"></svg>
-
-        <div onclick="m1DoubleCut()" class="absolute -top-3 -right-3 w-14 h-14 bg-red-500 hover:bg-red-400 rounded-full border-4 border-slate-900 flex items-center justify-center text-2xl shadow-md z-20 cursor-pointer animate-bounce active:scale-95" title="¡Cuchillo Asistido!">
-          🔪
+        <div id="altair-star" class="absolute -top-2 -right-2 text-xl sm:text-2xl animate-bounce hidden">⭐</div>
+      </div>
+      <div class="flex-1 min-w-0 flex flex-col justify-center">
+        <div class="bg-white border-2 sm:border-3 border-slate-900 rounded-2xl sm:rounded-3xl p-2 sm:p-3 text-xs sm:text-base font-bold text-slate-800 shadow-[3px_3px_0px_#0f172a] relative leading-snug">
+          <div class="absolute left-[-8px] top-6 w-0 h-0 border-t-6 border-t-transparent border-b-6 border-b-transparent border-r-8 border-r-slate-900"></div>
+          <div class="absolute left-[-6px] top-6 w-0 h-0 border-t-5 border-t-transparent border-b-5 border-b-transparent border-r-7 border-r-white"></div>
+          <span id="altair-speech">¡Tenemos 4 invitados en la mesa! Ayúdame a cortar la pizza en 4 partes iguales (cuartos). Toca el punto rojo y arrastra tu dedo.</span>
+          <span id="altair-badge" class="ml-1 hidden bg-emerald-500 text-white px-2 py-0.5 rounded-lg text-xs font-black shadow-sm"></span>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Conexión Triple de Conceptos -->
-      <div class="flex flex-col items-center bg-white px-6 py-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm mb-3 w-full max-w-lg">
-        <span class="text-xs font-black text-slate-500 uppercase tracking-wider">Tu Porción Seleccionada</span>
-        <div class="flex items-center gap-4 my-2">
-          <div class="flex flex-col items-center">
-            <span id="m1Num" class="text-4xl sm:text-5xl font-black text-blue-600 leading-none">1</span>
-            <div class="w-16 h-2.5 bg-slate-900 rounded-full my-1"></div>
-            <span id="m1Den" class="text-4xl sm:text-5xl font-black text-amber-500 leading-none">2</span>
-          </div>
-          <div class="text-left text-xs sm:text-sm font-bold text-slate-700 pl-3 border-l-2 border-slate-300 space-y-1">
-            <p><span class="inline-block w-3.5 h-3.5 bg-blue-500 rounded-full border border-slate-900 mr-1.5"></span><span id="m1NumText">1 rebanada con queso</span></p>
-            <p><span class="inline-block w-3.5 h-3.5 bg-amber-500 rounded-full border border-slate-900 mr-1.5"></span><span id="m1DenText">Cortes totales: 2</span></p>
-          </div>
-        </div>
-        <!-- Barra medidora -->
-        <div class="w-full bg-slate-200 rounded-full h-5 border-2 border-slate-900 overflow-hidden mt-1 relative">
-          <div id="m1VolumeBar" class="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 h-full transition-all duration-500 flex items-center justify-center" style="width: 50%;">
-            <span id="m1VolumeLabel" class="text-[10px] font-black text-slate-900 tracking-wide">50% PIZZA</span>
-          </div>
-        </div>
-        <span class="text-[11px] font-bold text-slate-600 mt-1">
-          La barra mide la pizza real: ¡Al partir a la mitad la cantidad es equivalente!
-        </span>
+  <!-- CONTENEDOR PRINCIPAL "ZERO-SCROLL" -->
+  <main class="flex-1 min-h-0 w-full flex flex-col items-center justify-center p-1 sm:p-2 overflow-hidden">
+    <!-- VISTA 1: CORTAR (REPARTIR PARA PERSONAS CON CORTE ASISTIDO) -->
+    <div id="view-1" class="h-full w-full flex flex-col items-center justify-between py-0.5 gap-1">
+      <div class="flex items-center gap-1 sm:gap-2 bg-white border-2 border-slate-900 rounded-2xl p-1 shadow-[2px_2px_0_#0f172a] shrink-0">
+        <span class="text-[10px] sm:text-xs font-black text-slate-700 px-1 hidden sm:inline">👥 Repartir en:</span>
+        <button onclick="setCutOption(0)" id="cut-opt-0" class="px-2 py-0.5 rounded-xl text-xs sm:text-sm font-black border-2 border-slate-900 bg-slate-100">2 (1/2)</button>
+        <button onclick="setCutOption(1)" id="cut-opt-1" class="px-2 py-0.5 rounded-xl text-xs sm:text-sm font-black border-2 border-slate-900 bg-slate-100">3 (1/3)</button>
+        <button onclick="setCutOption(2)" id="cut-opt-2" class="px-2 py-0.5 rounded-xl text-xs sm:text-sm font-black border-2 border-slate-900 bg-amber-400 shadow-[1px_1px_0_#0f172a]">4 (1/4)</button>
+        <button onclick="setCutOption(3)" id="cut-opt-3" class="px-2 py-0.5 rounded-xl text-xs sm:text-sm font-black border-2 border-slate-900 bg-slate-100">6 (1/6)</button>
+        <button onclick="setCutOption(4)" id="cut-opt-4" class="px-2 py-0.5 rounded-xl text-xs sm:text-sm font-black border-2 border-slate-900 bg-slate-100">8 (1/8)</button>
       </div>
 
-      <div class="w-full max-w-md flex flex-col sm:flex-row gap-3">
-        <button id="btnM1Double" onclick="m1DoubleCut()" class="flex-1 py-3 px-4 min-h-[48px] bg-emerald-400 hover:bg-emerald-300 rounded-2xl border-4 border-slate-900 font-black text-base comic-shadow-sm comic-shadow-active flex items-center justify-center gap-2 cursor-pointer">
-          <span>🔪 Cuchillo Asistido (Cortar x2)</span>
-        </button>
-        <button onclick="m1ToggleAssisted()" class="py-3 px-4 min-h-[48px] bg-white hover:bg-slate-100 rounded-2xl border-4 border-slate-900 font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
-          Guías de Corte
+      <div class="flex-1 min-h-0 w-full flex items-center justify-center p-1" id="m1-board-container"></div>
+
+      <div class="shrink-0 flex items-center justify-center gap-2">
+        <div id="cut-hint-box" class="bg-white/95 border-2 border-slate-900 rounded-xl px-3 py-0.5 shadow-[1px_1px_0_#0f172a] text-[10px] sm:text-xs font-bold text-center text-slate-700">
+          ✂️ <strong>Toca el punto rojo</strong> y arrastra a lo largo de la línea luminosa para cortar.
+        </div>
+        <button id="cut-next-btn" onclick="nextRandomCutChallenge()" class="py-1 px-4 bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs sm:text-sm rounded-xl border-2 sm:border-3 border-slate-900 shadow-[3px_3px_0_#0f172a] active:translate-y-0.5 animate-bounce hidden">
+          🎉 ¡Siguiente Pedido! 🍕
         </button>
       </div>
-    </section>
+    </div>
 
-    <!-- ------------------------------------------------------------ -->
-    <!-- MODO 2: COCINA DE SUMAS BÁSICAS (MISMO DENOMINADOR) -->
-    <!-- ------------------------------------------------------------ -->
-    <section id="view2" class="hidden flex-1 bg-[#bae6fd] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between relative overflow-hidden">
-      <div id="m2CelebrationContainer" class="absolute inset-0 pointer-events-none overflow-hidden z-30 hidden"></div>
-
-      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3.5 rounded-2xl border-4 border-slate-900 mb-3 shadow-sm z-10">
-        <span class="text-3xl flex-shrink-0">👾</span>
-        <p id="m2Instructions" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
-          "¡Ambos platos tienen cortes iguales! Toca las rebanadas o el botón para juntarlas en la Caja de Entrega."
-        </p>
+    <!-- VISTA 2: SUMAS -->
+    <div id="view-2" class="h-full w-full flex flex-col items-center justify-between py-0.5 gap-1 hidden">
+      <div class="flex items-center justify-between w-full max-w-lg px-2 shrink-0">
+        <div id="sum-eq-badge" class="px-2.5 py-0.5 rounded-xl border-2 border-slate-900 text-xs sm:text-sm font-black shadow-[2px_2px_0_#0f172a] transition-all bg-rose-500 text-white">
+          <span id="sum-eq-text">2/8 + 2/8 = 0/8</span>
+          <span id="sum-eq-icon" class="ml-1">⏳</span>
+        </div>
+        <button onclick="newRandomSum()" class="py-1 px-3 bg-amber-400 hover:bg-amber-300 border-2 border-slate-900 rounded-xl text-xs font-black shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1 cursor-pointer">
+          <span>🔄</span><span>Nueva Suma</span>
+        </button>
       </div>
 
-      <div class="w-full flex flex-col md:flex-row items-center justify-center gap-3 sm:gap-4 my-2 z-10">
-        <!-- Plato A -->
-        <div id="m2PlateA" onclick="m2AddSliceA()" class="flex flex-col items-center bg-white/90 p-3 rounded-2xl border-4 border-slate-900 cursor-pointer hover:scale-105 comic-shadow-sm transition-all">
-          <div class="relative w-36 h-36 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
-            <svg id="m2SvgA" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
+      <div class="flex-1 min-h-0 w-full flex flex-col sm:flex-row items-center justify-around gap-1 sm:gap-4 px-1 max-w-3xl">
+        <div class="flex sm:contents flex-row items-center justify-around w-full gap-2 shrink-0">
+          <div class="flex flex-col items-center p-1 sm:p-2 bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-slate-900 shadow-[2px_2px_0_#0f172a] shrink-0 sm:order-1">
+            <span id="sum-p1-title" class="text-[10px] sm:text-xs font-black text-slate-700 mb-0.5">Plato 1</span>
+            <div id="m2-plate-1"></div>
+            <span class="text-[9px] text-slate-500 font-bold block sm:hidden mt-0.5">⬇️ Pasa a caja</span>
           </div>
-          <span id="m2FracA" class="mt-2 text-2xl font-black text-blue-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">1/4</span>
-          <span id="m2HintA" class="text-[11px] font-bold text-slate-700 mt-1">👉 Toca para poner</span>
+
+          <span class="hidden sm:inline text-2xl font-black text-slate-800 shrink-0 sm:order-2">➡️</span>
+
+          <div class="flex flex-col items-center p-1 sm:p-2 bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-slate-900 shadow-[2px_2px_0_#0f172a] shrink-0 sm:order-5">
+            <span id="sum-p2-title" class="text-[10px] sm:text-xs font-black text-slate-700 mb-0.5">Plato 2</span>
+            <div id="m2-plate-2"></div>
+            <span class="text-[9px] text-slate-500 font-bold block sm:hidden mt-0.5">⬇️ Pasa a caja</span>
+          </div>
         </div>
 
-        <div class="w-12 h-12 bg-pink-500 rounded-full border-4 border-slate-900 flex items-center justify-center text-white text-3xl font-black comic-shadow-sm flex-shrink-0">
-          +
-        </div>
+        <span class="hidden sm:inline text-2xl font-black text-slate-800 shrink-0 sm:order-4">⬅️</span>
 
-        <!-- Plato B -->
-        <div id="m2PlateB" onclick="m2AddSliceB()" class="flex flex-col items-center bg-white/90 p-3 rounded-2xl border-4 border-slate-900 cursor-pointer hover:scale-105 comic-shadow-sm transition-all">
-          <div class="relative w-36 h-36 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
-            <svg id="m2SvgB" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
-          </div>
-          <span id="m2FracB" class="mt-2 text-2xl font-black text-purple-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">2/4</span>
-          <span id="m2HintB" class="text-[11px] font-bold text-slate-700 mt-1">👉 Toca para poner</span>
-        </div>
-
-        <div class="text-3xl font-black text-slate-800">➡️</div>
-
-        <!-- Caja de Entrega -->
-        <div onclick="m2CombineAll()" class="flex flex-col items-center bg-amber-100 p-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm min-w-[190px] cursor-pointer hover:bg-amber-200/80 transition-colors">
-          <div class="flex items-center gap-1.5">
-            <span class="text-xs font-black text-amber-900 uppercase">Caja de Entrega</span>
-            <span>📦</span>
-          </div>
-          <div class="relative w-36 h-36 flex items-center justify-center my-1 bg-amber-50 rounded-xl border-2 border-dashed border-amber-900/40">
-            <svg id="m2BoxSvg" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
-            <div id="m2BoxLabel" class="absolute text-center text-xs text-amber-900/80 font-bold px-3 pointer-events-none">
-              Toca para juntarlas
+        <div class="shrink-0 sm:order-3 relative" id="m2-box-wrapper">
+          <div class="flex flex-col items-center p-1.5 sm:p-2 bg-amber-100 rounded-2xl sm:rounded-3xl border-3 sm:border-4 border-slate-900 shadow-[3px_3px_0_#0f172a]" id="m2-box-outer">
+            <span id="m2-box-title" class="text-[10px] sm:text-xs font-black text-amber-950 uppercase tracking-wide mb-0.5 flex items-center gap-1">
+              <span>📦</span><span id="box-label-text">CAJA (0/8)</span>
+            </span>
+            <div class="relative rounded-xl bg-amber-50/90 p-0.5 border-2 border-dashed border-amber-300 flex items-center justify-center overflow-hidden">
+              <div id="m2-plate-box"></div>
+              <div id="m2-box-lid" class="absolute inset-0 bg-[#eab308] border-3 sm:border-4 border-slate-900 rounded-xl flex flex-col items-center justify-center p-2 hidden z-30 shadow-[inset_0_0_8px_rgba(180,83,9,0.3)]">
+                <div class="w-full h-full border border-dashed border-amber-800 rounded-lg flex flex-col items-center justify-center text-center p-1 bg-[#fde047]">
+                  <span class="text-xl sm:text-2xl animate-bounce">🍕</span>
+                  <span class="text-[10px] sm:text-xs font-black tracking-wider text-slate-900 uppercase">Pizzería de Altair</span>
+                  <div class="mt-0.5 text-[8px] sm:text-[9px] font-black text-emerald-800 bg-emerald-100 px-1 py-0.2 rounded border border-emerald-700">✔ ¡EMPACADO!</div>
+                </div>
+              </div>
+              <div id="m2-box-delivered-badge" class="absolute inset-0 bg-emerald-500/95 border-3 sm:border-4 border-slate-900 rounded-xl flex flex-col items-center justify-center p-2 z-40 text-center text-white hidden">
+                <span class="text-2xl animate-bounce">⭐</span>
+                <span class="text-[11px] sm:text-xs font-black uppercase mt-0.5">¡Pedido Entregado!</span>
+                <span class="text-[9px] font-bold text-emerald-100 mb-1">¡Cliente satisfecho!</span>
+                <button onclick="newRandomSum()" class="px-2 py-0.5 bg-amber-400 hover:bg-amber-300 text-slate-900 border-2 border-slate-900 rounded-xl font-black text-[10px]">🍕 Siguiente</button>
+              </div>
             </div>
-          </div>
-          <div id="m2ResultBadge" class="mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-slate-500 bg-white opacity-40 transition-all">
-            ? / ?
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full max-w-md flex flex-col sm:flex-row gap-3 items-center justify-center mt-2 z-10">
-        <button onclick="m2CombineAll()" class="w-full sm:w-auto flex-1 py-3 px-4 min-h-[48px] bg-emerald-400 hover:bg-emerald-300 text-slate-900 border-4 border-slate-900 rounded-2xl font-black text-base comic-shadow-sm comic-shadow-active flex items-center justify-center gap-2 cursor-pointer">
-          <span>📦 Juntar en la Caja</span>
-        </button>
-        <button onclick="m2GenerateNewSum()" class="w-full sm:w-auto py-3 px-5 min-h-[48px] bg-white hover:bg-slate-100 text-slate-900 border-4 border-slate-900 rounded-2xl font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
-          🎲 Nueva Suma
-        </button>
-      </div>
-    </section>
-
-    <!-- ------------------------------------------------------------ -->
-    <!-- MODO 3: LA FIESTA DE LAS RESTAS (COMER REBANADAS) -->
-    <!-- ------------------------------------------------------------ -->
-    <section id="view3" class="hidden flex-1 bg-[#fed7aa] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between">
-      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3.5 rounded-2xl border-4 border-slate-900 mb-3 shadow-sm">
-        <span class="text-3xl flex-shrink-0 animate-bounce">😋</span>
-        <p id="m3Instructions" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
-          "¡El Chef Monstruito tiene hambre! Quiere comerse rebanadas. <strong>Toca las rebanadas</strong> para que se las coma con un suave ¡ñam!"
-        </p>
-      </div>
-
-      <!-- Plato Central para Restar -->
-      <div class="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center my-1">
-        <div class="absolute inset-0 rounded-full bg-amber-300 border-4 border-slate-900 comic-shadow-sm flex items-center justify-center">
-          <div class="w-11/12 h-11/12 rounded-full border-4 border-dashed border-amber-600 opacity-40"></div>
-        </div>
-
-        <svg id="m3PizzaSvg" viewBox="0 0 200 200" class="w-56 h-56 sm:w-72 sm:h-72 relative z-10 filter drop-shadow-md"></svg>
-
-        <div id="m3BadgeEaten" class="absolute -top-3 -right-3 bg-red-500 text-white font-black px-3 py-1 rounded-full border-3 border-slate-900 text-xs shadow-md">
-          Comidas: 0 🍕
-        </div>
-      </div>
-
-      <!-- Panel de Resta Numérica -->
-      <div class="flex flex-col items-center bg-white px-6 py-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm mb-3 w-full max-w-lg">
-        <div class="flex items-center gap-3 sm:gap-4 my-1">
-          <!-- Inicial -->
-          <div class="flex flex-col items-center">
-            <span id="m3NumInit" class="text-3xl sm:text-4xl font-black text-blue-600">5</span>
-            <div class="w-12 h-2 bg-slate-900 rounded-full my-0.5"></div>
-            <span id="m3DenInit" class="text-3xl sm:text-4xl font-black text-amber-500">6</span>
-          </div>
-
-          <span class="text-3xl font-black text-pink-600">-</span>
-
-          <!-- Comidas -->
-          <div class="flex flex-col items-center">
-            <span id="m3NumEaten" class="text-3xl sm:text-4xl font-black text-red-600">0</span>
-            <div class="w-12 h-2 bg-slate-900 rounded-full my-0.5"></div>
-            <span id="m3DenEaten" class="text-3xl sm:text-4xl font-black text-amber-500">6</span>
-          </div>
-
-          <span class="text-3xl font-black text-slate-800">=</span>
-
-          <!-- Restante -->
-          <div class="flex flex-col items-center bg-emerald-100 px-3 py-1 rounded-xl border-2 border-slate-900">
-            <span id="m3NumResult" class="text-3xl sm:text-4xl font-black text-emerald-700">5</span>
-            <div class="w-12 h-2 bg-slate-900 rounded-full my-0.5"></div>
-            <span id="m3DenResult" class="text-3xl sm:text-4xl font-black text-amber-600">6</span>
-          </div>
-        </div>
-
-        <div id="m3SimplificationTip" class="hidden mt-2 text-xs font-black text-emerald-800 bg-emerald-200/80 px-3 py-1 rounded-full border border-slate-900">
-          💡 ¡Mira! Equivale exactamente a la mitad: <strong>1/2</strong>
-        </div>
-      </div>
-
-      <div class="w-full max-w-md flex gap-3">
-        <button onclick="m3ResetPizza()" class="flex-1 py-3 px-4 min-h-[48px] bg-white hover:bg-slate-100 rounded-2xl border-4 border-slate-900 font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
-          🔄 Restaurar Pizza
-        </button>
-        <button onclick="m3NewChallenge()" class="flex-1 py-3 px-4 min-h-[48px] bg-amber-400 hover:bg-amber-300 rounded-2xl border-4 border-slate-900 font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
-          🎲 Otro Reto de Resta
-        </button>
-      </div>
-    </section>
-
-    <!-- ------------------------------------------------------------ -->
-    <!-- MODO 4: SUMAS AVANZADAS (DIFERENTE DENOMINADOR Y CORTE) -->
-    <!-- ------------------------------------------------------------ -->
-    <section id="view4" class="hidden flex-1 bg-[#bae6fd] rounded-3xl border-4 border-slate-900 comic-shadow p-4 sm:p-6 flex flex-col items-center justify-between relative overflow-hidden">
-      <div id="m4CelebrationContainer" class="absolute inset-0 pointer-events-none overflow-hidden z-30 hidden"></div>
-
-      <div class="flex items-center gap-3 w-full max-w-xl bg-white p-3.5 rounded-2xl border-4 border-slate-900 mb-3 shadow-sm z-10">
-        <div class="w-10 h-10 flex-shrink-0 bg-purple-500 rounded-xl border-2 border-slate-900 flex items-center justify-center text-lg">
-          👾
-        </div>
-        <p id="m4Instructions" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
-          "¡Alto! Los trozos son de tamaños distintos. Toca el botón amarillo <strong class="text-amber-600 underline">🔪 Cortar y Emparejar</strong> para igualarlos."
-        </p>
-      </div>
-
-      <!-- Selector de retos populares -->
-      <div id="m4PresetsBar" class="flex flex-wrap items-center justify-center gap-2 mb-2 z-10"></div>
-
-      <div class="w-full flex flex-col md:flex-row items-center justify-center gap-3 sm:gap-4 my-2 z-10">
-        <!-- Plato A -->
-        <div id="m4PlateA" onclick="m4AddSliceA()" class="flex flex-col items-center bg-white/90 p-3 rounded-2xl border-4 border-slate-900 transition-all">
-          <div class="relative w-36 h-36 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
-            <svg id="m4SvgA" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
-          </div>
-          <div class="mt-2 flex items-center gap-2">
-            <span id="m4FracA" class="text-2xl font-black text-blue-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">1/2</span>
-            <button id="btnM4CutMatch" onclick="event.stopPropagation(); m4CutAndMatch();" class="bg-yellow-400 hover:bg-yellow-300 text-xs font-black py-1.5 px-2.5 rounded-xl border-2 border-slate-900 comic-shadow-sm comic-shadow-active flex items-center gap-1 cursor-pointer transition-all">
-              <span>🔪 Cortar y Emparejar</span>
+            <button id="btn-deliver-manual" onclick="handleManualDeliver()" class="mt-1 w-full py-0.5 px-2 bg-emerald-500 hover:bg-emerald-400 text-white font-black text-[10px] sm:text-xs rounded-xl border-2 border-slate-900 shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 hidden">
+              🛵 ¡Entregar Orden!
             </button>
           </div>
-          <span id="m4HintA" class="text-[11px] font-bold text-slate-700 mt-1">Rebanadas grandes</span>
+        </div>
+      </div>
+
+      <div class="shrink-0 text-[10px] sm:text-[11px] font-bold text-center text-slate-700 bg-white border-2 border-slate-900 rounded-xl px-2 py-0.5 shadow-[1px_1px_0_#0f172a]">
+        💡 <strong>Toca una rebanada</strong> para pasarla a la caja. Toca la huella vacía ↩️ para regresarla.
+      </div>
+    </div>
+
+    <!-- VISTA 3: RESTAS -->
+    <div id="view-3" class="h-full w-full flex flex-col items-center justify-between py-1 gap-1 hidden">
+      <div class="flex items-center justify-between w-full max-w-sm px-2 shrink-0">
+        <span id="res-status-display" class="text-xs font-black bg-white px-2 py-0.5 rounded-lg border-2 border-slate-900">
+          Comidas: 0 de 2
+        </span>
+        <button onclick="newRandomResta()" class="py-1 px-3 bg-purple-400 hover:bg-purple-300 border-2 border-slate-900 rounded-xl text-xs font-black shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 flex items-center gap-1">
+          <span>🔄</span><span>Nueva Resta</span>
+        </button>
+      </div>
+
+      <div class="flex-1 min-h-0 w-full flex items-center justify-center p-1">
+        <div class="bg-white border-3 sm:border-4 border-slate-900 rounded-3xl p-2 shadow-[4px_4px_0_#0f172a]">
+          <div id="m3-plate-resta"></div>
+        </div>
+      </div>
+
+      <div class="shrink-0 text-[10px] sm:text-[11px] font-bold text-center text-slate-700 bg-white border-2 border-slate-900 rounded-xl px-2 py-0.5 shadow-[1px_1px_0_#0f172a]">
+        😋 <strong>Toca cualquier rebanada</strong> para que Altair la muerda. Toca la huella para deshacer el mordisco.
+      </div>
+    </div>
+
+    <!-- VISTA 4: AVANZADAS -->
+    <div id="view-4" class="h-full w-full flex flex-col items-center justify-between py-0.5 gap-1 hidden">
+      <div class="flex items-center justify-between w-full max-w-lg px-2 shrink-0">
+        <span id="adv-status-title" class="text-xs font-black bg-white px-2 py-0.5 rounded-lg border-2 border-slate-900">
+          ✂️ Corta 1/2 con tu dedo
+        </span>
+        <button onclick="resetAdvState()" class="py-1 px-3 bg-amber-400 hover:bg-amber-300 border-2 border-slate-900 rounded-xl text-xs font-black shadow-[2px_2px_0_#0f172a] flex items-center gap-1">
+          <span>🔄</span><span>Reiniciar</span>
+        </button>
+      </div>
+
+      <div class="flex-1 min-h-0 w-full flex flex-col sm:flex-row items-center justify-around gap-1 sm:gap-4 px-1 max-w-3xl">
+        <div class="flex sm:contents flex-row items-center justify-around w-full gap-2 shrink-0">
+          <div class="flex flex-col items-center p-1 sm:p-2 bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-slate-900 shadow-[2px_2px_0_#0f172a] shrink-0 sm:order-1 cursor-pointer" onclick="handleAdvCutDirect()">
+            <span id="adv-p1-title" class="text-[10px] sm:text-xs font-black text-slate-700 mb-0.5">1/2 (Corta ✂️)</span>
+            <div id="adv-plate-1"></div>
+            <span class="text-[9px] text-slate-500 font-bold block sm:hidden mt-0.5">✂️ Toca para cortar</span>
+          </div>
+
+          <span class="hidden sm:inline text-2xl font-black text-slate-800 shrink-0 sm:order-2">➡️</span>
+
+          <div class="flex flex-col items-center p-1 sm:p-2 bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-slate-900 shadow-[2px_2px_0_#0f172a] shrink-0 sm:order-5">
+            <span class="text-[10px] sm:text-xs font-black text-slate-700 mb-0.5">Plato 2: 1/4</span>
+            <div id="adv-plate-2"></div>
+            <span class="text-[9px] text-slate-500 font-bold block sm:hidden mt-0.5">⬇️ Pasa a caja</span>
+          </div>
         </div>
 
-        <div class="w-12 h-12 bg-pink-500 rounded-full border-4 border-slate-900 flex items-center justify-center text-white text-3xl font-black comic-shadow-sm flex-shrink-0">
-          +
-        </div>
+        <span class="hidden sm:inline text-2xl font-black text-slate-800 shrink-0 sm:order-4">⬅️</span>
 
-        <!-- Plato B -->
-        <div id="m4PlateB" onclick="m4AddSliceB()" class="flex flex-col items-center bg-white/90 p-3 rounded-2xl border-4 border-slate-900 transition-all">
-          <div class="relative w-36 h-36 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full bg-amber-200 border-4 border-slate-900"></div>
-            <svg id="m4SvgB" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
-          </div>
-          <div class="mt-2">
-            <span id="m4FracB" class="text-2xl font-black text-purple-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900">1/4</span>
-          </div>
-          <span id="m4HintB" class="text-[11px] font-bold text-slate-700 mt-1">Rebanadas ya en medida</span>
-        </div>
-
-        <div class="text-3xl font-black text-slate-800">➡️</div>
-
-        <!-- Caja de Entrega -->
-        <div onclick="m4CombineAll()" class="flex flex-col items-center bg-amber-100 p-3 rounded-2xl border-4 border-slate-900 comic-shadow-sm min-w-[190px] cursor-pointer hover:bg-amber-200/80 transition-colors">
-          <div class="flex items-center gap-1.5">
-            <span class="text-xs font-black text-amber-900 uppercase">Caja de Entrega</span>
-            <span>📦</span>
-          </div>
-          <div class="relative w-36 h-36 flex items-center justify-center my-1 bg-amber-50 rounded-xl border-2 border-dashed border-amber-900/40">
-            <svg id="m4BoxSvg" viewBox="0 0 200 200" class="w-32 h-32 relative z-10"></svg>
-            <div id="m4BoxLabel" class="absolute text-center text-xs text-amber-900/80 font-bold px-3 pointer-events-none">
-              Toca para juntarlas
-            </div>
-          </div>
-          <div id="m4ResultBadge" class="mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-slate-500 bg-white opacity-40 transition-all">
-            ? / ?
+        <div class="shrink-0 sm:order-3">
+          <div class="flex flex-col items-center p-1.5 sm:p-2 bg-amber-100 rounded-2xl sm:rounded-3xl border-3 sm:border-4 border-slate-900 shadow-[3px_3px_0_#0f172a]">
+            <span id="adv-box-title" class="text-[10px] sm:text-xs font-black text-amber-950 uppercase tracking-wide mb-0.5 flex items-center gap-1">
+              <span>📦</span><span>CAJA (0/4)</span>
+            </span>
+            <div id="adv-plate-box"></div>
           </div>
         </div>
       </div>
 
-      <div class="w-full max-w-md flex flex-col sm:flex-row gap-3 items-center justify-center mt-2 z-10">
-        <button onclick="m4CombineAll()" class="w-full sm:w-auto flex-1 py-3 px-4 min-h-[48px] bg-emerald-400 hover:bg-emerald-300 text-slate-900 border-4 border-slate-900 rounded-2xl font-black text-base comic-shadow-sm comic-shadow-active flex items-center justify-center gap-2 cursor-pointer">
-          <span>📦 Juntar en la Caja</span>
-        </button>
-        <button onclick="m4NextPreset()" class="w-full sm:w-auto py-3 px-5 min-h-[48px] bg-white hover:bg-slate-100 text-slate-900 border-4 border-slate-900 rounded-2xl font-black text-sm comic-shadow-sm comic-shadow-active cursor-pointer">
-          Siguiente Reto 🚀
-        </button>
+      <div class="shrink-0 text-[10px] sm:text-[11px] font-bold text-center text-slate-700 bg-white border-2 border-slate-900 rounded-xl px-2 py-0.5 shadow-[1px_1px_0_#0f172a]">
+        ✂️ <strong>Equivalencia:</strong> 1/2 es igual a 2/4. ¡Al emparejarlas encajan en la caja!
       </div>
-    </section>
+    </div>
 
+    <!-- VISTA 5: MISIONES -->
+    <div id="view-5" class="h-full w-full flex flex-col items-center justify-between py-0.5 gap-1 hidden">
+      <div class="flex items-center justify-between w-full max-w-md bg-white border-2 border-slate-900 rounded-2xl p-1 px-2.5 shadow-[2px_2px_0_#0f172a] shrink-0">
+        <div class="flex items-center gap-1.5">
+          <span id="m5-batch-label" class="text-xs font-black">Lote #1:</span>
+          <div class="flex items-center gap-1" id="m5-step-dots"></div>
+        </div>
+        <div class="flex items-center gap-1">
+          <span id="m5-client-icon" class="text-base">👾</span>
+          <span id="m5-client-name" class="text-xs font-black truncate max-w-[100px]">Monstruo Luca</span>
+        </div>
+      </div>
+
+      <div class="flex-1 min-h-0 w-full flex items-center justify-center p-1" id="m5-body-container"></div>
+    </div>
   </main>
 
-  <!-- PIE DE PÁGINA -->
-  <footer class="mt-3 text-center text-xs font-bold text-slate-800">
-    Diseñado con amor y cuidado sensorial para campeones matemáticos 🍕✨
+  <!-- MODAL DE TROFEOS -->
+  <div id="trophy-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-white border-4 border-slate-900 rounded-3xl max-w-lg w-full p-4 sm:p-5 shadow-[6px_6px_0px_#0f172a] relative flex flex-col max-h-[90vh]">
+      <button onclick="toggleTrophyModal(false)" class="absolute top-4 right-4 p-1.5 bg-rose-100 hover:bg-rose-200 border-2 border-slate-900 rounded-xl">✕</button>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-3xl">🏆</span>
+        <div>
+          <h2 class="text-lg sm:text-xl font-black text-slate-900 leading-tight">Vitrina de Trofeos de Altair</h2>
+          <p class="text-xs font-bold text-amber-700" id="trophy-summary-count">Colecciona medallas resolviendo retos</p>
+        </div>
+      </div>
+      <div id="trophy-list-container" class="flex flex-col gap-2 overflow-y-auto pr-1 flex-1"></div>
+    </div>
+  </div>
+
+  <!-- NAVEGACIÓN INFERIOR (5 PESTAÑAS) -->
+  <footer class="bg-white border-t-3 sm:border-t-4 border-slate-900 px-1 sm:px-2 py-1 flex items-center justify-around shrink-0 z-40 max-w-2xl mx-auto w-full rounded-t-2xl sm:rounded-t-3xl shadow-[0_-3px_0_#0f172a]">
+    <button onclick="switchTab(1)" id="tab-1" class="flex flex-col items-center py-0.5 sm:py-1 px-2.5 sm:px-3.5 rounded-xl border-2 border-slate-900 font-black text-xs sm:text-sm bg-amber-400 text-slate-900 shadow-[2px_2px_0_#0f172a] -translate-y-0.5">
+      <span class="text-base sm:text-lg leading-none">🍕</span><span class="mt-0.5 leading-none text-[11px] sm:text-xs">Cortar</span>
+    </button>
+    <button onclick="switchTab(2)" id="tab-2" class="flex flex-col items-center py-0.5 sm:py-1 px-2.5 sm:px-3.5 rounded-xl border-2 border-slate-900 font-black text-xs sm:text-sm bg-amber-50 text-slate-600 hover:bg-amber-100">
+      <span class="text-base sm:text-lg leading-none">➕</span><span class="mt-0.5 leading-none text-[11px] sm:text-xs">Sumas</span>
+    </button>
+    <button onclick="switchTab(3)" id="tab-3" class="flex flex-col items-center py-0.5 sm:py-1 px-2.5 sm:px-3.5 rounded-xl border-2 border-slate-900 font-black text-xs sm:text-sm bg-amber-50 text-slate-600 hover:bg-amber-100">
+      <span class="text-base sm:text-lg leading-none">➖</span><span class="mt-0.5 leading-none text-[11px] sm:text-xs">Restas</span>
+    </button>
+    <button onclick="switchTab(4)" id="tab-4" class="flex flex-col items-center py-0.5 sm:py-1 px-2.5 sm:px-3.5 rounded-xl border-2 border-slate-900 font-black text-xs sm:text-sm bg-amber-50 text-slate-600 hover:bg-amber-100">
+      <span class="text-base sm:text-lg leading-none">⚡</span><span class="mt-0.5 leading-none text-[11px] sm:text-xs">Avanzadas</span>
+    </button>
+    <button onclick="switchTab(5)" id="tab-5" class="flex flex-col items-center py-0.5 sm:py-1 px-2.5 sm:px-3.5 rounded-xl border-2 border-slate-900 font-black text-xs sm:text-sm bg-amber-50 text-slate-600 hover:bg-amber-100">
+      <span class="text-base sm:text-lg leading-none">🎯</span><span class="mt-0.5 leading-none text-[11px] sm:text-xs">Misiones</span>
+    </button>
   </footer>
 
-  <!-- ============================================== -->
-  <!-- SCRIPTS NATIVOS Y AUDIO WEB API -->
-  <!-- ============================================== -->
   <script>
-    /* 1. MOTOR DE AUDIO NATIVO (Web Audio API) */
+    // ESTADÍSTICAS PERSISTENTES
+    const DEFAULT_STATS = {
+      slicesCut: 0,
+      sumsSolved: 0,
+      restasSolved: 0,
+      advSolved: 0,
+      missionsCompleted: 0,
+      batchesCompleted: 0,
+      deliveries: 0,
+      stars: 10
+    };
+
+    let userStats = { ...DEFAULT_STATS };
+    try {
+      const saved = localStorage.getItem('altair_user_stats_v5');
+      if (saved) userStats = JSON.parse(saved);
+    } catch {}
+
+    function incrementStat(key, amount = 1) {
+      userStats[key] = (userStats[key] || 0) + amount;
+      try {
+        localStorage.setItem('altair_user_stats_v5', JSON.stringify(userStats));
+      } catch {}
+      updateStatsBadge();
+    }
+
+    function updateStatsBadge() {
+      const b = document.getElementById('star-count-badge');
+      if (b) b.textContent = '⭐ ' + userStats.stars;
+    }
+
+    // AUDIO SINTETIZADO
     let audioCtx = null;
+    let musicMasterGain = null;
+    let sfxMasterGain = null;
     let isMuted = false;
+    let isMusicPlaying = false;
+    let musicInterval = null;
+    let musicStep = 0;
+
+    const MELODY_NOTES = [
+      { melody: 523.25, bass: 130.81 }, { melody: 392.00, bass: 0 }, { melody: 329.63, bass: 0 },
+      { melody: 523.25, bass: 196.00 }, { melody: 392.00, bass: 0 }, { melody: 329.63, bass: 0 },
+      { melody: 659.25, bass: 130.81 }, { melody: 587.33, bass: 0 }, { melody: 523.25, bass: 0 },
+      { melody: 493.88, bass: 196.00 }, { melody: 523.25, bass: 0 }, { melody: 587.33, bass: 0 },
+      { melody: 587.33, bass: 196.00 }, { melody: 493.88, bass: 0 }, { melody: 392.00, bass: 0 },
+      { melody: 698.46, bass: 146.83 }, { melody: 587.33, bass: 0 }, { melody: 493.88, bass: 0 },
+      { melody: 523.25, bass: 130.81 }, { melody: 392.00, bass: 0 }, { melody: 523.25, bass: 0 },
+      { melody: 523.25, bass: 130.81 }, { melody: 0, bass: 0 }, { melody: 0, bass: 0 }
+    ];
 
     function initAudio() {
       if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioCtx();
+        musicMasterGain = audioCtx.createGain();
+        musicMasterGain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        sfxMasterGain = audioCtx.createGain();
+        sfxMasterGain.gain.setValueAtTime(0.24, audioCtx.currentTime);
+        musicMasterGain.connect(audioCtx.destination);
+        sfxMasterGain.connect(audioCtx.destination);
       }
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
     }
 
+    function toggleMusic() {
+      initAudio();
+      if (isMusicPlaying) {
+        clearInterval(musicInterval);
+        isMusicPlaying = false;
+        document.getElementById('music-btn').className = 'p-1.5 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 bg-slate-100 text-slate-500 flex items-center justify-center';
+      } else {
+        isMusicPlaying = true;
+        musicStep = 0;
+        document.getElementById('music-btn').className = 'p-1.5 border-2 border-slate-900 rounded-xl shadow-[2px_2px_0_#0f172a] active:translate-y-0.5 bg-emerald-300 text-emerald-950 flex items-center justify-center';
+        musicInterval = setInterval(() => {
+          if (!audioCtx || !musicMasterGain) return;
+          const note = MELODY_NOTES[musicStep % MELODY_NOTES.length];
+          const t = audioCtx.currentTime;
+          if (note.melody > 0) {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(note.melody, t);
+            g.gain.setValueAtTime(0.2, t);
+            g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+            osc.connect(g);
+            g.connect(musicMasterGain);
+            osc.start(t);
+            osc.stop(t + 0.29);
+          }
+          musicStep++;
+        }, 175);
+      }
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      document.getElementById('mute-icon').textContent = isMuted ? '🔇' : '🔊';
+      playPop(420);
+    }
+
+    function playKitchenBell() {
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      [1568, 2352, 3136].forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        const vol = 0.24 / (idx + 1);
+        gain.gain.setValueAtTime(vol, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+        osc.connect(gain);
+        gain.connect(sfxMasterGain);
+        osc.start(now);
+        osc.stop(now + 1.25);
+      });
+    }
+
     function playPop(freq = 440) {
       if (isMuted) return;
-      try {
-        initAudio();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(freq * 1.35, audioCtx.currentTime + 0.08);
-
-        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.12);
-      } catch (e) {}
-    }
-
-    function playSlice() {
-      if (isMuted) return;
-      try {
-        initAudio();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(540, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.12);
-
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.15);
-      } catch (e) {}
-    }
-
-    function playNomNom() {
-      if (isMuted) return;
-      try {
-        initAudio();
-        [330, 440].forEach((freq, idx) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.12);
-          osc.frequency.exponentialRampToValueAtTime(freq * 0.8, audioCtx.currentTime + idx * 0.12 + 0.08);
-
-          gain.gain.setValueAtTime(0.2, audioCtx.currentTime + idx * 0.12);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + idx * 0.12 + 0.1);
-
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(audioCtx.currentTime + idx * 0.12);
-          osc.stop(audioCtx.currentTime + idx * 0.12 + 0.1);
-        });
-      } catch (e) {}
-    }
-
-    function playThinking() {
-      if (isMuted) return;
-      try {
-        initAudio();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(360, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(420, audioCtx.currentTime + 0.2);
-
-        gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.25);
-      } catch (e) {}
-    }
-
-    function playSuccess() {
-      if (isMuted) return;
-      try {
-        initAudio();
-        [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-
-          const startTime = audioCtx.currentTime + idx * 0.1;
-          gain.gain.setValueAtTime(0.16, startTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.45);
-
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(startTime);
-          osc.stop(startTime + 0.45);
-        });
-      } catch (e) {}
-    }
-
-    const btnSound = document.getElementById('btnSound');
-    const soundIcon = document.getElementById('soundIcon');
-    btnSound.addEventListener('click', () => {
       initAudio();
-      isMuted = !isMuted;
-      soundIcon.textContent = isMuted ? '🔇' : '🔊';
-      btnSound.classList.toggle('bg-slate-300', isMuted);
-      btnSound.classList.toggle('bg-amber-400', !isMuted);
-    });
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.4, now + 0.08);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.11);
+    }
 
-    /* 2. CHEF MONSTRUITO CON EXPRESIONES COMICAS */
-    function renderChef(mood = 'happy') {
-      const chefSvg = document.getElementById('chefSvg');
-      if (!chefSvg) return;
+    function playSliceCut() {
+      if (isMuted) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(540, now);
+      osc.frequency.exponentialRampToValueAtTime(860, now + 0.12);
+      gain.gain.setValueAtTime(0.24, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.15);
+    }
 
-      let eyes = '';
-      let mouth = '';
+    function playChew() {
+      if (isMuted) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(240, now);
+      osc.frequency.exponentialRampToValueAtTime(140, now + 0.12);
+      gain.gain.setValueAtTime(0.22, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.15);
+    }
 
-      if (mood === 'happy') {
-        eyes = `
-          <circle cx="39" cy="48" r="11" fill="#ffffff" stroke="#0f172a" stroke-width="4.5"/>
-          <circle cx="63" cy="47" r="10" fill="#ffffff" stroke="#0f172a" stroke-width="4.5"/>
-          <circle cx="41" cy="48" r="4.5" fill="#0f172a"/>
-          <circle cx="65" cy="47" r="4" fill="#0f172a"/>
-          <circle cx="39" cy="46" r="1.5" fill="#ffffff"/>
-          <circle cx="63" cy="45" r="1.5" fill="#ffffff"/>
+    function playVictoryChime() {
+      if (isMuted) return;
+      initAudio();
+      if (!audioCtx) return;
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const t = audioCtx.currentTime + idx * 0.1;
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.2, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 0.36);
+      });
+    }
+
+    // GESTIÓN DE PANTALLA DE BIENVENIDA
+    function startGameFromWelcome() {
+      playKitchenBell();
+      if (!isMusicPlaying) toggleMusic();
+      const screen = document.getElementById('welcome-screen');
+      screen.classList.add('opacity-0', 'scale-105', 'pointer-events-none');
+      setTimeout(() => {
+        screen.classList.add('hidden');
+      }, 500);
+    }
+
+    function showWelcomeScreen() {
+      playPop(520);
+      const screen = document.getElementById('welcome-screen');
+      screen.classList.remove('hidden');
+      setTimeout(() => {
+        screen.classList.remove('opacity-0', 'scale-105', 'pointer-events-none');
+      }, 20);
+    }
+
+    // Canvas de partículas para la pantalla de bienvenida
+    function initWelcomeParticles() {
+      const canvas = document.getElementById('welcome-stars-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      window.addEventListener('resize', () => {
+        if (!canvas) return;
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const stars = [];
+      for (let i = 0; i < 45; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 2.5 + 1.2,
+          alpha: Math.random() * 0.7 + 0.3,
+          speed: Math.random() * 0.35 + 0.15,
+          pulse: Math.random() * Math.PI * 2
+        });
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, width, height);
+        stars.forEach(s => {
+          s.y -= s.speed;
+          s.pulse += 0.04;
+          if (s.y < -10) {
+            s.y = height + 10;
+            s.x = Math.random() * width;
+          }
+          const a = Math.max(0.2, Math.min(0.9, s.alpha + Math.sin(s.pulse) * 0.3));
+          ctx.fillStyle = `rgba(255, 235, 120, ${a})`;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (s.r > 2) {
+            ctx.strokeStyle = `rgba(255, 255, 255, ${a * 0.6})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(s.x - s.r * 2.2, s.y);
+            ctx.lineTo(s.x + s.r * 2.2, s.y);
+            ctx.moveTo(s.x, s.y - s.r * 2.2);
+            ctx.lineTo(s.x, s.y + s.r * 2.2);
+            ctx.stroke();
+          }
+        });
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    // PIZZA Y AVATAR
+    let currentPizza = 'pepperoni.png';
+    function selectPizza(p) {
+      currentPizza = p;
+      playPop(520);
+      ['pepperoni.png', 'hawaiana.png', 'queso.png'].forEach(img => {
+        const btn = document.getElementById('btn-p-' + img);
+        if (img === p) {
+          btn.className = 'px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 bg-amber-400 text-slate-900 shadow-[1px_1px_0_#0f172a]';
+        } else {
+          btn.className = 'px-1.5 py-0.5 rounded-lg text-xs font-black flex items-center gap-1 text-slate-600 hover:bg-amber-100';
+        }
+      });
+      renderCurrentTab();
+    }
+
+    let altairSmile = false;
+    let isAltairCelebrating = false;
+    setInterval(() => {
+      if (!isAltairCelebrating) {
+        altairSmile = !altairSmile;
+        document.getElementById('altair-img').src = altairSmile ? 'altairsonrisa.png' : 'altaircerrada.png';
+      }
+    }, 2800);
+
+    function setAltairEmotion(em) {
+      const img = document.getElementById('altair-img');
+      const star = document.getElementById('altair-star');
+      if (em === 'celebrate') {
+        isAltairCelebrating = true;
+        img.src = 'altairojo.png';
+        img.classList.add('scale-115', '-rotate-3', 'animate-bounce');
+        star.classList.remove('hidden');
+      } else if (em === 'eating') {
+        img.src = 'altairsonrisa.png';
+      } else {
+        isAltairCelebrating = false;
+        img.src = altairSmile ? 'altairsonrisa.png' : 'altaircerrada.png';
+        img.classList.remove('scale-115', '-rotate-3', 'animate-bounce');
+        star.classList.add('hidden');
+      }
+    }
+
+    function setAltairSpeech(txt, badgeTxt = null) {
+      document.getElementById('altair-speech').textContent = txt;
+      const b = document.getElementById('altair-badge');
+      if (badgeTxt) {
+        b.textContent = badgeTxt;
+        b.classList.remove('hidden');
+      } else {
+        b.classList.add('hidden');
+      }
+    }
+
+    function triggerCelebration(msg) {
+      playVictoryChime();
+      setAltairEmotion('celebrate');
+      setAltairSpeech(msg);
+      triggerConfetti();
+      setTimeout(() => {
+        setAltairEmotion('idle');
+      }, 3200);
+    }
+
+    function triggerConfetti() {
+      const c = document.getElementById('confetti-container');
+      c.innerHTML = '';
+      c.classList.remove('hidden');
+      const colors = ['#f59e0b', '#ef4444', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
+      for (let i = 0; i < 30; i++) {
+        const el = document.createElement('div');
+        el.className = 'absolute animate-confetti drop-shadow-md';
+        el.style.left = Math.random() * 95 + '%';
+        el.style.top = '-20px';
+        el.style.animationDelay = (Math.random() * 0.5) + 's';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        el.innerHTML = `
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" fill="${color}" stroke="#0f172a" stroke-width="2"/>
+          </svg>
         `;
-        mouth = `
-          <path d="M 38 68 Q 50 78 64 68" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
-          <rect x="47" y="67" width="6" height="6" fill="#ffffff" stroke="#0f172a" stroke-width="2.5" rx="1.5"/>
-        `;
-      } else if (mood === 'thinking') {
-        eyes = `
-          <circle cx="39" cy="48" r="11" fill="#ffffff" stroke="#0f172a" stroke-width="4.5"/>
-          <circle cx="63" cy="47" r="10" fill="#ffffff" stroke="#0f172a" stroke-width="4.5"/>
-          <circle cx="43" cy="43" r="4.5" fill="#0f172a"/>
-          <circle cx="67" cy="42" r="4" fill="#0f172a"/>
-          <path d="M 32 35 Q 40 31 48 36" fill="none" stroke="#0f172a" stroke-width="4" stroke-linecap="round"/>
-          <path d="M 58 37 Q 65 35 72 38" fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
-        `;
-        mouth = `<ellipse cx="52" cy="71" rx="5" ry="4" fill="#0f172a"/>`;
-      } else if (mood === 'eating') {
-        eyes = `
-          <path d="M 32 48 Q 40 42 48 48" fill="none" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"/>
-          <path d="M 54 48 Q 62 42 70 48" fill="none" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"/>
-        `;
-        mouth = `
-          <ellipse cx="50" cy="70" rx="9" ry="7" fill="#0f172a"/>
-          <polygon points="46,71 58,66 54,76" fill="#facc15" stroke="#ea580c" stroke-width="1"/>
-          <circle cx="51" cy="70" r="1.5" fill="#ef4444"/>
-        `;
-      } else if (mood === 'celebrating') {
-        eyes = `
-          <path d="M 30 48 Q 40 38 50 48" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
-          <path d="M 54 48 Q 64 38 74 48" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
-          <polygon points="50,2 52,8 58,10 52,12 50,18 48,12 42,10 48,8" fill="#facc15" stroke="#0f172a" stroke-width="1.5"/>
-        `;
-        mouth = `
-          <path d="M 36 65 Q 50 82 66 65 Z" fill="#0f172a" stroke="#0f172a" stroke-width="2"/>
-          <path d="M 43 72 Q 50 79 57 72 Z" fill="#f43f5e"/>
-          <rect x="44" y="64" width="6" height="5" fill="#ffffff" rx="1"/>
-          <rect x="52" y="64" width="6" height="5" fill="#ffffff" rx="1"/>
+        c.appendChild(el);
+      }
+      setTimeout(() => {
+        c.classList.add('hidden');
+        c.innerHTML = '';
+      }, 3200);
+    }
+
+    // CONSTRUCTOR DE REBANADA LIMPIA
+    function buildSliceHTML(id, cx, cy, radius, startAngle, endAngle, state, pizzaImg, clickHandler, sepOffset = 0) {
+      const midAngle = (startAngle + endAngle) / 2;
+      const curCx = cx + sepOffset * Math.cos(midAngle);
+      const curCy = cy + sepOffset * Math.sin(midAngle);
+
+      const x1 = (curCx + radius * Math.cos(startAngle)).toFixed(2);
+      const y1 = (curCy + radius * Math.sin(startAngle)).toFixed(2);
+      const x2 = (curCx + radius * Math.cos(endAngle)).toFixed(2);
+      const y2 = (curCy + radius * Math.sin(endAngle)).toFixed(2);
+      const diff = endAngle - startAngle;
+      const largeArc = diff > Math.PI ? 1 : 0;
+      const path = `M ${curCx.toFixed(2)} ${curCy.toFixed(2)} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+
+      const fx = curCx + radius * 0.58 * Math.cos(midAngle);
+      const fy = curCy + radius * 0.58 * Math.sin(midAngle);
+
+      if (state === 'empty_shadow') {
+        return `
+          <g class="cursor-pointer transition-opacity hover:opacity-80" onclick="${clickHandler || ''}">
+            <path d="${path}" fill="#fef9c3" opacity="0.45" />
+            <path d="${path}" fill="none" stroke="#94a3b8" stroke-width="2.2" stroke-dasharray="4 3" />
+            <text x="${fx}" y="${fy + 4}" text-anchor="middle" font-size="11" fill="#64748b" font-weight="bold" class="pointer-events-none select-none opacity-70">↩️</text>
+          </g>
         `;
       }
 
-      chefSvg.innerHTML = `
-        <ellipse cx="50" cy="56" rx="35" ry="40" fill="#a855f7" stroke="#0f172a" stroke-width="5"/>
-        <g class="${mood === 'celebrating' ? 'animate-bounce' : ''}">
-          <path d="M 28 34 C 18 18, 45 4, 50 18 C 55 4, 82 18, 72 34 Z" fill="#ffffff" stroke="#0f172a" stroke-width="5"/>
-          <rect x="28" y="30" width="44" height="9" rx="4" fill="#f1f5f9" stroke="#0f172a" stroke-width="4"/>
+      if (state === 'unused') {
+        return `
+          <path d="${path}" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 3" class="opacity-50" />
+        `;
+      }
+
+      const clipId = 'clip-' + id;
+      return `
+        <g class="cursor-pointer transition-transform duration-[1500ms] ease-out hover:scale-[1.02] active:scale-95" onclick="${clickHandler || ''}">
+          <defs>
+            <clipPath id="${clipId}">
+              <path d="${path}" />
+            </clipPath>
+          </defs>
+          <path d="${path}" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5" />
+          <image href="${pizzaImg}" x="${curCx - radius}" y="${curCy - radius}" width="${radius * 2}" height="${radius * 2}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" />
+          <path d="${path}" fill="none" stroke="#0f172a" stroke-width="2.8" stroke-linejoin="round" class="pointer-events-none" />
         </g>
-        <circle cx="28" cy="62" r="5" fill="#f472b6" opacity="0.6"/>
-        <circle cx="72" cy="62" r="5" fill="#f472b6" opacity="0.6"/>
-        ${eyes}
-        ${mouth}
       `;
     }
 
-    /* 3. DIBUJADO DE PIZZAS VECTORIALES (SVG NATIVO) */
-    function getArcPoint(cx, cy, radius, angleInDegrees) {
-      const rad = (angleInDegrees - 90) * Math.PI / 180.0;
-      return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) };
+    function renderPlateWithStates(den, states, size, clickFnName, pizzaImg = currentPizza, sepOffset = 0) {
+      const cx = 80, cy = 80, r = 64;
+      const step = (2 * Math.PI) / den;
+      let slices = '';
+      for (let i = 0; i < den; i++) {
+        const sa = i * step - Math.PI / 2;
+        const ea = (i + 1) * step - Math.PI / 2;
+        const st = states[i] || 'unused';
+        const clickHandler = clickFnName ? `${clickFnName}(${i})` : '';
+        slices += buildSliceHTML(`sl-${Math.random()}-${i}`, cx, cy, r, sa, ea, st, pizzaImg, clickHandler, sepOffset);
+      }
+
+      return `
+        <div style="width:${size}px; height:${size}px;" class="relative select-none aspect-square flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 160 160" class="w-full h-full drop-shadow-md select-none touch-none">
+            <circle cx="${cx}" cy="${cy}" r="${r + 10}" fill="#ffffff" stroke="#0f172a" stroke-width="3.5" />
+            <circle cx="${cx}" cy="${cy}" r="${r + 3}" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 4" />
+            ${slices}
+          </svg>
+        </div>
+      `;
     }
 
-    function createSlicePath(cx, cy, radius, startAngle, endAngle) {
-      const start = getArcPoint(cx, cy, radius, endAngle);
-      const end = getArcPoint(cx, cy, radius, startAngle);
-      const largeArc = endAngle - startAngle <= 180 ? "0" : "1";
-      return ["M", cx, cy, "L", start.x, start.y, "A", radius, radius, 0, largeArc, 0, end.x, end.y, "Z"].join(" ");
+    // MODO 1: CORTAR
+    const SHARING_OPTIONS = [
+      { guests: 2, fraction: '1/2', name: 'medios' },
+      { guests: 3, fraction: '1/3', name: 'tercios' },
+      { guests: 4, fraction: '1/4', name: 'cuartos' },
+      { guests: 6, fraction: '1/6', name: 'sextos' },
+      { guests: 8, fraction: '1/8', name: 'octavos' }
+    ];
+
+    let cutOptionIdx = 2;
+    let cutLinesCompleted = [];
+    let cutCurrentLineIdx = 0;
+    let cutIsFinished = false;
+
+    function getCutLines(guests) {
+      const cx = 100, cy = 100, r = 78;
+      const lines = [];
+      if (guests === 2) {
+        lines.push({ x1: cx, y1: cy - r, x2: cx, y2: cy + r, angle: 180 });
+      } else if (guests === 3) {
+        [-Math.PI/2, Math.PI/6, 5*Math.PI/6].forEach(a => {
+          lines.push({ x1: cx, y1: cy, x2: cx + r*Math.cos(a), y2: cy + r*Math.sin(a), angle: (a*180/Math.PI)+90 });
+        });
+      } else if (guests === 4) {
+        lines.push({ x1: cx, y1: cy - r, x2: cx, y2: cy + r, angle: 180 });
+        lines.push({ x1: cx - r, y1: cy, x2: cx + r, y2: cy, angle: 90 });
+      } else if (guests === 6) {
+        [Math.PI/2, Math.PI/6, 5*Math.PI/6].forEach(a => {
+          lines.push({ x1: cx - r*Math.cos(a), y1: cy - r*Math.sin(a), x2: cx + r*Math.cos(a), y2: cy + r*Math.sin(a), angle: (a*180/Math.PI)+90 });
+        });
+      } else if (guests === 8) {
+        [Math.PI/2, 0, Math.PI/4, 3*Math.PI/4].forEach(a => {
+          lines.push({ x1: cx - r*Math.cos(a), y1: cy - r*Math.sin(a), x2: cx + r*Math.cos(a), y2: cy + r*Math.sin(a), angle: (a*180/Math.PI)+90 });
+        });
+      }
+      return lines;
     }
 
-    function renderPizza(svgElem, totalSlices, activeSlices, options = {}) {
-      const {
-        sliceColor = '#facc15',
-        crustColor = '#f59e0b',
-        emptyColor = '#fef3c7',
-        showAssistedDashes = false,
-        onSliceClick = null
-      } = options;
-
-      svgElem.innerHTML = '';
-      const cx = 100, cy = 100, radius = 86;
-      const anglePerSlice = 360 / totalSlices;
-
-      const crust = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      crust.setAttribute("cx", cx);
-      crust.setAttribute("cy", cy);
-      crust.setAttribute("r", radius + 6);
-      crust.setAttribute("fill", crustColor);
-      crust.setAttribute("stroke", "#0f172a");
-      crust.setAttribute("stroke-width", "5");
-      svgElem.appendChild(crust);
-
-      const sauce = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      sauce.setAttribute("cx", cx);
-      sauce.setAttribute("cy", cy);
-      sauce.setAttribute("r", radius + 1);
-      sauce.setAttribute("fill", "#dc2626");
-      sauce.setAttribute("stroke", "#0f172a");
-      sauce.setAttribute("stroke-width", "2");
-      svgElem.appendChild(sauce);
-
-      for (let i = 0; i < totalSlices; i++) {
-        const startAngle = i * anglePerSlice;
-        const endAngle = startAngle + anglePerSlice;
-        const isActive = i < activeSlices;
-
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        if (onSliceClick && isActive) {
-          g.style.cursor = 'pointer';
-          g.onclick = () => onSliceClick(i);
+    function setCutOption(idx) {
+      cutOptionIdx = idx;
+      cutIsFinished = false;
+      cutCurrentLineIdx = 0;
+      cutLinesCompleted = [];
+      for (let i = 0; i < 5; i++) {
+        const btn = document.getElementById('cut-opt-' + i);
+        if (btn) {
+          btn.className = (i === idx)
+            ? 'px-2 py-0.5 rounded-xl text-xs sm:text-sm font-black border-2 border-slate-900 bg-amber-400 shadow-[1px_1px_0_#0f172a]'
+            : 'px-2 py-0.5 rounded-xl text-xs sm:text-sm font-black border-2 border-slate-900 bg-slate-100';
         }
+      }
+      const opt = SHARING_OPTIONS[idx];
+      setAltairSpeech(`¡Tenemos ${opt.guests} invitados en la mesa! Ayúdame a cortar la pizza en ${opt.guests} partes iguales (${opt.name}). Toca el punto rojo y arrastra tu dedo.`);
+      document.getElementById('cut-next-btn').classList.add('hidden');
+      document.getElementById('cut-hint-box').classList.remove('hidden');
+      playPop(480);
+      renderCutBoard();
+    }
 
-        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        path.setAttribute("d", createSlicePath(cx, cy, radius, startAngle, endAngle));
-        path.setAttribute("fill", isActive ? sliceColor : emptyColor);
-        path.setAttribute("stroke", "#0f172a");
-        path.setAttribute("stroke-width", "4");
-        path.setAttribute("class", "slice-path");
-        g.appendChild(path);
+    function nextRandomCutChallenge() {
+      let next = Math.floor(Math.random() * SHARING_OPTIONS.length);
+      if (next === cutOptionIdx) next = (next + 1) % SHARING_OPTIONS.length;
+      setCutOption(next);
+    }
 
-        if (isActive) {
-          const midAngle = startAngle + anglePerSlice / 2;
-          const pepPos = getArcPoint(cx, cy, radius * 0.58, midAngle);
-          const pepRadius = totalSlices >= 8 ? 6 : totalSlices >= 6 ? 7.5 : 9.5;
+    let isCuttingPointer = false;
+    let cutDragProgress = 0;
 
-          const pep = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-          pep.setAttribute("cx", pepPos.x);
-          pep.setAttribute("cy", pepPos.y);
-          pep.setAttribute("r", pepRadius);
-          pep.setAttribute("fill", "#ef4444");
-          pep.setAttribute("stroke", "#0f172a");
-          pep.setAttribute("stroke-width", "2.5");
-          g.appendChild(pep);
+    function renderCutBoard() {
+      const opt = SHARING_OPTIONS[cutOptionIdx];
+      const cx = 100, cy = 100, r = 78;
+      const lines = getCutLines(opt.guests);
+      const activeLine = lines[cutCurrentLineIdx] || null;
 
-          if (totalSlices <= 8) {
-            const e1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            e1.setAttribute("cx", pepPos.x - (totalSlices >= 8 ? 2 : 2.8));
-            e1.setAttribute("cy", pepPos.y - 1);
-            e1.setAttribute("r", totalSlices >= 8 ? 1.2 : 1.6);
-            e1.setAttribute("fill", "#0f172a");
-            g.appendChild(e1);
+      const size = Math.min(window.innerHeight * 0.44, window.innerWidth * 0.85, 300);
+      const sepOffset = cutIsFinished ? 14 : 0;
+      const step = (2 * Math.PI) / opt.guests;
 
-            const e2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            e2.setAttribute("cx", pepPos.x + (totalSlices >= 8 ? 2 : 2.8));
-            e2.setAttribute("cy", pepPos.y - 1);
-            e2.setAttribute("r", totalSlices >= 8 ? 1.2 : 1.6);
-            e2.setAttribute("fill", "#0f172a");
-            g.appendChild(e2);
+      let slicesHTML = '';
+      for (let i = 0; i < opt.guests; i++) {
+        const sa = i * step - Math.PI / 2;
+        const ea = (i + 1) * step - Math.PI / 2;
+        slicesHTML += buildSliceHTML(`cboard-${i}`, cx, cy, r, sa, ea, 'present', currentPizza, null, sepOffset);
+      }
+
+      let doneLinesHTML = '';
+      if (!cutIsFinished) {
+        lines.forEach((l, idx) => {
+          if (cutLinesCompleted[idx]) {
+            doneLinesHTML += `<line x1="${l.x1}" y1="${l.y1}" x2="${l.x2}" y2="${l.y2}" stroke="#0f172a" stroke-width="3.8" stroke-linecap="round" />`;
+          }
+        });
+      }
+
+      let activeGuideHTML = '';
+      if (!cutIsFinished && activeLine) {
+        const curCutX = activeLine.x1 + (activeLine.x2 - activeLine.x1) * cutDragProgress;
+        const curCutY = activeLine.y1 + (activeLine.y2 - activeLine.y1) * cutDragProgress;
+
+        activeGuideHTML = `
+          <g class="cursor-grab active:cursor-grabbing">
+            <!-- Zona táctil amplia -->
+            <line x1="${activeLine.x1}" y1="${activeLine.y1}" x2="${activeLine.x2}" y2="${activeLine.y2}" stroke="transparent" stroke-width="48" />
+            <!-- Guía dorada luminosa -->
+            <line x1="${activeLine.x1}" y1="${activeLine.y1}" x2="${activeLine.x2}" y2="${activeLine.y2}" stroke="#fbbf24" stroke-width="6" opacity="0.8" stroke-linecap="round" />
+            <!-- Guía punteada -->
+            <line x1="${activeLine.x1}" y1="${activeLine.y1}" x2="${activeLine.x2}" y2="${activeLine.y2}" stroke="#ef4444" stroke-width="3.2" stroke-dasharray="6 4" stroke-linecap="round" />
+            
+            <!-- Estela luminosa de corte real detrás del dedo -->
+            ${cutDragProgress > 0 ? `
+              <line x1="${activeLine.x1}" y1="${activeLine.y1}" x2="${curCutX}" y2="${curCutY}" stroke="#fef08a" stroke-width="9" opacity="0.85" stroke-linecap="round" />
+              <line x1="${activeLine.x1}" y1="${activeLine.y1}" x2="${curCutX}" y2="${curCutY}" stroke="#0f172a" stroke-width="4" stroke-linecap="round" />
+            ` : ''}
+
+            <!-- Indicador sutil de punto de inicio -->
+            ${cutDragProgress < 0.12 ? `
+              <g class="animate-pulse pointer-events-none">
+                <circle cx="${activeLine.x1}" cy="${activeLine.y1}" r="14" fill="#fbbf24" opacity="0.45" />
+                <circle cx="${activeLine.x1}" cy="${activeLine.y1}" r="7.5" fill="#ef4444" stroke="#ffffff" stroke-width="2.2" />
+                <circle cx="${activeLine.x1}" cy="${activeLine.y1}" r="2.5" fill="#ffffff" />
+                <text x="${activeLine.x1}" y="${activeLine.y1 > cy ? activeLine.y1 + 16 : activeLine.y1 - 10}" text-anchor="middle" fill="#0f172a" font-size="9.5" font-weight="900" class="select-none bg-white/90 px-1 py-0.5 rounded drop-shadow-sm">Toca y arrastra</text>
+              </g>
+            ` : ''}
+
+            <!-- Destello suave debajo del dedo (SIN RODILLO NI RUEDA) -->
+            ${cutDragProgress > 0 ? `
+              <g transform="translate(${curCutX}, ${curCutY})" class="pointer-events-none">
+                <circle cx="0" cy="0" r="14" fill="#fbbf24" opacity="0.45" />
+                <circle cx="0" cy="0" r="7.5" fill="#f59e0b" stroke="#ffffff" stroke-width="2.5" />
+                <circle cx="0" cy="0" r="2.5" fill="#ffffff" />
+                <line x1="-5" y1="0" x2="5" y2="0" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="0" y1="-5" x2="0" y2="5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+              </g>
+            ` : ''}
+          </g>
+        `;
+      }
+
+      document.getElementById('m1-board-container').innerHTML = `
+        <div style="width:${size}px; height:${size}px;" class="relative select-none aspect-square flex items-center justify-center shrink-0">
+          <svg id="cut-svg-canvas" viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl select-none touch-none">
+            <circle cx="${cx}" cy="${cy}" r="${r + 14}" fill="#ffffff" stroke="#0f172a" stroke-width="4" />
+            <circle cx="${cx}" cy="${cy}" r="${r + 5}" fill="#f8fafc" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="8 5" />
+            ${slicesHTML}
+            ${doneLinesHTML}
+            ${activeGuideHTML}
+          </svg>
+        </div>
+      `;
+
+      attachCutEvents(activeLine);
+    }
+
+    function attachCutEvents(activeLine) {
+      const svg = document.getElementById('cut-svg-canvas');
+      if (!svg || !activeLine || cutIsFinished) return;
+
+      svg.onpointerdown = (e) => {
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX;
+        pt.y = e.clientY;
+        const local = pt.matrixTransform(svg.getScreenCTM().inverse());
+        const d = Math.hypot(local.x - activeLine.x1, local.y - activeLine.y1);
+        if (d < 36) {
+          isCuttingPointer = true;
+          cutDragProgress = 0;
+          try { e.target.setPointerCapture(e.pointerId); } catch {}
+          playPop(520);
+        }
+      };
+
+      svg.onpointermove = (e) => {
+        if (!isCuttingPointer || !activeLine) return;
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX;
+        pt.y = e.clientY;
+        const local = pt.matrixTransform(svg.getScreenCTM().inverse());
+        const dx = activeLine.x2 - activeLine.x1;
+        const dy = activeLine.y2 - activeLine.y1;
+        const lenSq = dx * dx + dy * dy;
+        const proj = ((local.x - activeLine.x1) * dx + (local.y - activeLine.y1) * dy) / lenSq;
+        cutDragProgress = Math.max(0, Math.min(1, proj));
+
+        renderCutBoard();
+
+        if (cutDragProgress > 0.86) {
+          isCuttingPointer = false;
+          cutDragProgress = 0;
+          playSliceCut();
+          cutLinesCompleted[cutCurrentLineIdx] = true;
+
+          const opt = SHARING_OPTIONS[cutOptionIdx];
+          const lines = getCutLines(opt.guests);
+
+          if (cutCurrentLineIdx + 1 < lines.length) {
+            cutCurrentLineIdx++;
+            playPop(580);
+            setAltairSpeech('¡Muy bien! Ahora corta por esta otra línea para completar el pedido.');
+            renderCutBoard();
+          } else {
+            cutIsFinished = true;
+            incrementStat('slicesCut', 1);
+            incrementStat('stars', 2);
+            triggerCelebration(`¡Excelente trabajo! Cortaste la pizza en ${opt.guests} partes iguales. Ahora cada amigo tiene exactamente ${opt.fraction} de pizza del mismo tamaño y a todos les toca la misma cantidad.`);
+            document.getElementById('cut-hint-box').classList.add('hidden');
+            document.getElementById('cut-next-btn').classList.remove('hidden');
+            renderCutBoard();
           }
         }
+      };
 
-        if (showAssistedDashes && isActive) {
-          const midAngle = startAngle + anglePerSlice / 2;
-          const edgePoint = getArcPoint(cx, cy, radius + 2, midAngle);
-          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-          line.setAttribute("x1", cx);
-          line.setAttribute("y1", cy);
-          line.setAttribute("x2", edgePoint.x);
-          line.setAttribute("y2", edgePoint.y);
-          line.setAttribute("stroke", "#ea580c");
-          line.setAttribute("stroke-width", "3.5");
-          line.setAttribute("stroke-dasharray", "4 4");
-          g.appendChild(line);
+      svg.onpointerup = () => {
+        isCuttingPointer = false;
+        cutDragProgress = 0;
+        renderCutBoard();
+      };
+    }
+
+    // MODO 2: SUMAS
+    let sumDen = 8;
+    let sumP1Total = 2;
+    let sumP2Total = 2;
+    let p1Trans = [false, false];
+    let p2Trans = [false, false];
+    let sumDelivered = false;
+
+    function renderSumTab() {
+      const inBoxCount = p1Trans.filter(Boolean).length + p2Trans.filter(Boolean).length;
+      const target = sumP1Total + sumP2Total;
+      const isComplete = inBoxCount === target;
+
+      const badge = document.getElementById('sum-eq-badge');
+      const text = document.getElementById('sum-eq-text');
+      const icon = document.getElementById('sum-eq-icon');
+      if (badge && text && icon) {
+        text.textContent = `${sumP1Total}/${sumDen} + ${sumP2Total}/${sumDen} = ${inBoxCount}/${sumDen}`;
+        if (isComplete) {
+          badge.className = 'px-2.5 py-0.5 rounded-xl border-2 border-slate-900 text-xs sm:text-sm font-black shadow-[2px_2px_0_#0f172a] transition-all bg-emerald-400 text-slate-950 animate-bounce';
+          icon.textContent = '✅';
+        } else {
+          badge.className = 'px-2.5 py-0.5 rounded-xl border-2 border-slate-900 text-xs sm:text-sm font-black shadow-[2px_2px_0_#0f172a] transition-all bg-rose-500 text-white';
+          icon.textContent = '⏳';
         }
+      }
 
-        svgElem.appendChild(g);
+      document.getElementById('box-label-text').textContent = `CAJA (${inBoxCount}/${sumDen})`;
+      document.getElementById('sum-p1-title').textContent = `Plato 1 (${sumP1Total - p1Trans.filter(Boolean).length}/${sumDen})`;
+      document.getElementById('sum-p2-title').textContent = `Plato 2 (${sumP2Total - p2Trans.filter(Boolean).length}/${sumDen})`;
+
+      const plateSize = Math.min(window.innerWidth * 0.32, window.innerHeight * 0.24, 135);
+      const boxSize = Math.min(window.innerWidth * 0.36, window.innerHeight * 0.26, 155);
+
+      const p1States = Array.from({ length: sumDen }).map((_, i) => i >= sumP1Total ? 'unused' : (p1Trans[i] ? 'empty_shadow' : 'present'));
+      const p2States = Array.from({ length: sumDen }).map((_, i) => i >= sumP2Total ? 'unused' : (p2Trans[i] ? 'empty_shadow' : 'present'));
+      const boxStates = Array.from({ length: sumDen }).map((_, i) => i < inBoxCount ? 'present' : 'unused');
+
+      document.getElementById('m2-plate-1').innerHTML = renderPlateWithStates(sumDen, p1States, plateSize, 'toggleSumP1');
+      document.getElementById('m2-plate-2').innerHTML = renderPlateWithStates(sumDen, p2States, plateSize, 'toggleSumP2');
+      document.getElementById('m2-plate-box').innerHTML = renderPlateWithStates(sumDen, boxStates, boxSize, 'toggleSumBox');
+
+      const btnManual = document.getElementById('btn-deliver-manual');
+      if (btnManual) {
+        if (isComplete && !sumDelivered) btnManual.classList.remove('hidden');
+        else btnManual.classList.add('hidden');
       }
     }
 
-    /* 4. MODO 1: CORTADOR MÁGICO */
-    let m1DenVal = 2;
-    let m1NumVal = 1;
-    let m1ShowAssistedDashes = true;
-
-    function initM1() {
-      const container = document.getElementById('m1BaseButtons');
-      container.innerHTML = '';
-      [2, 3, 4, 6, 8].forEach(d => {
-        const btn = document.createElement('button');
-        btn.textContent = `/${d}`;
-        btn.className = `px-3 py-1.5 min-h-[44px] rounded-xl border-3 border-slate-900 font-black text-sm cursor-pointer transition-all ${
-          m1DenVal === d ? 'bg-amber-400 comic-shadow-sm scale-105' : 'bg-white hover:bg-slate-100'
-        }`;
-        btn.onclick = () => {
-          playPop(480);
-          m1DenVal = d;
-          m1NumVal = Math.max(1, Math.floor(d / 2));
-          updateM1();
-        };
-        container.appendChild(btn);
-      });
-      updateM1();
+    function toggleSumP1(idx) {
+      if (idx >= sumP1Total || sumDelivered) return;
+      p1Trans[idx] = !p1Trans[idx];
+      playPop(p1Trans[idx] ? 450 : 350);
+      checkSumProgress();
     }
 
-    function updateM1() {
-      document.getElementById('m1Num').textContent = m1NumVal;
-      document.getElementById('m1Den').textContent = m1DenVal;
-      document.getElementById('m1NumText').textContent = `${m1NumVal} rebanada${m1NumVal > 1 ? 's' : ''} con queso`;
-      document.getElementById('m1DenText').textContent = `Cortes totales: ${m1DenVal}`;
-
-      const pct = Math.round((m1NumVal / m1DenVal) * 100);
-      document.getElementById('m1VolumeBar').style.width = `${pct}%`;
-      document.getElementById('m1VolumeLabel').textContent = `${pct}% PIZZA`;
-
-      const btnDouble = document.getElementById('btnM1Double');
-      if (m1DenVal >= 8) {
-        btnDouble.classList.add('bg-slate-300', 'opacity-60', 'cursor-not-allowed');
-        btnDouble.classList.remove('bg-emerald-400', 'hover:bg-emerald-300');
-      } else {
-        btnDouble.classList.remove('bg-slate-300', 'opacity-60', 'cursor-not-allowed');
-        btnDouble.classList.add('bg-emerald-400', 'hover:bg-emerald-300');
-      }
-
-      renderPizza(document.getElementById('m1PizzaSvg'), m1DenVal, m1NumVal, {
-        sliceColor: '#facc15',
-        crustColor: '#ea580c',
-        emptyColor: '#fef3c7',
-        showAssistedDashes: m1ShowAssistedDashes
-      });
+    function toggleSumP2(idx) {
+      if (idx >= sumP2Total || sumDelivered) return;
+      p2Trans[idx] = !p2Trans[idx];
+      playPop(p2Trans[idx] ? 470 : 370);
+      checkSumProgress();
     }
 
-    function m1DoubleCut() {
-      if (m1DenVal >= 8) {
-        playPop(350);
+    function toggleSumBox() {
+      if (sumDelivered) return;
+      const p2Active = p2Trans.lastIndexOf(true);
+      if (p2Active !== -1) {
+        toggleSumP2(p2Active);
         return;
       }
-      playSlice();
-      renderChef('celebrating');
-      m1DenVal *= 2;
-      m1NumVal *= 2;
-      updateM1();
-      setTimeout(() => renderChef('happy'), 1500);
+      const p1Active = p1Trans.lastIndexOf(true);
+      if (p1Active !== -1) {
+        toggleSumP1(p1Active);
+      }
     }
 
-    function m1ToggleAssisted() {
-      playPop(450);
-      m1ShowAssistedDashes = !m1ShowAssistedDashes;
-      updateM1();
-    }
-
-    /* 5. MODO 2: SUMAS BÁSICAS */
-    let m2DenVal = 4;
-    let m2NumA = 1;
-    let m2NumB = 2;
-    let m2AddedA = false;
-    let m2AddedB = false;
-
-    function renderM2() {
-      renderPizza(document.getElementById('m2SvgA'), m2DenVal, m2AddedA ? 0 : m2NumA, { sliceColor: '#60a5fa' });
-      renderPizza(document.getElementById('m2SvgB'), m2DenVal, m2AddedB ? 0 : m2NumB, { sliceColor: '#c084fc' });
-
-      document.getElementById('m2FracA').textContent = `${m2NumA}/${m2DenVal}`;
-      document.getElementById('m2FracB').textContent = `${m2NumB}/${m2DenVal}`;
-
-      document.getElementById('m2HintA').textContent = m2AddedA ? '¡En la caja! ✔️' : '👉 Toca para poner';
-      document.getElementById('m2HintB').textContent = m2AddedB ? '¡En la caja! ✔️' : '👉 Toca para poner';
-
-      document.getElementById('m2PlateA').classList.toggle('opacity-40', m2AddedA);
-      document.getElementById('m2PlateB').classList.toggle('opacity-40', m2AddedB);
-
-      const inBox = (m2AddedA ? m2NumA : 0) + (m2AddedB ? m2NumB : 0);
-      const target = m2NumA + m2NumB;
-      const boxSvg = document.getElementById('m2BoxSvg');
-      const boxLabel = document.getElementById('m2BoxLabel');
-      const badge = document.getElementById('m2ResultBadge');
-
-      if (inBox === 0) {
-        boxSvg.innerHTML = '';
-        boxLabel.style.display = 'block';
-        badge.textContent = '? / ?';
-        badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-slate-500 bg-white opacity-40 transition-all";
+    function checkSumProgress() {
+      renderSumTab();
+      const inBoxCount = p1Trans.filter(Boolean).length + p2Trans.filter(Boolean).length;
+      const target = sumP1Total + sumP2Total;
+      if (inBoxCount === target) {
+        handleManualDeliver();
       } else {
-        renderPizza(boxSvg, m2DenVal, inBox, { sliceColor: '#34d399', crustColor: '#ea580c' });
-        boxLabel.style.display = 'none';
-        badge.textContent = `${inBox}/${m2DenVal}`;
-        if (inBox === target) {
-          badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-emerald-700 bg-emerald-200 scale-105 transition-all";
-          renderChef('celebrating');
-          playSuccess();
-        } else {
-          badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-blue-600 bg-white transition-all";
-        }
+        setAltairSpeech(`Llevas ${inBoxCount}/${sumDen} en la caja. Pasa las que faltan para completar la suma.`);
       }
     }
 
-    function m2AddSliceA() {
-      if (m2AddedA) return;
-      playPop(480);
-      m2AddedA = true;
-      renderM2();
-    }
+    function handleManualDeliver() {
+      if (sumDelivered) return;
+      sumDelivered = true;
+      incrementStat('sumsSolved', 1);
+      incrementStat('stars', 2);
+      triggerCelebration('¡Excelente trabajo! Has completado el pedido a la perfección.');
 
-    function m2AddSliceB() {
-      if (m2AddedB) return;
-      playPop(520);
-      m2AddedB = true;
-      renderM2();
-    }
+      const lid = document.getElementById('m2-box-lid');
+      if (lid) lid.classList.remove('hidden');
 
-    function m2CombineAll() {
-      if (m2AddedA && m2AddedB) return;
-      playPop(520);
-      m2AddedA = true;
-      m2AddedB = true;
-      renderM2();
-    }
-
-    function m2GenerateNewSum() {
-      playPop(520);
-      const dens = [4, 6, 8];
-      m2DenVal = dens[Math.floor(Math.random() * dens.length)];
-      m2NumA = Math.floor(Math.random() * (m2DenVal - 2)) + 1;
-      const maxB = m2DenVal - m2NumA;
-      m2NumB = Math.floor(Math.random() * maxB) + 1;
-      m2AddedA = false;
-      m2AddedB = false;
-      renderChef('happy');
-      renderM2();
-    }
-
-    /* 6. MODO 3: FIESTA DE LAS RESTAS */
-    let m3DenVal = 6;
-    let m3InitVal = 5;
-    let m3EatenCount = 0;
-    let m3TargetEat = 2;
-
-    function renderM3() {
-      const remaining = m3InitVal - m3EatenCount;
-      document.getElementById('m3NumInit').textContent = m3InitVal;
-      document.getElementById('m3DenInit').textContent = m3DenVal;
-      document.getElementById('m3NumEaten').textContent = m3EatenCount;
-      document.getElementById('m3DenEaten').textContent = m3DenVal;
-      document.getElementById('m3NumResult').textContent = remaining;
-      document.getElementById('m3DenResult').textContent = m3DenVal;
-
-      document.getElementById('m3BadgeEaten').textContent = `Comidas: ${m3EatenCount} / ${m3TargetEat} 🍕`;
-
-      const tip = document.getElementById('m3SimplificationTip');
-      if (remaining > 0 && remaining / m3DenVal === 0.5) {
-        tip.classList.remove('hidden');
-      } else {
-        tip.classList.add('hidden');
-      }
-
-      renderPizza(document.getElementById('m3PizzaSvg'), m3DenVal, remaining, {
-        sliceColor: '#f59e0b',
-        crustColor: '#b45309',
-        emptyColor: '#fef3c7',
-        onSliceClick: () => {
-          if (m3EatenCount >= m3TargetEat) return;
-          playNomNom();
-          renderChef('eating');
-          m3EatenCount++;
-          renderM3();
-          setTimeout(() => {
-            if (m3EatenCount >= m3TargetEat) {
-              renderChef('celebrating');
-              playSuccess();
-            } else {
-              renderChef('happy');
-            }
-          }, 600);
-        }
-      });
-    }
-
-    function m3ResetPizza() {
-      playPop(420);
-      m3EatenCount = 0;
-      renderChef('happy');
-      renderM3();
-    }
-
-    function m3NewChallenge() {
-      playPop(500);
-      const dens = [4, 6, 8];
-      m3DenVal = dens[Math.floor(Math.random() * dens.length)];
-      m3InitVal = Math.floor(Math.random() * (m3DenVal - 2)) + 3;
-      m3TargetEat = Math.floor(Math.random() * (m3InitVal - 1)) + 1;
-      m3EatenCount = 0;
-      renderChef('happy');
-      renderM3();
-    }
-
-    /* 7. MODO 4: SUMAS AVANZADAS */
-    const presetsM4 = [
-      { name: '1/2 + 1/4', numA: 1, denA: 2, numB: 1, denB: 4 },
-      { name: '1/2 + 3/8', numA: 1, denA: 2, numB: 3, denB: 8 },
-      { name: '1/3 + 1/6', numA: 1, denA: 3, numB: 1, denB: 6 },
-      { name: '2/4 + 1/8', numA: 2, denA: 4, numB: 1, denB: 8 },
-    ];
-    let m4Idx = 0;
-    let m4IsSlicedA = false;
-    let m4AddedA = false;
-    let m4AddedB = false;
-
-    function initM4() {
-      const bar = document.getElementById('m4PresetsBar');
-      bar.innerHTML = '<span class="text-xs font-black text-slate-700 uppercase mr-1">Elegir Reto:</span>';
-      presetsM4.forEach((p, idx) => {
-        const btn = document.createElement('button');
-        btn.textContent = p.name;
-        btn.className = `px-3 py-1.5 min-h-[40px] rounded-xl border-3 border-slate-900 font-black text-xs cursor-pointer transition-all ${
-          m4Idx === idx ? 'bg-amber-400 comic-shadow-sm scale-105' : 'bg-white hover:bg-slate-100'
-        }`;
-        btn.onclick = () => {
-          m4Idx = idx;
-          m4IsSlicedA = false;
-          m4AddedA = false;
-          m4AddedB = false;
-          initM4();
-          renderM4();
-        };
-        bar.appendChild(btn);
-      });
-      renderM4();
-    }
-
-    function renderM4() {
-      const cur = presetsM4[m4Idx];
-      const factor = cur.denB / cur.denA;
-      const convertedNumA = cur.numA * factor;
-      const commonDen = cur.denB;
-
-      // Plato A
-      if (!m4IsSlicedA) {
-        renderPizza(document.getElementById('m4SvgA'), cur.denA, cur.numA, { sliceColor: '#60a5fa' });
-        document.getElementById('m4FracA').textContent = `${cur.numA}/${cur.denA}`;
-        document.getElementById('m4FracA').className = "text-2xl font-black text-blue-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900";
-        document.getElementById('btnM4CutMatch').style.display = "flex";
-        document.getElementById('m4HintA').textContent = "Rebanadas grandes";
-        document.getElementById('m4PlateA').classList.remove('cursor-pointer', 'hover:scale-105', 'opacity-40');
-      } else {
-        renderPizza(document.getElementById('m4SvgA'), commonDen, m4AddedA ? 0 : convertedNumA, { sliceColor: '#60a5fa' });
-        document.getElementById('m4FracA').textContent = `${convertedNumA}/${commonDen}`;
-        document.getElementById('m4FracA').className = "text-2xl font-black text-emerald-600 bg-white px-3 py-1 rounded-xl border-2 border-slate-900";
-        document.getElementById('btnM4CutMatch').style.display = "none";
-        document.getElementById('m4HintA').textContent = m4AddedA ? "¡En la caja! ✔️" : "👉 Toca para poner en la caja";
-        document.getElementById('m4PlateA').classList.toggle('opacity-40', m4AddedA);
-        document.getElementById('m4PlateA').classList.add('cursor-pointer', 'hover:scale-105');
-      }
-
-      // Plato B
-      renderPizza(document.getElementById('m4SvgB'), cur.denB, m4AddedB ? 0 : cur.numB, { sliceColor: '#c084fc' });
-      document.getElementById('m4FracB').textContent = `${cur.numB}/${cur.denB}`;
-      document.getElementById('m4HintB').textContent = m4AddedB ? "¡En la caja! ✔️" : m4IsSlicedA ? "👉 Toca para poner en la caja" : "Rebanadas ya en medida";
-      document.getElementById('m4PlateB').classList.toggle('opacity-40', m4AddedB);
-      if (m4IsSlicedA) {
-        document.getElementById('m4PlateB').classList.add('cursor-pointer', 'hover:scale-105');
-      }
-
-      // Caja
-      const inBox = (m4AddedA ? convertedNumA : 0) + (m4AddedB ? cur.numB : 0);
-      const target = convertedNumA + cur.numB;
-      const boxSvg = document.getElementById('m4BoxSvg');
-      const boxLabel = document.getElementById('m4BoxLabel');
-      const badge = document.getElementById('m4ResultBadge');
-
-      if (inBox === 0) {
-        boxSvg.innerHTML = '';
-        boxLabel.style.display = 'block';
-        badge.textContent = '? / ?';
-        badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-slate-500 bg-white opacity-40 transition-all";
-      } else {
-        renderPizza(boxSvg, commonDen, inBox, { sliceColor: '#34d399', crustColor: '#ea580c' });
-        boxLabel.style.display = 'none';
-        badge.textContent = `${inBox}/${commonDen}`;
-        if (inBox === target) {
-          badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-emerald-700 bg-emerald-200 scale-105 transition-all";
-          renderChef('celebrating');
-          playSuccess();
-        } else {
-          badge.className = "mt-1 text-2xl font-black px-4 py-0.5 rounded-xl border-2 border-slate-900 text-blue-600 bg-white transition-all";
-        }
-      }
-    }
-
-    function m4CutAndMatch() {
-      playSlice();
-      m4IsSlicedA = true;
-      renderChef('happy');
-      document.getElementById('m4Instructions').innerHTML = `"¡Perfecto! Ahora ambos platos son del mismo tamaño. ¡Toca las rebanadas o el botón para ponerlas en la caja!"`;
-      renderM4();
-    }
-
-    function m4EarlyAttempt() {
-      playThinking();
-      renderChef('thinking');
-      document.getElementById('m4Instructions').innerHTML = `"¡Alto! Los trozos son de tamaños distintos. Toca el botón amarillo <strong class="text-amber-600 underline">🔪 Cortar y Emparejar</strong> para igualarlos."`;
-      const btn = document.getElementById('btnM4CutMatch');
-      btn.classList.add('animate-bounce', 'ring-4', 'ring-pink-400', 'scale-110');
       setTimeout(() => {
-        btn.classList.remove('animate-bounce', 'ring-4', 'ring-pink-400', 'scale-110');
-        renderChef('happy');
-      }, 1800);
+        const outer = document.getElementById('m2-box-outer');
+        if (outer) outer.classList.add('animate-box-fly');
+      }, 700);
+
+      setTimeout(() => {
+        const outer = document.getElementById('m2-box-outer');
+        if (outer) outer.classList.remove('animate-box-fly');
+        const badge = document.getElementById('m2-box-delivered-badge');
+        if (badge) badge.classList.remove('hidden');
+        incrementStat('deliveries', 1);
+      }, 2000);
     }
 
-    function m4AddSliceA() {
-      if (!m4IsSlicedA) {
-        m4EarlyAttempt();
-        return;
-      }
-      if (m4AddedA) return;
+    function newRandomSum() {
+      sumDen = [4, 6, 8][Math.floor(Math.random() * 3)];
+      sumP1Total = Math.floor(Math.random() * (sumDen / 2)) + 1;
+      sumP2Total = Math.floor(Math.random() * (sumDen / 2)) + 1;
+      p1Trans = Array(sumP1Total).fill(false);
+      p2Trans = Array(sumP2Total).fill(false);
+      sumDelivered = false;
+
+      const lid = document.getElementById('m2-box-lid');
+      if (lid) lid.classList.add('hidden');
+      const badge = document.getElementById('m2-box-delivered-badge');
+      if (badge) badge.classList.add('hidden');
+      const outer = document.getElementById('m2-box-outer');
+      if (outer) outer.classList.remove('animate-box-fly');
+
+      setAltairEmotion('idle');
+      setAltairSpeech('¡Hola! Pasa las rebanadas de los dos platos a la caja para sumar las pizzas.');
       playPop(480);
-      m4AddedA = true;
-      renderM4();
+      renderSumTab();
     }
 
-    function m4AddSliceB() {
-      if (!m4IsSlicedA) {
-        m4EarlyAttempt();
-        return;
+    // MODO 3: RESTAS
+    let resDen = 8;
+    let resStart = 6;
+    let resToEat = 2;
+    let resEaten = [];
+
+    function renderRestaTab() {
+      document.getElementById('res-status-display').textContent = `Comidas: ${resEaten.length} de ${resToEat}`;
+      const size = Math.min(window.innerHeight * 0.42, 280);
+      const states = Array.from({ length: resDen }).map((_, i) => i >= resStart ? 'unused' : (resEaten.includes(i) ? 'empty_shadow' : 'present'));
+      document.getElementById('m3-plate-resta').innerHTML = renderPlateWithStates(resDen, states, size, 'clickSliceResta');
+    }
+
+    function clickSliceResta(i) {
+      if (i >= resStart) return;
+      if (resEaten.includes(i)) {
+        resEaten = resEaten.filter(idx => idx !== i);
+        playPop(340);
+      } else {
+        if (resEaten.length >= resToEat) return;
+        resEaten.push(i);
+        playChew();
+        setAltairEmotion('eating');
+        setTimeout(() => setAltairEmotion('idle'), 400);
       }
-      if (m4AddedB) return;
-      playPop(520);
-      m4AddedB = true;
-      renderM4();
-    }
-
-    function m4CombineAll() {
-      if (!m4IsSlicedA) {
-        m4EarlyAttempt();
-        return;
+      renderRestaTab();
+      if (resEaten.length === resToEat) {
+        incrementStat('restasSolved', 1);
+        incrementStat('stars', 2);
+        triggerCelebration('¡Excelente trabajo! Has completado el pedido a la perfección.');
+      } else {
+        setAltairSpeech(`¡Qué rica pizza! Has comido ${resEaten.length} de ${resToEat}. Faltan ${resToEat - resEaten.length}.`);
       }
-      if (m4AddedA && m4AddedB) return;
-      m4AddedA = true;
-      m4AddedB = true;
-      renderM4();
     }
 
-    function m4NextPreset() {
-      playPop(490);
-      m4Idx = (m4Idx + 1) % presetsM4.length;
-      m4IsSlicedA = false;
-      m4AddedA = false;
-      m4AddedB = false;
-      renderChef('happy');
-      initM4();
-    }
-
-    /* 8. NAVEGACIÓN ENTRE MODOS */
-    function switchMode(idx) {
-      initAudio();
+    function newRandomResta() {
+      resDen = [4, 6, 8][Math.floor(Math.random() * 3)];
+      resStart = Math.floor(Math.random() * (resDen - 2)) + 3;
+      resToEat = 2;
+      resEaten = [];
+      setAltairEmotion('idle');
+      setAltairSpeech(`¡Tengo mucha hambre! Toca ${resToEat} rebanadas para que me las coma y veamos cuántas quedan.`);
       playPop(480);
-      renderChef('happy');
+      renderRestaTab();
+    }
 
-      [1, 2, 3, 4].forEach(i => {
-        const tab = document.getElementById(`tab${i}`);
-        const view = document.getElementById(`view${i}`);
-        if (i === idx) {
-          tab.classList.remove('bg-slate-200', 'opacity-80', 'comic-shadow-sm');
-          tab.classList.add('bg-yellow-400', 'comic-shadow');
-          view.classList.remove('hidden');
+    // MODO 4: AVANZADAS
+    let advCut = false;
+    let advP1 = [false, false];
+    let advP2 = [false];
+
+    function renderAdvTab() {
+      const inBox = advP1.filter(Boolean).length + advP2.filter(Boolean).length;
+      document.getElementById('adv-status-title').textContent = advCut ? '✅ 2/4 + 1/4 = 3/4' : '✂️ Corta 1/2 con tu dedo';
+      document.getElementById('adv-p1-title').textContent = advCut ? 'Plato 1: 2/4' : '1/2 (Corta ✂️)';
+      document.getElementById('adv-box-title').innerHTML = `<span>📦</span><span>CAJA (${inBox}/4)</span>`;
+
+      const plateSize = Math.min(window.innerWidth * 0.32, window.innerHeight * 0.24, 135);
+      const boxSize = Math.min(window.innerWidth * 0.36, window.innerHeight * 0.26, 155);
+
+      const p1States = advCut ? [advP1[0] ? 'empty_shadow' : 'present', advP1[1] ? 'empty_shadow' : 'present', 'unused', 'unused'] : ['present', 'unused'];
+      const p2States = [advP2[0] ? 'empty_shadow' : 'present', 'unused', 'unused', 'unused'];
+      const boxStates = Array.from({ length: 4 }).map((_, i) => i < inBox ? 'present' : 'unused');
+
+      document.getElementById('adv-plate-1').innerHTML = renderPlateWithStates(advCut ? 4 : 2, p1States, plateSize, advCut ? 'toggleAdvP1' : 'handleAdvCutDirect');
+      document.getElementById('adv-plate-2').innerHTML = renderPlateWithStates(4, p2States, plateSize, advCut ? 'toggleAdvP2' : null);
+      document.getElementById('adv-plate-box').innerHTML = renderPlateWithStates(4, boxStates, boxSize, null);
+    }
+
+    function handleAdvCutDirect() {
+      if (advCut) return;
+      advCut = true;
+      playSliceCut();
+      setAltairEmotion('celebrate');
+      setAltairSpeech('¡Genial! Ahora tienen el mismo tamaño. Pásalas a la caja para sumarlas.');
+      setTimeout(() => setAltairEmotion('idle'), 2200);
+      renderAdvTab();
+    }
+
+    function toggleAdvP1(idx) {
+      if (!advCut) return;
+      advP1[idx] = !advP1[idx];
+      playPop(advP1[idx] ? 450 : 340);
+      checkAdvProgress();
+    }
+
+    function toggleAdvP2() {
+      if (!advCut) return;
+      advP2[0] = !advP2[0];
+      playPop(advP2[0] ? 470 : 360);
+      checkAdvProgress();
+    }
+
+    function checkAdvProgress() {
+      renderAdvTab();
+      const inBox = advP1.filter(Boolean).length + advP2.filter(Boolean).length;
+      if (inBox === 3) {
+        incrementStat('advSolved', 1);
+        incrementStat('stars', 3);
+        triggerCelebration('¡Excelente trabajo! Has completado el pedido a la perfección.');
+      }
+    }
+
+    function resetAdvState() {
+      advCut = false;
+      advP1 = [false, false];
+      advP2 = [false];
+      setAltairSpeech('¡Ojo! Estas rebanadas son de tamaños diferentes. Primero emparejemos los trozos antes de juntarlos.');
+      playPop(460);
+      renderAdvTab();
+    }
+
+    // MODO 5: MISIONES
+    let batchIndex = 1;
+    let currentStep = 0;
+    let m5P1 = [false, false];
+    let m5P2 = [false, false];
+    let m5Eaten = [];
+    let m5CutDone = false;
+
+    function renderMissionsTab() {
+      document.getElementById('m5-batch-label').textContent = `Lote #${batchIndex}:`;
+      const dots = document.getElementById('m5-step-dots');
+      dots.innerHTML = '';
+      for (let s = 0; s < 5; s++) {
+        const d = document.createElement('div');
+        d.className = `w-5 h-5 rounded-lg border-2 border-slate-900 flex items-center justify-center text-[10px] font-black ${
+          s < currentStep ? 'bg-emerald-400 text-slate-900' : (s === currentStep ? 'bg-amber-400 text-slate-900 animate-pulse' : 'bg-slate-100 text-slate-400')
+        }`;
+        d.textContent = s + 1;
+        dots.appendChild(d);
+      }
+
+      const clientNames = ['Monstruo Luca', 'Dino Mateo', 'Robot Bip', 'Gatito Miau', 'Gran Banquete'];
+      const clientIcons = ['👾', '🦖', '🤖', '🐱', '👑'];
+      document.getElementById('m5-client-name').textContent = clientNames[currentStep];
+      document.getElementById('m5-client-icon').textContent = clientIcons[currentStep];
+
+      const container = document.getElementById('m5-body-container');
+      const plateSize = Math.min(window.innerWidth * 0.32, window.innerHeight * 0.24, 130);
+      const boxSize = Math.min(window.innerWidth * 0.36, window.innerHeight * 0.26, 150);
+
+      if (currentStep === 0 || currentStep === 2 || currentStep === 4) {
+        const den = currentStep === 0 ? 4 : 8;
+        const p1Count = currentStep === 0 ? 1 : 2;
+        const p2Count = currentStep === 0 ? 2 : 3;
+        const inBox = m5P1.filter(Boolean).length + m5P2.filter(Boolean).length;
+        const p1States = Array.from({ length: den }).map((_, i) => i >= p1Count ? 'unused' : (m5P1[i] ? 'empty_shadow' : 'present'));
+        const p2States = Array.from({ length: den }).map((_, i) => i >= p2Count ? 'unused' : (m5P2[i] ? 'empty_shadow' : 'present'));
+        const boxStates = Array.from({ length: den }).map((_, i) => i < inBox ? 'present' : 'unused');
+
+        container.innerHTML = `
+          <div class="w-full flex flex-col sm:flex-row items-center justify-around gap-1 sm:gap-4 max-w-3xl">
+            <div class="flex sm:contents flex-row items-center justify-around w-full gap-2 shrink-0">
+              <div class="flex flex-col items-center p-1 bg-white rounded-2xl border-2 border-slate-900 shadow-[2px_2px_0_#0f172a] sm:order-1">
+                <span class="text-[10px] font-black">${p1Count} reb.</span>
+                ${renderPlateWithStates(den, p1States, plateSize, 'clickM5P1')}
+              </div>
+              <div class="flex flex-col items-center p-1 bg-white rounded-2xl border-2 border-slate-900 shadow-[2px_2px_0_#0f172a] sm:order-3">
+                <span class="text-[10px] font-black">${p2Count} reb.</span>
+                ${renderPlateWithStates(den, p2States, plateSize, 'clickM5P2', 'queso.png')}
+              </div>
+            </div>
+            <div class="shrink-0 sm:order-2">
+              <div class="flex flex-col items-center p-1.5 bg-amber-100 rounded-2xl border-3 border-slate-900 shadow-[3px_3px_0_#0f172a]">
+                <span class="text-[10px] font-black text-amber-950 uppercase mb-0.5">📦 CAJA (${inBox}/${den})</span>
+                ${renderPlateWithStates(den, boxStates, boxSize, null)}
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (currentStep === 1) {
+        const den = 6;
+        const start = 5;
+        const targetEat = 2;
+        const states = Array.from({ length: den }).map((_, i) => i >= start ? 'unused' : (m5Eaten.includes(i) ? 'empty_shadow' : 'present'));
+        container.innerHTML = `
+          <div class="flex flex-col items-center gap-1">
+            <div class="bg-white border-3 border-slate-900 rounded-3xl p-2 shadow-[4px_4px_0_#0f172a]">
+              ${renderPlateWithStates(den, states, Math.min(window.innerHeight * 0.40, 260), 'clickM5Resta')}
+            </div>
+            <span class="text-[11px] font-bold text-slate-700 bg-white px-2.5 py-0.5 rounded-lg border border-slate-900">
+              Comidas: ${m5Eaten.length} de ${targetEat} rebanadas
+            </span>
+          </div>
+        `;
+      } else if (currentStep === 3) {
+        const inBox = m5P1.filter(Boolean).length + m5P2.filter(Boolean).length;
+        const p1States = m5CutDone ? [m5P1[0] ? 'empty_shadow' : 'present', m5P1[1] ? 'empty_shadow' : 'present', 'unused', 'unused'] : ['present', 'unused'];
+        const p2States = [m5P2[0] ? 'empty_shadow' : 'present', 'unused', 'unused', 'unused'];
+        const boxStates = Array.from({ length: 4 }).map((_, i) => i < inBox ? 'present' : 'unused');
+
+        container.innerHTML = `
+          <div class="w-full flex flex-col sm:flex-row items-center justify-around gap-1 sm:gap-4 max-w-3xl">
+            <div class="flex sm:contents flex-row items-center justify-around w-full gap-2 shrink-0">
+              <div class="flex flex-col items-center p-1 bg-white rounded-2xl border-2 border-slate-900 shadow-[2px_2px_0_#0f172a] sm:order-1 cursor-pointer" onclick="!m5CutDone ? cutM5Equiv() : null">
+                <span class="text-[10px] font-black">${m5CutDone ? '2/4' : '1/2 (Corta ✂️)'}</span>
+                ${renderPlateWithStates(m5CutDone ? 4 : 2, p1States, plateSize, m5CutDone ? 'clickM5EquivP1' : null)}
+              </div>
+              <div class="flex flex-col items-center p-1 bg-white rounded-2xl border-2 border-slate-900 shadow-[2px_2px_0_#0f172a] sm:order-3">
+                <span class="text-[10px] font-black">1/4</span>
+                ${renderPlateWithStates(4, p2States, plateSize, m5CutDone ? 'clickM5EquivP2' : null)}
+              </div>
+            </div>
+            <div class="shrink-0 sm:order-2">
+              <div class="flex flex-col items-center p-1.5 bg-amber-100 rounded-2xl border-3 border-slate-900 shadow-[3px_3px_0_#0f172a]">
+                <span class="text-[10px] font-black text-amber-950 uppercase mb-0.5">📦 CAJA (${inBox}/4)</span>
+                ${renderPlateWithStates(4, boxStates, boxSize, null)}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function clickM5P1(i) {
+      m5P1[i] = !m5P1[i];
+      playPop(m5P1[i] ? 450 : 350);
+      checkM5StepProgress();
+    }
+
+    function clickM5P2(i) {
+      m5P2[i] = !m5P2[i];
+      playPop(m5P2[i] ? 470 : 360);
+      checkM5StepProgress();
+    }
+
+    function clickM5Resta(i) {
+      if (i >= 5) return;
+      if (m5Eaten.includes(i)) {
+        m5Eaten = m5Eaten.filter(idx => idx !== i);
+        playPop(340);
+      } else {
+        if (m5Eaten.length >= 2) return;
+        m5Eaten.push(i);
+        playChew();
+      }
+      renderMissionsTab();
+      if (m5Eaten.length === 2) advanceMissionStep();
+    }
+
+    function cutM5Equiv() {
+      m5CutDone = true;
+      playSliceCut();
+      setAltairSpeech('¡Genial! Ahora tienen el mismo tamaño. Pásalas a la caja para sumarlas.');
+      renderMissionsTab();
+    }
+
+    function clickM5EquivP1(i) {
+      m5P1[i] = !m5P1[i];
+      playPop(m5P1[i] ? 450 : 350);
+      checkM5StepProgress();
+    }
+
+    function clickM5EquivP2() {
+      m5P2[0] = !m5P2[0];
+      playPop(m5P2[0] ? 470 : 360);
+      checkM5StepProgress();
+    }
+
+    function checkM5StepProgress() {
+      renderMissionsTab();
+      const inBox = m5P1.filter(Boolean).length + m5P2.filter(Boolean).length;
+      const target = currentStep === 0 ? 3 : (currentStep === 3 ? 3 : 5);
+      if (inBox === target) advanceMissionStep();
+    }
+
+    function advanceMissionStep() {
+      incrementStat('missionsCompleted', 1);
+      incrementStat('stars', 2);
+      triggerCelebration('¡Excelente trabajo! Has completado el pedido a la perfección.');
+      setTimeout(() => {
+        if (currentStep < 4) {
+          currentStep++;
+          m5P1 = [false, false];
+          m5P2 = [false, false];
+          m5Eaten = [];
+          m5CutDone = false;
+          renderMissionsTab();
         } else {
-          tab.classList.remove('bg-yellow-400', 'comic-shadow');
-          tab.classList.add('bg-slate-200', 'opacity-80', 'comic-shadow-sm');
-          view.classList.add('hidden');
+          batchIndex++;
+          currentStep = 0;
+          m5P1 = [false, false];
+          m5P2 = [false, false];
+          m5Eaten = [];
+          m5CutDone = false;
+          incrementStat('batchesCompleted', 1);
+          incrementStat('stars', 5);
+          renderMissionsTab();
+        }
+      }, 1600);
+    }
+
+    // NAVEGACIÓN ENTRE LAS 5 PESTAÑAS
+    let activeTab = 1;
+    function switchTab(tabNum) {
+      activeTab = tabNum;
+      playPop(500);
+      [1, 2, 3, 4, 5].forEach(i => {
+        const v = document.getElementById('view-' + i);
+        const t = document.getElementById('tab-' + i);
+        if (i === tabNum) {
+          v.classList.remove('hidden');
+          t.className = 'flex flex-col items-center py-0.5 sm:py-1 px-2.5 sm:px-3.5 rounded-xl border-2 border-slate-900 font-black text-xs sm:text-sm bg-amber-400 text-slate-900 shadow-[2px_2px_0_#0f172a] -translate-y-0.5';
+        } else {
+          v.classList.add('hidden');
+          t.className = 'flex flex-col items-center py-0.5 sm:py-1 px-2.5 sm:px-3.5 rounded-xl border-2 border-slate-900 font-black text-xs sm:text-sm bg-amber-50 text-slate-600 hover:bg-amber-100';
         }
       });
-
-      if (idx === 1) updateM1();
-      if (idx === 2) renderM2();
-      if (idx === 3) renderM3();
-      if (idx === 4) initM4();
+      renderCurrentTab();
     }
 
-    window.onload = function() {
-      renderChef('happy');
-      initM1();
-      renderM2();
-      renderM3();
-      initM4();
-    };
+    function renderCurrentTab() {
+      if (activeTab === 1) {
+        const opt = SHARING_OPTIONS[cutOptionIdx];
+        setAltairSpeech(`¡Tenemos ${opt.guests} invitados en la mesa! Ayúdame a cortar la pizza en ${opt.guests} partes iguales (${opt.name}). Toca el punto rojo y arrastra tu dedo.`);
+        renderCutBoard();
+      } else if (activeTab === 2) {
+        setAltairSpeech('¡Hola! Pasa las rebanadas de los dos platos a la caja para sumar las pizzas.');
+        renderSumTab();
+      } else if (activeTab === 3) {
+        setAltairSpeech(`¡Tengo mucha hambre! Toca ${resToEat} rebanadas para que me las coma y veamos cuántas quedan.`);
+        renderRestaTab();
+      } else if (activeTab === 4) {
+        setAltairSpeech('¡Ojo! Estas rebanadas son de tamaños diferentes. Primero emparejemos los trozos antes de juntarlos.');
+        renderAdvTab();
+      } else if (activeTab === 5) {
+        setAltairSpeech(`Comanda #${currentStep + 1}: Completa el pedido para el cliente.`);
+        renderMissionsTab();
+      }
+    }
+
+    // MODAL DE TROFEOS
+    const TROPHIES = [
+      { key: 'first_cut', title: 'Primer Reparto', desc: 'Corta tu primera pizza para invitados.', icon: '🍕', target: 1, getVal: s => s.slicesCut },
+      { key: 'master_slicer', title: 'Maestro Cortador', desc: 'Realiza 5 cortes perfectos con asistencia.', icon: '✂️', target: 5, getVal: s => s.slicesCut },
+      { key: 'first_sum', title: 'Chef de la Suma', desc: 'Resuelve tu primera suma de pizza.', icon: '➕', target: 1, getVal: s => s.sumsSolved },
+      { key: 'sum_collector', title: 'Coleccionista de Rebanadas', desc: 'Resuelve 5 sumas homogéneas.', icon: '📦', target: 5, getVal: s => s.sumsSolved },
+      { key: 'first_resta', title: 'Primer Mordisco', desc: 'Resuelve tu primera resta.', icon: '😋', target: 1, getVal: s => s.restasSolved },
+      { key: 'adv_master', title: 'Científico de Fracciones', desc: 'Resuelve 3 sumas avanzadas.', icon: '⚡', target: 3, getVal: s => s.advSolved },
+      { key: 'first_mission', title: 'Repartidor Veloz', desc: 'Completa tu primera comanda.', icon: '🛵', target: 1, getVal: s => s.missionsCompleted },
+      { key: 'galaxy_chef', title: 'Gran Maestro de Altair', desc: 'Acumula 30 estrellas de oro.', icon: '👑', target: 30, getVal: s => s.stars }
+    ];
+
+    function toggleTrophyModal(open) {
+      const m = document.getElementById('trophy-modal');
+      if (open) {
+        renderTrophies();
+        m.classList.remove('hidden');
+        playPop(520);
+      } else {
+        m.classList.add('hidden');
+      }
+    }
+
+    function renderTrophies() {
+      const container = document.getElementById('trophy-list-container');
+      container.innerHTML = '';
+      let unlocked = 0;
+      TROPHIES.forEach(t => {
+        const val = t.getVal(userStats);
+        const isOk = val >= t.target;
+        if (isOk) unlocked++;
+        const pct = Math.min(100, Math.round((val / t.target) * 100));
+
+        const div = document.createElement('div');
+        div.className = `p-2 rounded-2xl border-2 border-slate-900 flex items-center gap-2 ${isOk ? 'bg-amber-100 shadow-[2px_2px_0_#0f172a]' : 'bg-slate-50 opacity-80'}`;
+        div.innerHTML = `
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl border-2 border-slate-900 shrink-0 ${isOk ? 'bg-amber-300' : 'bg-slate-200 grayscale'}">
+            ${isOk ? t.icon : '🔒'}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-black text-slate-900 truncate">${t.title}</h4>
+              ${isOk ? '<span class="text-[9px] bg-emerald-500 text-white font-black px-1.5 py-0.2 rounded border border-slate-900">¡LOGRADO!</span>' : `<span class="text-[10px] font-bold text-slate-500">${val}/${t.target}</span>`}
+            </div>
+            <p class="text-[10px] text-slate-600 font-semibold leading-tight line-clamp-1">${t.desc}</p>
+            ${!isOk ? `
+              <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1 border border-slate-400 overflow-hidden">
+                <div class="bg-amber-500 h-full" style="width:${pct}%"></div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      document.getElementById('trophy-summary-count').textContent = `${unlocked} de ${TROPHIES.length} Logrados • ⭐ ${userStats.stars} Estrellas`;
+    }
+
+    // SOPORTE PWA (INSTALACIÓN ANDROID / CHROME)
+    let deferredPWAEvent = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPWAEvent = e;
+      const btn = document.getElementById('pwa-install-btn');
+      if (btn) {
+        btn.classList.remove('hidden');
+        btn.classList.add('flex');
+      }
+    });
+
+    async function installPWAApp() {
+      if (!deferredPWAEvent) return;
+      try {
+        deferredPWAEvent.prompt();
+        const choice = await deferredPWAEvent.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          triggerCelebration('¡Aplicación instalada con éxito en tu pantalla de inicio! 📲🎉');
+        }
+      } catch (err) {}
+      deferredPWAEvent = null;
+      const btn = document.getElementById('pwa-install-btn');
+      if (btn) btn.classList.add('hidden');
+    }
+
+    // Generador dinámico de Web App Manifest Blob y Registro de Service Worker
+    function setupPWACompliance() {
+      try {
+        const manifestData = {
+          id: "/",
+          name: "Pizzería de Altair",
+          short_name: "Pizzería",
+          description: "¡Aprende fracciones cortando, sumando y compartiendo deliciosas pizzas!",
+          start_url: "./index.html",
+          scope: "./",
+          display: "fullscreen",
+          background_color: "#fef08a",
+          theme_color: "#fbbf24",
+          orientation: "any",
+          icons: [
+            { src: "altairojo.png", sizes: "192x192", type: "image/png", purpose: "any" },
+            { src: "altairojo.png", sizes: "512x512", type: "image/png", purpose: "any" }
+          ]
+        };
+        const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+        const manifestURL = URL.createObjectURL(blob);
+        let link = document.querySelector('link[rel="manifest"]');
+        if (!link) {
+          link = document.createElement('link');
+          link.rel = 'manifest';
+          document.head.appendChild(link);
+        }
+        link.href = manifestURL;
+      } catch (e) {}
+
+      if ('serviceWorker' in navigator) {
+        try {
+          const swCode = `
+            const CACHE_NAME = 'pizzeria-altair-standalone-v1';
+            const ASSETS = ['./', './index.html', './altairojo.png', './altairsonrisa.png', './altaircerrada.png', './pepperoni.png', './hawaiana.png', './queso.png'];
+            self.addEventListener('install', e => {
+              e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS).catch(() => {})));
+              self.skipWaiting();
+            });
+            self.addEventListener('activate', e => {
+              e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));
+              self.clients.claim();
+            });
+            self.addEventListener('fetch', e => {
+              e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('./index.html'))));
+            });
+          `;
+          const swBlob = new Blob([swCode], { type: 'application/javascript' });
+          const swUrl = URL.createObjectURL(swBlob);
+          navigator.serviceWorker.register(swUrl).catch(() => {
+            navigator.serviceWorker.register('./sw.js').catch(() => {});
+          });
+        } catch (err) {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        }
+      }
+    }
+
+    // INICIALIZACIÓN
+    window.addEventListener('DOMContentLoaded', () => {
+      setupPWACompliance();
+      initWelcomeParticles();
+      updateStatsBadge();
+      renderCurrentTab();
+    });
   </script>
 </body>
 </html>

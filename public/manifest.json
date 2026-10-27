@@ -1,0 +1,26 @@
+{
+  "id": "/",
+  "name": "Pizzería de Altair",
+  "short_name": "Pizzería",
+  "description": "¡Aprende fracciones cortando, sumando y compartiendo deliciosas pizzas!",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#fef08a",
+  "theme_color": "#fbbf24",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "altairojo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "altairojo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
